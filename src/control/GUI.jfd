@@ -103,8 +103,8 @@ new FormModel {
 							"value": "card2"
 						} )
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq l {space :::p, par l {comp panel1:::p::p, comp panel3:::p:341:p}, par l {seq {space :p:61:p, comp panel4:::p::p, space ::174:x}, seq t {space ::660:x, comp testButton:::p::p, space :p:285:p}}}}"
-							"$verticalGroup": "par l {seq l {par l {seq {space :p:36:p, comp panel4:::::x, space :::p}, seq l {space :p:60:p, comp panel3:::p::p, space ::35:x}}, par l {comp panel1:::p::p, seq l {space :p:123:p, comp testButton:::p::p}}, space :p:66:p}}"
+							"$horizontalGroup": "par l {seq l {space :::p, par l {comp panel1:::p::p, comp panel3::l:p:341:p}, par l {seq {space :p:61:p, comp panel4:::p::p, space ::174:x}, seq t {space ::660:x, comp testButton:::p::p, space :p:285:p}}}}"
+							"$verticalGroup": "par l {seq l {space :p:36:p, par l {comp panel4:::::x, seq l {space :p:11:p, comp panel3:::p::p, space :0:42:x}}, space :::p, par l {comp panel1:::p::p, seq l {space :p:123:p, comp testButton:::p::p}}, space :p:66:p}}"
 						} ) {
 							name: "filePanel"
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -300,7 +300,7 @@ new FormModel {
 								} )
 							} )
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-								"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp panel8:::p:242:p, space :::p, par l {seq {space :0:0:x, par l {seq t {par l:::p {comp readFileButton::l::0:x, comp addFileButton::l::0:x, comp createFile::t:p:76:p, comp button1::l::0:x}, space :p:12:p}, seq {par t {comp openFile::t:p:76:p, comp writeFileButton:::p:76:p}, space :::p}, seq t {comp deleteFile:::p:76:p, space :p:11:p}}}, seq l {comp getInDirectory:::p::p, space :0:0:x}}}, seq {par l {seq {comp textField1:::p:183:p, space :::p, comp fileJump:::p:53:p}, seq l {comp label3:::p::p, space :::p, comp filePathLabel:::p::p}}, space :::x}}}}"
+								"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp panel8:::p:242:p, space :::x, par l {seq t {par l:::p {comp readFileButton::l::0:x, comp addFileButton::l::0:x, comp createFile::t:p:76:p, comp button1::l::0:x}, space :p:12:p}, seq {par t {comp openFile::t:p:76:p, comp writeFileButton:::p:76:p}, space :::p}, seq t {par t {comp getInDirectory:::p:77:p, comp deleteFile:::p:76:p}, space :p:11:p}}}, seq {par l {seq {comp textField1:::p:183:p, space :::p, comp fileJump:::p:53:p}, seq l {comp label3:::p::p, space :::p, comp filePathLabel:::p::p}}, space :::x}}}}"
 								"$verticalGroup": "par l {seq l {space :p:8:p, par b {comp label3::b:p::p, comp filePathLabel::b:p::p}, space :::p, par l {comp fileJump:::p::p, comp textField1::t:p:30:p}, space :::p, comp createFile:::p::p, space :::p, par l {comp panel8:::p:300:p, seq {comp openFile:::p::p, space :::p, comp writeFileButton:::p::p, space :::p, comp readFileButton:::p::p, space :::p, comp addFileButton:::p::p, space :::p, comp button1:::p::p, space :::p, comp deleteFile:::p::p, space :::p, comp getInDirectory:::p::p}}, space ::45:x}}"
 							} ) {
 								name: "panel3"
@@ -563,50 +563,8 @@ new FormModel {
 				"value": "South"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 40, 395 )
-			"size": new java.awt.Dimension( 1400, 990 )
-		} )
-		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {space :0:243:x}"
-			"$verticalGroup": "par l {space :0:288:x}"
-		} ) {
-			name: "createFileDialog"
-			"title": "Create File"
-		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 490, 25 )
-			"size": new java.awt.Dimension( 245, 320 )
-		} )
-		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-			name: "addFileDialog"
-			"title": "追加"
-			"minimumSize": new java.awt.Dimension( 700, 400 )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "scrollPane8"
-				add( new FormComponent( "javax.swing.JTextArea" ) {
-					name: "addFileArea"
-					"lineWrap": true
-				} )
-			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "Center"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-				name: "panel7"
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "addFileSure"
-					"text": "确定"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addFileSureActionPerformed", true ) )
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "addFileCancel"
-					"text": "取消"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addFileCancelActionPerformed", true ) )
-				} )
-			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "South"
-			} )
-		}, new FormLayoutConstraints( null ) {
-			"size": new java.awt.Dimension( 730, 535 )
-			"location": new java.awt.Point( 115, 1490 )
+			"location": new java.awt.Point( 45, 20 )
+			"size": new java.awt.Dimension( 1400, 1040 )
 		} )
 	}
 }

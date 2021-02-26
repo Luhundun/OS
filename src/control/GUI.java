@@ -23,6 +23,7 @@ import javax.swing.border.*;
 public class GUI extends JFrame {
     public GUI() {
         initComponents();
+        this.setVisible(true);
     }
 
     public void workButtonActionPerformed(ActionEvent e) {
@@ -147,11 +148,6 @@ public class GUI extends JFrame {
 
     }
 
-
-    public void createFileCancleButtonActionPerformed(ActionEvent e) {
-        createFileDialog.dispose();
-    }
-
     public void writeFileButtonActionPerformed(ActionEvent e) {
         new WriteFileDialog(this).setVisible(true);
     }
@@ -162,22 +158,8 @@ public class GUI extends JFrame {
     }
 
 
-    public void addFileSureActionPerformed(ActionEvent e) {
-        try {
-            File.addFileContext((short) 1,addFileArea.getText());
-        } catch (Exception exception) {
-            JOptionPane.showMessageDialog(null,exception,"追加时发生错误",JOptionPane.ERROR_MESSAGE);
-        }
-        addFileDialog.dispose();
-    }
-
-    public void addFileCancelActionPerformed(ActionEvent e) {
-        addFileDialog.dispose();
-    }
-
     public void addFileButtonActionPerformed(ActionEvent e) {
-        addFileArea.setText("");
-        addFileDialog.setVisible(true);
+        new addFileDialog(this).setVisible(true);
     }
 
     public void fileNameListValueChanged(ListSelectionEvent e) {
@@ -341,13 +323,6 @@ public class GUI extends JFrame {
         findBlockContext2 = new JButton();
         scrollPane6 = new JScrollPane();
         blockContext2 = new JTextArea();
-        createFileDialog = new JDialog();
-        addFileDialog = new JDialog();
-        scrollPane8 = new JScrollPane();
-        addFileArea = new JTextArea();
-        panel7 = new JPanel();
-        addFileSure = new JButton();
-        addFileCancel = new JButton();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -902,29 +877,25 @@ public class GUI extends JFrame {
                                         .addGroup(panel3Layout.createParallelGroup()
                                             .addGroup(panel3Layout.createSequentialGroup()
                                                 .addComponent(panel8, GroupLayout.PREFERRED_SIZE, 242, GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addGroup(panel3Layout.createParallelGroup()
+                                                    .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
+                                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                            .addComponent(readFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                            .addComponent(addFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                            .addComponent(createFile, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(button1, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                                                        .addGap(12, 12, 12))
                                                     .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addGap(0, 0, Short.MAX_VALUE)
-                                                        .addGroup(panel3Layout.createParallelGroup()
-                                                            .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                                    .addComponent(readFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                                                    .addComponent(addFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                                                    .addComponent(createFile, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-                                                                    .addComponent(button1, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
-                                                                .addGap(12, 12, 12))
-                                                            .addGroup(panel3Layout.createSequentialGroup()
-                                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                                    .addComponent(openFile, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-                                                                    .addComponent(writeFileButton, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE))
-                                                                .addContainerGap())
-                                                            .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                                                                .addComponent(deleteFile, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(11, 11, 11))))
-                                                    .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addComponent(getInDirectory)
-                                                        .addGap(0, 0, Short.MAX_VALUE))))
+                                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                            .addComponent(openFile, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(writeFileButton, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE))
+                                                        .addContainerGap())
+                                                    .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
+                                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                            .addComponent(getInDirectory, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
+                                                            .addComponent(deleteFile, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE))
+                                                        .addGap(11, 11, 11))))
                                             .addGroup(panel3Layout.createSequentialGroup()
                                                 .addGroup(panel3Layout.createParallelGroup()
                                                     .addGroup(panel3Layout.createSequentialGroup()
@@ -1144,15 +1115,14 @@ public class GUI extends JFrame {
                         filePanelLayout.setVerticalGroup(
                             filePanelLayout.createParallelGroup()
                                 .addGroup(filePanelLayout.createSequentialGroup()
+                                    .addGap(36, 36, 36)
                                     .addGroup(filePanelLayout.createParallelGroup()
+                                        .addComponent(panel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(filePanelLayout.createSequentialGroup()
-                                            .addGap(36, 36, 36)
-                                            .addComponent(panel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED))
-                                        .addGroup(filePanelLayout.createSequentialGroup()
-                                            .addGap(60, 60, 60)
+                                            .addGap(11, 11, 11)
                                             .addComponent(panel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)))
+                                            .addGap(0, 42, Short.MAX_VALUE)))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(filePanelLayout.createParallelGroup()
                                         .addComponent(panel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addGroup(filePanelLayout.createSequentialGroup()
@@ -1318,60 +1288,6 @@ public class GUI extends JFrame {
         contentPane.add(dialogPane, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(getOwner());
-
-        //======== createFileDialog ========
-        {
-            createFileDialog.setTitle("Create File");
-            Container createFileDialogContentPane = createFileDialog.getContentPane();
-
-            GroupLayout createFileDialogContentPaneLayout = new GroupLayout(createFileDialogContentPane);
-            createFileDialogContentPane.setLayout(createFileDialogContentPaneLayout);
-            createFileDialogContentPaneLayout.setHorizontalGroup(
-                createFileDialogContentPaneLayout.createParallelGroup()
-                    .addGap(0, 243, Short.MAX_VALUE)
-            );
-            createFileDialogContentPaneLayout.setVerticalGroup(
-                createFileDialogContentPaneLayout.createParallelGroup()
-                    .addGap(0, 288, Short.MAX_VALUE)
-            );
-            createFileDialog.pack();
-            createFileDialog.setLocationRelativeTo(createFileDialog.getOwner());
-        }
-
-        //======== addFileDialog ========
-        {
-            addFileDialog.setTitle("\u8ffd\u52a0");
-            addFileDialog.setMinimumSize(new Dimension(700, 400));
-            Container addFileDialogContentPane = addFileDialog.getContentPane();
-            addFileDialogContentPane.setLayout(new BorderLayout());
-
-            //======== scrollPane8 ========
-            {
-
-                //---- addFileArea ----
-                addFileArea.setLineWrap(true);
-                scrollPane8.setViewportView(addFileArea);
-            }
-            addFileDialogContentPane.add(scrollPane8, BorderLayout.CENTER);
-
-            //======== panel7 ========
-            {
-                panel7.setLayout(new FlowLayout());
-
-                //---- addFileSure ----
-                addFileSure.setText("\u786e\u5b9a");
-                addFileSure.addActionListener(e -> addFileSureActionPerformed(e));
-                panel7.add(addFileSure);
-
-                //---- addFileCancel ----
-                addFileCancel.setText("\u53d6\u6d88");
-                addFileCancel.addActionListener(e -> addFileCancelActionPerformed(e));
-                panel7.add(addFileCancel);
-            }
-            addFileDialogContentPane.add(panel7, BorderLayout.SOUTH);
-            addFileDialog.pack();
-            addFileDialog.setLocationRelativeTo(addFileDialog.getOwner());
-        }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
 
@@ -1505,13 +1421,6 @@ public class GUI extends JFrame {
     public static JButton findBlockContext2;
     public static JScrollPane scrollPane6;
     public static JTextArea blockContext2;
-    public static JDialog createFileDialog;
-    public static JDialog addFileDialog;
-    public static JScrollPane scrollPane8;
-    public static JTextArea addFileArea;
-    public static JPanel panel7;
-    public static JButton addFileSure;
-    public static JButton addFileCancel;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
 

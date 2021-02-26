@@ -4,6 +4,7 @@ import fileManage.*;
 import hardware.CPU;
 import hardware.Disk;
 import hardware.Memory;
+import memoryManage.PageTable;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
@@ -30,6 +31,8 @@ public class OS {
     private static int time = 0;
     private static SuperBlock superBlock = null;
 
+    public static PageTable systemPageTable = null;
+
     public static File topFile;
     public static Directory pathDirectory;
     public static ArrayList<String> path = new ArrayList<>();
@@ -42,22 +45,38 @@ public class OS {
      * @auther: Lu Ning
      * @date: 2021/1/30 17:10
      */
-    public static void runSystem() throws Exception {
-        disk.loadDisk();
-        System.out.println(disk.findBlockByDno((short) 148).showInFile());
-        superBlock = new SuperBlock(false);
-        disk.exchangeBlock(1,superBlock);
-        GroupLink.runGroupLink();
-        memory = new Memory();
+    public static void runSystem() {
         try {
+
+            //加载硬盘
+            disk.loadDisk();
+
+            //加载内存
+            memory = new Memory();
+            //加载超级块
+            superBlock = new SuperBlock(false);
+            disk.exchangeBlock(1,superBlock);
+
+
+            //加载成组空闲块链
+            GroupLink.runGroupLink();
+
+            //初始化系统页表
+            PageTable.initSystemPageTable();
+
+            //打开根目录，加载根目录内文件
             Inode parentPathInode = new Inode(0,true);
             pathDirectory = new Directory(parentPathInode);
             Directory.getInDirectory(".");
+
+            //启动对应进程
+            new TimerThread().start();   //启动时钟进程
+            new FlashGUIThread().start(); //启动刷新GUI进程
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        new TimerThread().start();   //启动时钟进程
-        new FlashGUIThread().start(); //启动刷新GUI进程
+
+
 
     }
 

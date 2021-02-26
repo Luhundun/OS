@@ -21,7 +21,7 @@ public class SuperBlock extends Block {
     final short freeInodesSumInMemory = 7;                               //内存中登记的空闲inode数
     final short freeInodesNumInMemory = 8;                 //位示图法管理内存中登记的空闲inode编号，大小4B
     final short freeInodesSumInDisk = 10;                               //硬盘中登记的空闲inode数
-    final short freeInodesNumInDisk = 11;                          //位示图法管理内存中登记的空闲inode编号，共64B
+    final short freeInodesNumInDisk = 11;                          //位示图法管理硬盘中登记的空闲inode编号，共64B
     final short freeBlocksInDiskGroupLink = 43;                        //硬盘中登记的存放成组链表的第一个块号
     final short freeBlocksSumInDisk = 44;                      //记录磁盘中的空闲盘块数目
     final short ifChanged = 45;                               //记录超级块装载入内存后是否有变动
@@ -66,6 +66,8 @@ public class SuperBlock extends Block {
             for(int i=0;i<256;i++){
                 block[i] = firstBlock.readAWord(i);
             }
+            setFreeBlocksSumInMemory((short) 48);
+            setFreeInodesSumInMemory((short) 32);
         }
     }
 

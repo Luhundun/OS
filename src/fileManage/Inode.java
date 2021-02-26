@@ -34,6 +34,7 @@ public class Inode {
 //    public short[] fileAddress;    //标记文件内容的位置
 
     public static Inode[] activeInodeInMemoryTable = new Inode[32];  //内存活动inode表，其实质已经模拟在内存的物理块中，此处列出单纯为了展示
+                                                        //其存放在内存的 9、10块
 
     /**
      * @Description: 在硬盘初始化Inode
@@ -127,7 +128,6 @@ public class Inode {
         }else {
             throw new Exception("Inode在硬盘的数目不足");
         }
-        System.out.println(i+"个文件");
         return (short)(i);
     }
 

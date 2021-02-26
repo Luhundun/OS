@@ -83,9 +83,21 @@ public class Directory extends File{
      * @date: 2021/2/25 0:37
      */
     public static void getInDirectory(String fileName) throws Exception {
+        Directory oldDirectory = OS.pathDirectory;
         File nextDirectory = OS.pathDirectory.findFileInDirectory(fileName);
         if(nextDirectory.fInode.getFileType() != 2){
             throw new Exception("非文件夹");
+        }
+        //关闭一次父目录下的其他目录项
+        for(FCB fcb : OS.pathDirectory.directoryItems){
+            if(!fcb.getFileName().equals(".")&&!fcb.getFileName().equals(fileName)){
+                short ino = fcb.getIno();
+                for(File openFile : fileStructTable) {
+                    if (openFile != null && openFile.fInode.getInodeNum() == ino) {
+                        closeFileInMemory(openFile.fd);
+                    }
+                }
+            }
         }
         OS.pathDirectory = (Directory) nextDirectory;
         //打开下一级目录下的每个文件的inode
@@ -107,20 +119,24 @@ public class Directory extends File{
                 }
             }
         }
+        //最后关闭上一级的父目录
+        if(oldDirectory.getfInode().getInodeNum() != 0 ){
+            closeFileInMemory(oldDirectory.getFd());
+        }
     }
 
-    /**
-     * @Description: 真正创建文件的方法，先在当前目录中创建目录项，再分配Inode，新建文件
-     * @param: [fileName, mode, type, sizeForTest]
-     * @return: short
-     * @auther: Lu Ning
-     * @date: 2021/2/24 20:55
-     */
-    public static Directory createDirectory(String fileName,int mode, int type, int sizeForTest) throws Exception {
-        Directory newDirectory = new Directory(OS.pathDirectory,mode);
-        OS.pathDirectory.addToDirectory(new FCB(fileName,newDirectory.fInode.getInodeNum()));
-        return newDirectory;
-    }
+//    /**
+//     * @Description: 真正创建文件的方法，先在当前目录中创建目录项，再分配Inode，新建文件
+//     * @param: [fileName, mode, type, sizeForTest]
+//     * @return: short
+//     * @auther: Lu Ning
+//     * @date: 2021/2/24 20:55
+//     */
+//    public static Directory createDirectory(String fileName,int mode, int type, int sizeForTest) throws Exception {
+//        Directory newDirectory = new Directory(OS.pathDirectory,mode);
+//        OS.pathDirectory.addToDirectory(new FCB(fileName,newDirectory.fInode.getInodeNum()));
+//        return newDirectory;
+//    }
 
     /**
      * @Description: 在当前目录下新建一个文件

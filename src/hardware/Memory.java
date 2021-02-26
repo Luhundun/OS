@@ -2,7 +2,6 @@ package hardware;
 
 import control.OS;
 
-import java.util.ArrayList;
 
 /**
  * @ClassName: memory
@@ -27,7 +26,7 @@ public class Memory {
        for (int i=0;i<64;i++){
            memory[i] = new Block();
        }
-       memory[0] = OS.getSuperBlock().cloneABlock((short)-1);  //将硬盘的超级块深拷贝至内存
+       memory[0] = OS.getSuperBlock();  //将硬盘的超级块深拷贝至内存
        for(int i=1;i<16;i++){
            memory[i].setBlockUsedBytes(512);          //系统部分默认全部占用
        }

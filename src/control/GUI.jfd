@@ -563,118 +563,23 @@ new FormModel {
 				"value": "South"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 135, 335 )
+			"location": new java.awt.Point( 40, 395 )
 			"size": new java.awt.Dimension( 1400, 990 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-			"$horizontalGroup": "par l {seq {par l {seq {space :::p, par l:::p {seq {par l:::p {comp label35:::::x, comp label36:::::x}, space s:::p, par l {comp inputFileName:::::x, comp fileTypeBox:::::x}}, comp label37::l:p::p, seq {par l {comp label38::l:p::p, comp label39::l:p::p}, space s:::p, par l {comp fileSaveModeBox:::p::p, comp inputFileSize:::::x}}, comp label40::l:p::p}}, seq l {comp createFileSureButton:::p::p, space :::p, comp createFileCancleButton:::p::p}}, space :0:40:x}}"
-			"$verticalGroup": "par l {seq l {space :::p, par b {comp label35::b:p::p, comp inputFileName::b:p::p}, space :4:4:p, par b {comp label36::b:p::p, comp fileTypeBox::b:p::p}, space :::p, par b {comp label38::b:p::p, comp fileSaveModeBox::b:p::p}, space :::p, comp label37:::p::p, space :::p, par b {comp label39::b:p::p, comp inputFileSize::b:p::p}, space :p:39:p, comp label40:::p::p, space ::48:x, par b {comp createFileSureButton::b:p::p, comp createFileCancleButton::b:p::p}, space :::p}}"
+			"$horizontalGroup": "par l {space :0:243:x}"
+			"$verticalGroup": "par l {space :0:288:x}"
 		} ) {
 			name: "createFileDialog"
 			"title": "Create File"
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label35"
-				"text": "文件名"
-			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "inputFileName"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label36"
-				"text": "文件类型"
-			} )
-			add( new FormComponent( "javax.swing.JComboBox" ) {
-				name: "fileTypeBox"
-				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "普通文件"
-					addElement( "普通文件" )
-					addElement( "目录文件" )
-					addElement( "特殊文件" )
-				}
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label37"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label38"
-				"text": "存取权限"
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label39"
-				"text": "预留块数"
-			} )
-			add( new FormComponent( "javax.swing.JComboBox" ) {
-				name: "fileSaveModeBox"
-				"model": new javax.swing.DefaultComboBoxModel {
-					selectedItem: "无"
-					addElement( "无" )
-					addElement( "可运行" )
-					addElement( "可写" )
-					addElement( "可运行、写" )
-					addElement( "可读" )
-					addElement( "可读、运行" )
-					addElement( "可读、写" )
-					addElement( "可读、写、运行" )
-				}
-			} )
-			add( new FormComponent( "javax.swing.JLabel" ) {
-				name: "label40"
-				"text": "当前路径"
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "createFileSureButton"
-				"text": "确定"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "createFileSureButtonActionPerformed", true ) )
-			} )
-			add( new FormComponent( "javax.swing.JButton" ) {
-				name: "createFileCancleButton"
-				"text": "取消"
-				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "createFileCancleButtonActionPerformed", true ) )
-			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "inputFileSize"
-				"text": "1"
-			} )
 		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 955, 50 )
+			"location": new java.awt.Point( 490, 25 )
 			"size": new java.awt.Dimension( 245, 320 )
-		} )
-		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.BorderLayout ) ) {
-			name: "writeFileDialog"
-			"title": "Write File"
-			"minimumSize": &Dimension0 new java.awt.Dimension( 700, 400 )
-			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-				name: "scrollPane7"
-				add( new FormComponent( "javax.swing.JTextArea" ) {
-					name: "writeFileArea"
-					"lineWrap": true
-				} )
-			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "Center"
-			} )
-			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
-				name: "panel6"
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "writeFileSure"
-					"text": "确定"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "writeFileSureActionPerformed", true ) )
-				} )
-				add( new FormComponent( "javax.swing.JButton" ) {
-					name: "writeFileCancel"
-					"text": "取消"
-					addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "writeFileCancelActionPerformed", true ) )
-				} )
-			}, new FormLayoutConstraints( class java.lang.String ) {
-				"value": "South"
-			} )
-		}, new FormLayoutConstraints( null ) {
-			"location": new java.awt.Point( 420, 30 )
-			"size": &Dimension1 new java.awt.Dimension( 730, 535 )
 		} )
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "addFileDialog"
 			"title": "追加"
-			"minimumSize": #Dimension0
+			"minimumSize": new java.awt.Dimension( 700, 400 )
 			add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 				name: "scrollPane8"
 				add( new FormComponent( "javax.swing.JTextArea" ) {
@@ -700,7 +605,7 @@ new FormModel {
 				"value": "South"
 			} )
 		}, new FormLayoutConstraints( null ) {
-			"size": #Dimension1
+			"size": new java.awt.Dimension( 730, 535 )
 			"location": new java.awt.Point( 115, 1490 )
 		} )
 	}

@@ -259,8 +259,22 @@ public class Block {
         BigInteger bigInteger = new BigInteger(String.valueOf(UTF16.charAt(str,0)));
         return bigInteger.shortValue();
     }
-
-
+    
+    /**
+     * @Description: 将short转化成16进制显示的地址类型 
+     * @param: []
+     * @return: java.lang.String
+     * @auther: Lu Ning
+     * @date: 2021/2/26 16:42
+     */
+    public static String convertShortToAddress(short thisShort){
+        String temp = Integer.toHexString(Short.toUnsignedInt(thisShort));
+        while (temp.length()<4){
+            temp = '0' + temp;
+        }
+        return temp;
+    }
+    
     public void setDno(short dno) {
         this.dno = dno;
     }

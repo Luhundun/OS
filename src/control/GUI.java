@@ -110,8 +110,7 @@ public class GUI extends JFrame {
 
 
     public void createFileActionPerformed(ActionEvent e)  {
-        inputFileName.setText("");
-        createFileDialog.setVisible(true);
+        new createFileDialog(this).setVisible(true);
     }
 
     public void deleteFileActionPerformed(ActionEvent e) {
@@ -149,58 +148,12 @@ public class GUI extends JFrame {
     }
 
 
-    public void createFileSureButtonActionPerformed(ActionEvent e) {
-        try {
-            short mode = 0,type = 0,size;
-            String temp = (String) fileTypeBox.getSelectedItem();
-            if(temp.equals("普通文件")){
-                type = 1;
-            } else if(temp.equals("目录文件")){
-                type = 2;
-            } else if(temp.equals("特殊文件")){
-                type = 3;
-            }
-            temp = (String) fileSaveModeBox.getSelectedItem();
-            if(temp.equals("无")){
-                mode = 0;
-            }else if(temp.equals("可运行")){
-                mode = 1;
-            }else if(temp.equals("可写")){
-                mode = 2;
-            }else if(temp.equals("可运行、写")){
-                mode = 3;
-            }else if(temp.equals("可读")){
-                mode = 4;
-            }else if(temp.equals("可读、运行")){
-                mode = 5;
-            }else if(temp.equals("可读、写")){
-                mode = 6;
-            }else if(temp.equals("可读、写、运行")){
-                mode = 7;
-            }
-            String name = inputFileName.getText();
-            if(name.equals("")){
-                throw new Exception("未输入文件名");
-            }
-            size = Short.parseShort(inputFileSize.getText());
-            File f =File.createFile(name,mode, type,size);
-            System.out.println(name);
-            OS.topFile = f;
-            f.showFileInfomation();
-        }catch (Exception e1){
-            JOptionPane.showMessageDialog(null,e1.getMessage(),"创建时发生错误",JOptionPane.ERROR_MESSAGE);
-            e1.printStackTrace();
-        }
-        createFileDialog.dispose();
-    }
-
     public void createFileCancleButtonActionPerformed(ActionEvent e) {
         createFileDialog.dispose();
     }
 
     public void writeFileButtonActionPerformed(ActionEvent e) {
-        writeFileArea.setText("");
-        writeFileDialog.setVisible(true);
+        new WriteFileDialog(this).setVisible(true);
     }
 
     public void readFileButtonActionPerformed(ActionEvent e) {
@@ -208,18 +161,6 @@ public class GUI extends JFrame {
 
     }
 
-    public void writeFileSureActionPerformed(ActionEvent e) {
-        try {
-            File.writeFile((short) 1,writeFileArea.getText());
-        } catch (Exception exception) {
-            JOptionPane.showMessageDialog(null,exception,"写入时发生错误",JOptionPane.ERROR_MESSAGE);
-        }
-        writeFileDialog.dispose();
-    }
-
-    public void writeFileCancelActionPerformed(ActionEvent e) {
-        writeFileDialog.dispose();
-    }
 
     public void addFileSureActionPerformed(ActionEvent e) {
         try {
@@ -264,6 +205,7 @@ public class GUI extends JFrame {
 
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(null,exception,"追加时发生错误",JOptionPane.ERROR_MESSAGE);
+            exception.printStackTrace();
         }
     }
 
@@ -400,24 +342,6 @@ public class GUI extends JFrame {
         scrollPane6 = new JScrollPane();
         blockContext2 = new JTextArea();
         createFileDialog = new JDialog();
-        label35 = new JLabel();
-        inputFileName = new JTextField();
-        label36 = new JLabel();
-        fileTypeBox = new JComboBox<>();
-        label37 = new JLabel();
-        label38 = new JLabel();
-        label39 = new JLabel();
-        fileSaveModeBox = new JComboBox<>();
-        label40 = new JLabel();
-        createFileSureButton = new JButton();
-        createFileCancleButton = new JButton();
-        inputFileSize = new JTextField();
-        writeFileDialog = new JDialog();
-        scrollPane7 = new JScrollPane();
-        writeFileArea = new JTextArea();
-        panel6 = new JPanel();
-        writeFileSure = new JButton();
-        writeFileCancel = new JButton();
         addFileDialog = new JDialog();
         scrollPane8 = new JScrollPane();
         addFileArea = new JTextArea();
@@ -1400,150 +1324,18 @@ public class GUI extends JFrame {
             createFileDialog.setTitle("Create File");
             Container createFileDialogContentPane = createFileDialog.getContentPane();
 
-            //---- label35 ----
-            label35.setText("\u6587\u4ef6\u540d");
-
-            //---- label36 ----
-            label36.setText("\u6587\u4ef6\u7c7b\u578b");
-
-            //---- fileTypeBox ----
-            fileTypeBox.setModel(new DefaultComboBoxModel<>(new String[] {
-                "\u666e\u901a\u6587\u4ef6",
-                "\u76ee\u5f55\u6587\u4ef6",
-                "\u7279\u6b8a\u6587\u4ef6"
-            }));
-
-            //---- label38 ----
-            label38.setText("\u5b58\u53d6\u6743\u9650");
-
-            //---- label39 ----
-            label39.setText("\u9884\u7559\u5757\u6570");
-
-            //---- fileSaveModeBox ----
-            fileSaveModeBox.setModel(new DefaultComboBoxModel<>(new String[] {
-                "\u65e0",
-                "\u53ef\u8fd0\u884c",
-                "\u53ef\u5199",
-                "\u53ef\u8fd0\u884c\u3001\u5199",
-                "\u53ef\u8bfb",
-                "\u53ef\u8bfb\u3001\u8fd0\u884c",
-                "\u53ef\u8bfb\u3001\u5199",
-                "\u53ef\u8bfb\u3001\u5199\u3001\u8fd0\u884c"
-            }));
-
-            //---- label40 ----
-            label40.setText("\u5f53\u524d\u8def\u5f84");
-
-            //---- createFileSureButton ----
-            createFileSureButton.setText("\u786e\u5b9a");
-            createFileSureButton.addActionListener(e -> createFileSureButtonActionPerformed(e));
-
-            //---- createFileCancleButton ----
-            createFileCancleButton.setText("\u53d6\u6d88");
-            createFileCancleButton.addActionListener(e -> createFileCancleButtonActionPerformed(e));
-
-            //---- inputFileSize ----
-            inputFileSize.setText("1");
-
             GroupLayout createFileDialogContentPaneLayout = new GroupLayout(createFileDialogContentPane);
             createFileDialogContentPane.setLayout(createFileDialogContentPaneLayout);
             createFileDialogContentPaneLayout.setHorizontalGroup(
                 createFileDialogContentPaneLayout.createParallelGroup()
-                    .addGroup(createFileDialogContentPaneLayout.createSequentialGroup()
-                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup()
-                            .addGroup(createFileDialogContentPaneLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(createFileDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(createFileDialogContentPaneLayout.createSequentialGroup()
-                                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(label35, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(label36, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup()
-                                            .addComponent(inputFileName)
-                                            .addComponent(fileTypeBox)))
-                                    .addComponent(label37)
-                                    .addGroup(createFileDialogContentPaneLayout.createSequentialGroup()
-                                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup()
-                                            .addComponent(label38)
-                                            .addComponent(label39))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup()
-                                            .addComponent(fileSaveModeBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(inputFileSize)))
-                                    .addComponent(label40)))
-                            .addGroup(createFileDialogContentPaneLayout.createSequentialGroup()
-                                .addComponent(createFileSureButton)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(createFileCancleButton)))
-                        .addGap(0, 40, Short.MAX_VALUE))
+                    .addGap(0, 243, Short.MAX_VALUE)
             );
             createFileDialogContentPaneLayout.setVerticalGroup(
                 createFileDialogContentPaneLayout.createParallelGroup()
-                    .addGroup(createFileDialogContentPaneLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label35)
-                            .addComponent(inputFileName, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGap(4, 4, 4)
-                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label36)
-                            .addComponent(fileTypeBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label38)
-                            .addComponent(fileSaveModeBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label37)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(label39)
-                            .addComponent(inputFileSize, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                        .addGap(39, 39, 39)
-                        .addComponent(label40)
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-                        .addGroup(createFileDialogContentPaneLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                            .addComponent(createFileSureButton)
-                            .addComponent(createFileCancleButton))
-                        .addContainerGap())
+                    .addGap(0, 288, Short.MAX_VALUE)
             );
             createFileDialog.pack();
             createFileDialog.setLocationRelativeTo(createFileDialog.getOwner());
-        }
-
-        //======== writeFileDialog ========
-        {
-            writeFileDialog.setTitle("Write File");
-            writeFileDialog.setMinimumSize(new Dimension(700, 400));
-            Container writeFileDialogContentPane = writeFileDialog.getContentPane();
-            writeFileDialogContentPane.setLayout(new BorderLayout());
-
-            //======== scrollPane7 ========
-            {
-
-                //---- writeFileArea ----
-                writeFileArea.setLineWrap(true);
-                scrollPane7.setViewportView(writeFileArea);
-            }
-            writeFileDialogContentPane.add(scrollPane7, BorderLayout.CENTER);
-
-            //======== panel6 ========
-            {
-                panel6.setLayout(new FlowLayout());
-
-                //---- writeFileSure ----
-                writeFileSure.setText("\u786e\u5b9a");
-                writeFileSure.addActionListener(e -> writeFileSureActionPerformed(e));
-                panel6.add(writeFileSure);
-
-                //---- writeFileCancel ----
-                writeFileCancel.setText("\u53d6\u6d88");
-                writeFileCancel.addActionListener(e -> writeFileCancelActionPerformed(e));
-                panel6.add(writeFileCancel);
-            }
-            writeFileDialogContentPane.add(panel6, BorderLayout.SOUTH);
-            writeFileDialog.pack();
-            writeFileDialog.setLocationRelativeTo(writeFileDialog.getOwner());
         }
 
         //======== addFileDialog ========
@@ -1714,24 +1506,6 @@ public class GUI extends JFrame {
     public static JScrollPane scrollPane6;
     public static JTextArea blockContext2;
     public static JDialog createFileDialog;
-    public static JLabel label35;
-    public static JTextField inputFileName;
-    public static JLabel label36;
-    public static JComboBox<String> fileTypeBox;
-    public static JLabel label37;
-    public static JLabel label38;
-    public static JLabel label39;
-    public static JComboBox<String> fileSaveModeBox;
-    public static JLabel label40;
-    public static JButton createFileSureButton;
-    public static JButton createFileCancleButton;
-    public static JTextField inputFileSize;
-    public static JDialog writeFileDialog;
-    public static JScrollPane scrollPane7;
-    public static JTextArea writeFileArea;
-    public static JPanel panel6;
-    public static JButton writeFileSure;
-    public static JButton writeFileCancel;
     public static JDialog addFileDialog;
     public static JScrollPane scrollPane8;
     public static JTextArea addFileArea;

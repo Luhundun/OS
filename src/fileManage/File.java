@@ -19,9 +19,6 @@ public class File {
     protected short fFlags;
     protected short fCount;
     protected short fPos;
-
-
-
     protected Inode fInode;                    //这个文件的inode节点
     protected ArrayList<Block> dataBlockList;  //这个文件在磁盘的存储块链 (8个直接物理块块 -> 256个一级间址物理块 -> 32k个二级间址物理块)，这个成员仅仅为了方便展示
     public static File[] fileStructTable = new File[32];   //系统打开文件表，存储在内存的第8块。每个元素16B，共可同时打开32个。
@@ -97,7 +94,6 @@ public class File {
      */
     public File(Inode inode) throws Exception {
         fInode = inode;
-        fd = openFileByFile();
         dataBlockList = new ArrayList<>();
         int blockNum = inode.getFileSize();
         //预加载直接地址

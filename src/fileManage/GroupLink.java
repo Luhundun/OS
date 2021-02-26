@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class GroupLink {
 
-    public static Block topGroupLinkBlock = null;
+    private static Block topGroupLinkBlock = null;
 
     /**
      * @Description: 仅在重装操作系统时使用，初始化成组空闲块链

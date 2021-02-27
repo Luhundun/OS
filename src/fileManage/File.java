@@ -135,10 +135,38 @@ public class File {
             newFile = new Directory(OS.pathDirectory, mode);
         }
         OS.pathDirectory.addToDirectory(new FCB(fileName,newFile.fInode.getInodeNum()));
+        newFile.fInode.setFileCreateTime((short) (OS.getTime() + OS.getSuperBlock().getRunTime()));
         newFile.fInode.saveInodeToDisk();
         return newFile;
     }
 
+    
+    /**
+     * @Description: 真正删除文件的方法 
+     * @param: [fileName]
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/2/27 19:49
+     */
+    public static void deleteFile(String fileName) throws Exception {
+        if(fileName.equals(".") || fileName.equals("..")){
+            throw new Exception("删除.或..请往上级目录");
+        }
+        File thisFile = OS.pathDirectory.findFileInDirectory(fileName);
+        //先删除在当前文件夹下的fcb
+        OS.pathDirectory.deleteInDirectory(fileName);
+        //如果文件无其他硬链接，先删去数据块，再删去在内存中的inode，再删去再硬盘中的inode
+        if(thisFile.fInode.getInodeLink() <= 1){
+            thisFile.releaseAllBlocks();
+            thisFile.fInode.setInodeCount((short) 1);
+            closeFileInMemory(thisFile.fd);
+            thisFile.fInode.deleteInodeInDisk();
+        }else { //如果有其他硬链接，只删除当前目录下的目录项，并在内存减少一次打开数
+            thisFile.fInode.setInodeLink((short) (thisFile.fInode.getInodeLink() - 1));
+            closeFileInMemory(thisFile.fd);
+        }
+    }
+    
     /**
      * @Description: 根据文件名将文件打开
      * @param: []
@@ -158,8 +186,8 @@ public class File {
      * @date: 2021/2/22 14:09
      */
     public short openFileByFile() throws Exception {
-        fCount++;
-        if (fCount ==1){         //如果内存中这个文件打开数目为0，那么把对应的inode和文件在相关表中删去
+        fInode.setInodeCount((short) (fInode.getInodeCount() + 1));
+        if (fInode.getInodeCount()  ==1){         //如果内存中这个文件打开数目为0，那么把对应的inode和文件在相关表中删去
             fInode.loadInodeToMemory();
             openInFileStructTable();
         }
@@ -178,8 +206,8 @@ public class File {
      */
     public static void closeFileInMemory(short fd) throws Exception {
         File thisFile = fileStructTable[fd];
-        thisFile.fCount--;
-        if (thisFile.fCount ==0){         //如果内存中这个文件打开数目为0，那么把对应的inode和文件在相关表中删去
+        thisFile.fInode.setInodeCount((short) (thisFile.fInode.getInodeCount() - 1));
+        if (thisFile.fInode.getInodeCount()  == 0){         //如果内存中这个文件打开数目为0，那么把对应的inode和文件在相关表中删去
             thisFile.closeInFileStructTable();
             thisFile.fInode.saveInodeToDisk();
             thisFile.fInode.deleteInodeInMemory();
@@ -282,7 +310,7 @@ public class File {
      * @date: 2021/2/20 13:20
      */
     public void showFileInfomation(){
-        GUI.fileName.setText("");
+        GUI.fileName.setText(OS.selectedString);
         if(fInode.getFileType() == 1){
             GUI.fileType.setText("普通文件");
         } else if(fInode.getFileType() ==2){
@@ -298,7 +326,7 @@ public class File {
         }
 
         GUI.fileLink.setText(String.valueOf(fInode.getInodeLink()));
-        GUI.fileCount.setText(String.valueOf(fCount));
+        GUI.fileCount.setText(String.valueOf(fInode.getInodeCount()));
         switch (fInode.getInodeSaveMode()){
             case 0: GUI.fileSaveMode.setText("不可读写运行"); break;
             case 1: GUI.fileSaveMode.setText("不可读写 可运行"); break;
@@ -312,6 +340,9 @@ public class File {
         GUI.fileStructureP.setText("索引结构");
         GUI.fileStructureL.setText("流式结构");
         GUI.fileFID.setText(String.valueOf(fInode.getInodeNum()));
+        GUI.createTime.setText(String.valueOf(fInode.getFileCreateTime()));
+        GUI.alterTime.setText(String.valueOf(fInode.getFileAlterTime()));
+
         //时间
         short[] directAddress = fInode.getFileAddressDirect();
         GUI.directAddress1.setText(String.valueOf(directAddress[0]));
@@ -396,7 +427,6 @@ public class File {
                 stringBuffer.append(temp);
             }
         }
-        System.out.println("不正常结束");
         return stringBuffer.toString();
     }
 

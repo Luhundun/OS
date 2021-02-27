@@ -113,9 +113,9 @@ public class Directory extends File{
             }else {//不在内存情况下
                 inode = new Inode(fcb.getIno(), true);
                 if(inode.getFileType()==2){
-                    new Directory(inode);
+                    Directory directory=new Directory(inode);
                 }else {
-                    new File(inode);
+                    File file = new File(inode);
                 }
             }
         }
@@ -139,7 +139,7 @@ public class Directory extends File{
 //    }
 
     /**
-     * @Description: 在当前目录下新建一个文件
+     * @Description: 在当前目录下添加一个FCB，是创建文件的子步骤之一
      * @param: []
      * @return: void
      * @auther: Lu Ning
@@ -150,6 +150,24 @@ public class Directory extends File{
             throw new Exception("文件已存在");
         }
         directoryItems.add(fcb);
+        flashDirectory();
+        fInode.setFileAlterTime((short) (OS.getSuperBlock().getRunTime() + OS.getTime()));
+    }
+
+    /**
+     * @Description: 在当前目录下删去一个FCB，是删除文件的子步骤之一
+     * @param: [fileName]
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/2/27 19:48
+     */
+    public void deleteInDirectory(String fileName) throws Exception{
+        for(FCB fcb : directoryItems){
+            if(fcb.getFileName().equals(fileName)){
+                directoryItems.remove(fcb);
+                break;
+            }
+        }
         flashDirectory();
         fInode.setFileAlterTime((short) (OS.getSuperBlock().getRunTime() + OS.getTime()));
     }
@@ -189,7 +207,6 @@ public class Directory extends File{
      */
     public void flashDirectory() throws Exception {
         int FCBNums = directoryItems.size();
-        System.out.println(FCBNums);
         releaseAllBlocks();
         for (int i=0;i<=FCBNums/8;i++){
             Block thisBlock = OS.disk.findBlockByDno(getFileNextBlock());

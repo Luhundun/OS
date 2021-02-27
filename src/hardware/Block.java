@@ -164,6 +164,20 @@ public class Block {
     }
 
     /**
+     * @Description: 将原本有关inode信息的硬盘区域全部清零
+     * @param: [ino]
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/2/27 20:09
+     */
+    public synchronized void deleteInode(int ino){
+        int startIndex = ino * 32;
+        for(int i=0;i<32;i++){
+            block[startIndex + i] = 0;
+        }
+    }
+
+    /**
      * @Description: 获取当前块使用的字节数
      * @param: []
      * @return: int

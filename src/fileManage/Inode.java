@@ -181,7 +181,8 @@ public class Inode {
      * @auther: Lu Ning
      * @date: 2021/2/22 1:22
      */
-    public void deleteInodeInMemory(){
+    public void deleteInodeInMemory() throws Exception {
+        //在超级块中删去
         SuperBlock superBlock = OS.getSuperBlock();
         superBlock.setFreeInodesSumInMemory((short) (superBlock.getFreeInodesSumInMemory()  + 1));
         boolean[][] map = superBlock.getFreeInodesNumInMemory();
@@ -189,6 +190,27 @@ public class Inode {
         map[inodeIndex/16][inodeIndex%16] = false;
         superBlock.setFreeInodesNumInMemory(map);
         activeInodeInMemoryTable[inodeIndex] = null;
+        inodeCount = 0;
+        saveInodeToDisk();
+    }
+
+    /**
+     * @Description: 删除硬盘里的Inode
+     * @param: []
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/2/27 19:55
+     */
+    public void deleteInodeInDisk(){
+        //在超级块中删去
+        SuperBlock superBlock = OS.getSuperBlock();
+        superBlock.setFreeInodesSumInDisk((short) (superBlock.getFreeInodesSumInDisk()  + 1));
+        boolean[][] map = superBlock.getFreeInodesNumInDisk();
+        short inodeIndex = this.inodeNum;
+        map[inodeIndex/16][inodeIndex%16] = false;
+        superBlock.setFreeInodesNumInDisk(map);
+        //在物理硬盘中删去
+        OS.disk.findBlockByDno((short) (inodeNum/8+2)).deleteInode(inodeNum%8);
     }
 
     /**

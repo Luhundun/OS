@@ -8,6 +8,8 @@ package memoryManage;
  * @Version: v1.0
  */
 public class PageTableItem {
+
+
     private short logicalPageNumber;    //逻辑页号
     private short physicalPageNumber;   //物理页号
     private boolean stateFlag;          //状态位
@@ -116,6 +118,38 @@ public class PageTableItem {
         buffer.append('\t');
         buffer.append(modifyFlag);
         return buffer.toString();
+    }
+
+    public short getLogicalPageNumber() {
+        return logicalPageNumber;
+    }
+
+    public void setLogicalPageNumber(short logicalPageNumber) {
+        this.logicalPageNumber = logicalPageNumber;
+    }
+
+    public short getPhysicalPageNumber() {
+        return physicalPageNumber;
+    }
+
+    public void setPhysicalPageNumber(short physicalPageNumber) {
+        this.physicalPageNumber = physicalPageNumber;
+    }
+
+    public boolean isStateFlag() {
+        return stateFlag;
+    }
+
+    public void setStateFlag(boolean stateFlag) {
+        this.stateFlag = stateFlag;
+    }
+
+    public boolean isModifyFlag() {
+        return modifyFlag;
+    }
+
+    public void setModifyFlag(boolean modifyFlag) {
+        this.modifyFlag = modifyFlag;
     }
 
     public static void main(String[] args) throws Exception {

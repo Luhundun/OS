@@ -8,4 +8,6 @@ package memoryManage;
  * @Version: v1.0
  */
 public class LRU {
+
+
 }

@@ -1,0 +1,114 @@
+JFDML JFormDesigner: "7.0.1.0.272" Java: "11.0.9.1" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			"title": "创建文件"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "contentPanel"
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+						"$horizontalGroup": "par l {space :0:249:x};par l {seq {space ::21:x, par l:::p {seq {comp label35:::p:48:p, space :p:18:p, comp inputFileName:::::x}, seq {comp label36:::p::p, space :p:18:p, comp fileTypeBox:::::x}, seq {comp label38:::p::p, space :18:18:p, comp fileSaveModeBox:::p::p}, comp label37:::p::p, seq {comp label39:::p::p, space :p:18:p, comp inputFileSize:::::x}, comp label40:::p::p}, space :0:15:x}}"
+						"$verticalGroup": "par l {space :0:267:x};par l {seq {par l {seq {space :6::x, comp label35:::p::p, space :p:11:p}, comp inputFileName::l:p::p}, par l {seq {space :7:7:p, comp label36:::p::p, space :p:12:p}, seq t {comp fileTypeBox:::p::p, space :p:6:p}}, par l {seq {space :7:7:p, comp label38:::p::p}, comp fileSaveModeBox:::p::p}, space :6:6:p, comp label37:::p::p, par l {seq {space :p:12:p, comp label39:::p::p}, seq {space :p:6:p, comp inputFileSize:::p::p}}, space :p:39:p, comp label40:::p::p, space :0:68:x}}"
+					} ) {
+						name: "panel1"
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label35"
+							"text": "文件名"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "inputFileName"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label36"
+							"text": "文件类型"
+						} )
+						add( new FormComponent( "javax.swing.JComboBox" ) {
+							name: "fileTypeBox"
+							"model": new javax.swing.DefaultComboBoxModel {
+								selectedItem: "普通文件"
+								addElement( "普通文件" )
+								addElement( "目录文件" )
+								addElement( "特殊文件" )
+							}
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label37"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label38"
+							"text": "存取权限"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label39"
+							"text": "预留块数"
+						} )
+						add( new FormComponent( "javax.swing.JComboBox" ) {
+							name: "fileSaveModeBox"
+							"model": new javax.swing.DefaultComboBoxModel {
+								selectedItem: "无"
+								addElement( "无" )
+								addElement( "可运行" )
+								addElement( "可写" )
+								addElement( "可运行、写" )
+								addElement( "可读" )
+								addElement( "可读、运行" )
+								addElement( "可读、写" )
+								addElement( "可读、写、运行" )
+							}
+							"selectedIndex": 7
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "label40"
+							"text": "当前路径"
+						} )
+						add( new FormComponent( "javax.swing.JTextField" ) {
+							name: "inputFileSize"
+							"text": "1"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "South"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+					"$columnSpecs": "0:1.0, 80, 80"
+					"$rowSpecs": "0"
+					"$hGap": 5
+					"$vGap": 5
+				} ) {
+					name: "buttonBar"
+					"border": new javax.swing.border.EmptyBorder( 12, 0, 0, 0 )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "okButton"
+						"text": "OK"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "okButtonActionPerformed", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 1
+						"gridy": 0
+					} )
+					add( new FormComponent( "javax.swing.JButton" ) {
+						name: "cancelButton"
+						"text": "Cancel"
+						addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "cancelButtonActionPerformed", true ) )
+					}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+						"gridx": 2
+						"gridy": 0
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "South"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "Center"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 210, 95 )
+			"size": new java.awt.Dimension( 275, 365 )
+		} )
+	}
+}

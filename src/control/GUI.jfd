@@ -1,0 +1,570 @@
+JFDML JFormDesigner: "7.0.1.0.272" Java: "11.0.9.1" encoding: "UTF-8"
+
+new FormModel {
+	contentType: "form/swing"
+	root: new FormRoot {
+		add( new FormWindow( "javax.swing.JFrame", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+			name: "this"
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+				name: "dialogPane"
+				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
+				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+					name: "contentPanel"
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.FlowLayout ) ) {
+						name: "buttonPanel"
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "workButton"
+							"text": "作业管理页面"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "workButtonActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "memoryButton"
+							"text": "内存管理页面"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "memoryButtonActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "fileButton"
+							"text": "文件管理页面"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "fileButtonActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "deviceManage"
+							"text": "设备管理页面"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "deviceManageActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "reinstallOS"
+							"text": "重装操作系统"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "reinstallOSActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "loadOSFile"
+							"text": "加载操作系统镜像"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "loadOSFileActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "saveOS"
+							"text": "保存操作系统镜像"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "saveOSActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "runSystem"
+							"text": "开机"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "runSystemActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "continueButton"
+							"text": "继续"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "continueButtonActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "pauseButton"
+							"text": "暂停"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "pauseActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JButton" ) {
+							name: "showDownButton"
+							"text": "关机"
+							addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showDownButtonActionPerformed", true ) )
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "timeLabel"
+							"text": "当前时间：00"
+						} )
+						add( new FormComponent( "javax.swing.JLabel" ) {
+							name: "allTimeLabel"
+							"text": "累计时间：0000"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "North"
+					} )
+					add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.CardLayout ) ) {
+						name: "cardPanel"
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+							name: "workPanel"
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "card1"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
+							name: "memoryPanel"
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label1"
+								"text": "text"
+							}, new FormLayoutConstraints( class java.lang.String ) {
+								"value": "Center"
+							} )
+							add( new FormComponent( "javax.swing.JLabel" ) {
+								name: "label2"
+								"text": "text"
+							}, new FormLayoutConstraints( class java.lang.String ) {
+								"value": "North"
+							} )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "card2"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+							"$horizontalGroup": "par l {seq l {space :::p, par l {comp panel1:::p::p, comp panel3::l:p:341:p}, par l {seq {space :p:61:p, comp panel4:::p::p, space :::x}, seq t {space ::519:x, comp testButton:::p::p, space :p:285:p}}}}"
+							"$verticalGroup": "par l {seq l {space :p:36:p, par l {comp panel4:::::x, seq l {space :p:11:p, comp panel3:::p::p, space :0:75:x}}, space :::p, par l {comp panel1:::p::p, seq l {space :p:123:p, comp testButton:::p::p}}, space :p:66:p}}"
+						} ) {
+							name: "filePanel"
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+								"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp label28:::p::p, space :12:12:p, comp createTime:::p::p}, seq l {comp label11:::p::p, space :12:12:p, comp fileSize:::p::p}, seq l {comp label12:::p::p, space :12:12:p, comp fileLink:::p::p}, seq l {comp label13:::p::p, space :12:12:p, comp fileCount:::p::p}, seq l {comp label14:::p::p, space :12:12:p, comp fileSaveMode:::p::p}, seq l {comp label16:::p::p, space :12:12:p, comp fileStructureP:::p::p}, seq l {comp label17:::p::p, space :12:12:p, comp fileStructureL:::p::p}, seq l {comp label15:::p::p, space s:::p, comp fileFID:::p::p}, comp label8::l:p::p, seq l {comp label29:::p::p, space :12:12:p, comp alterTime:::p::p}, seq l {comp label30:::p::p, space :12:12:p, comp filePath:::p::p}, seq l {par l {comp label10::l:p::p, comp label9::l:p::p}, space :p:12:p, par l {comp fileName:::p::p, comp fileType:::p::p}}}, space s:::p, comp panel2:::p::p, space :0:20:x}}"
+								"$verticalGroup": "par l {seq l {space :::p, par l {comp panel2:::p::p, seq {comp label8:::p::p, space :p:3:p, par b {comp label9::b:p::p, comp fileName::b:p::p}, space :p:5:p, par l {comp label10:::p::p, comp fileType:::p::p}, space :::p, par l {comp label11:::p::p, comp fileSize:::p::p}, space :6:6:p, par l {comp label12:::p::p, comp fileLink:::p::p}, space :6:6:p, par l {comp label13:::p::p, comp fileCount:::p::p}, space :6:6:p, par l {comp label14:::p::p, comp fileSaveMode:::p::p}, space :::p, par l {comp label16:::p::p, comp fileStructureP:::p::p}, space :::p, par l {comp label17:::p::p, comp fileStructureL:::p::p}, space :::p, par b {comp label15::b:p::p, comp fileFID::b:p::p}, space :::p, par l {comp label28:::p::p, comp createTime:::p::p}, space :::p, par l {comp label29:::p::p, comp alterTime:::p::p}, space :::p, par l {comp label30:::p::p, comp filePath:::p::p}}}, space :::x}}"
+							} ) {
+								name: "panel1"
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label9"
+									"text": "文件名："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileName"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label10"
+									"text": "文件类型："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileType"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileSize"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label11"
+									"text": "文件大小："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileLink"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label12"
+									"text": "硬链接数："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label13"
+									"text": "打开数目："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileCount"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label14"
+									"text": "存取权限："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileSaveMode"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label15"
+									"text": "inode号："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileFID"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label16"
+									"text": "物理结构："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileStructureP"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label17"
+									"text": "逻辑结构："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "fileStructureL"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label8"
+									"text": "被选中文件的相关信息"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label28"
+									"text": "创建时间："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "createTime"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label29"
+									"text": "修改时间："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "alterTime"
+									"text": "null"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label30"
+									"text": "路径全名："
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "filePath"
+									"text": "null"
+								} )
+								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+									"$horizontalGroup": "par l {seq {space :::p, par l {seq l {par l {comp label20::l:p::p, par t:l {comp label18::t:p::p, comp label19::t:p::p}}, space s:::p, par l {comp directAddress3::l:p::p, par t:l {comp directAddress1::t:p::p, comp directAddress2::t:p::p}}}, seq l {comp label21:::p::p, space s:::p, comp directAddress4:::p::p}, seq l {comp label22:::p::p, space s:::p, comp directAddress5:::p::p}, seq l {comp label23:::p::p, space :18:18:p, comp directAddress6:::p::p}, seq l {comp label24:::p::p, space :18:18:p, comp directAddress7:::p::p}, seq l {comp label25:::p::p, space :18:18:p, comp directAddress8:::p::p}, seq l {comp label26:::p::p, space :18:18:p, comp indirectAddress1:::p::p}, seq l {comp label27:::p::p, space :18:18:p, comp indirectAddress2:::p::p}}, space ::34:x}}"
+									"$verticalGroup": "par l {seq l {space :p:23:p, par l {seq {comp label18:::p::p, space :::p, comp label19:::p::p, space :::p, comp label20:::p::p}, seq {comp directAddress1:::p::p, space :::p, comp directAddress2:::p::p, space :::p, comp directAddress3:::p::p}}, space :::p, par b {comp label21::b:p::p, comp directAddress4::b:p::p}, space :::p, par b {comp label22::b:p::p, comp directAddress5::b:p::p}, space :::p, par l {comp label23:::p::p, comp directAddress6:::p::p}, space :::p, par l {comp label24:::p::p, comp directAddress7:::p::p}, space :::p, par l {comp label25:::p::p, comp directAddress8:::p::p}, space :::p, par l {comp label26:::p::p, comp indirectAddress1:::p::p}, space :::p, par l {comp label27:::p::p, comp indirectAddress2:::p::p}, space ::49:x}}"
+								} ) {
+									name: "panel2"
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label18"
+										"text": "直接地址1:"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "directAddress1"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label19"
+										"text": "直接地址2:"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "directAddress2"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label20"
+										"text": "直接地址3:"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "directAddress3"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label21"
+										"text": "直接地址4:"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "directAddress4"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label22"
+										"text": "直接地址5:"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "directAddress5"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "directAddress6"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label23"
+										"text": "直接地址6:"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "directAddress7"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label24"
+										"text": "直接地址7:"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "directAddress8"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label25"
+										"text": "直接地址8:"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "indirectAddress1"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label26"
+										"text": "一级间址  :"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "indirectAddress2"
+										"text": "null"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label27"
+										"text": "二级间址  :"
+									} )
+								} )
+							} )
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+								"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp panel8:::p:242:p, space :::x, par l {seq t {par l:::p {comp readFileButton::l::0:x, comp addFileButton::l::0:x, comp createFile::t:p:76:p, comp button1::l::0:x}, space :p:12:p}, seq {par t {comp openFile::t:p:76:p, comp writeFileButton:::p:76:p}, space :::p}, seq t {par t {comp getInDirectory:::p:77:p, comp deleteFile:::p:76:p}, space :p:11:p}}}, seq {par l {seq {comp textField1:::p:183:p, space :::p, comp fileJump:::p:53:p}, seq l {comp label3:::p::p, space :::p, comp filePathLabel:::p::p}}, space :::x}}}}"
+								"$verticalGroup": "par l {seq l {space :p:8:p, par b {comp label3::b:p::p, comp filePathLabel::b:p::p}, space :::p, par l {comp fileJump:::p::p, comp textField1::t:p:30:p}, space :::p, comp createFile:::p::p, space :::p, par l {comp panel8:::p:300:p, seq {comp openFile:::p::p, space :::p, comp writeFileButton:::p::p, space :::p, comp readFileButton:::p::p, space :::p, comp addFileButton:::p::p, space :::p, comp button1:::p::p, space :::p, comp deleteFile:::p::p, space :::p, comp getInDirectory:::p::p}}, space ::45:x}}"
+							} ) {
+								name: "panel3"
+								add( new FormComponent( "javax.swing.JTextField" ) {
+									name: "textField1"
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "fileJump"
+									"text": "跳转"
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "deleteFile"
+									"text": "删除文件"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "deleteFileActionPerformed", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label3"
+									"text": "当前文件位置:"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "filePathLabel"
+									"text": "/"
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "button1"
+									"text": "建立链接"
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "writeFileButton"
+									"text": "重写文件"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "writeFileButtonActionPerformed", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "readFileButton"
+									"text": "读文件"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "readFileButtonActionPerformed", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "addFileButton"
+									"text": "追加文件"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addFileButtonActionPerformed", true ) )
+								} )
+								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+									"columns": 4
+								} ) {
+									name: "panel8"
+									add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+										name: "scrollPane10"
+										add( new FormComponent( "javax.swing.JList" ) {
+											name: "fileNameList"
+											"selectionMode": 0
+											addEvent( new FormEvent( "javax.swing.event.ListSelectionListener", "valueChanged", "fileNameListValueChanged", true ) )
+										} )
+									} )
+									add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+										name: "scrollPane11"
+										add( new FormComponent( "javax.swing.JList" ) {
+											name: "fileModeList"
+										} )
+									} )
+									add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+										name: "scrollPane13"
+										add( new FormComponent( "javax.swing.JList" ) {
+											name: "fileUserList"
+										} )
+									} )
+									add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+										name: "scrollPane12"
+										add( new FormComponent( "javax.swing.JList" ) {
+											name: "list3"
+										} )
+									} )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "createFile"
+									"text": "创建文件"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "createFileActionPerformed", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "openFile"
+									"text": "打开文件"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "fileDetailActionPerformed", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "getInDirectory"
+									"text": "进入下一级"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "getInDirectoryActionPerformed", true ) )
+								} )
+							} )
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+								"$horizontalGroup": "par l {seq t {par l {seq l {space :p:50:p, comp label41:::p::p}, seq l {space :p:33:p, par l:::p {comp scrollPane9::::174:x, comp label42::::174:x}}}, space :0:33:x, par l {comp label34:::p::p, comp scrollPane5:::p:85:p}, par l {seq {space :p:9:p, comp label32:::p::p}, seq l {space :p:47:p, par l {seq l {space :6:6:p, comp inodeInMemoryLabel:::p::p}, comp inodeBarInMemory:::p:38:p}}}, space s:::p, par l {comp scrollPane4:::p:83:p, comp label31:::p::p}, space :p:33:p, par l {comp label6:::p::p, seq {space :6:6:p, comp scrollPane3:::p:72:p}}, space u:::p, par l {comp label7:::p::p, seq l {space :p:21:p, par t {comp inodeInDiskLabel:::p::p, comp inodeBarInDisk:::p:38:p}}}, space :::p}}"
+								"$verticalGroup": "par l {seq l {space :::p, par b {comp label7::b:p::p, comp label6::b:p::p, comp label31::b:p::p, comp label32::b:p::p, comp label41::b:p::p, comp label34::b:p::p}, space :::p, par l {seq {par l {comp scrollPane3:::::x, comp scrollPane4::l:::x, comp scrollPane5::l:::x, seq {comp inodeBarInDisk:::p:369:p, space :::p, comp inodeInDiskLabel:::p::p, space :0:0:x}, seq t {space :0:82:x, par l {seq t {comp inodeBarInMemory:::p:370:p, space :::p, comp inodeInMemoryLabel:::p::p}, comp scrollPane9::t:p:376:p}}}, space :p:33:p}, seq {comp label42:::p::p, space :::x}}}}"
+							} ) {
+								name: "panel4"
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label6"
+									"text": "硬盘成组空闲块链"
+								} )
+								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+									name: "scrollPane3"
+									add( new FormComponent( "javax.swing.JList" ) {
+										name: "groupLinkList"
+									} )
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label7"
+									"text": "硬盘空闲inode数"
+								} )
+								add( new FormComponent( "javax.swing.JProgressBar" ) {
+									name: "inodeBarInDisk"
+									"maximum": 512
+									"orientation": 1
+									"stringPainted": true
+								} )
+								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+									name: "scrollPane4"
+									add( new FormComponent( "javax.swing.JList" ) {
+										name: "inodeInMemoryList"
+									} )
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label31"
+									"text": "内存中inode"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label32"
+									"text": "内存剩余可存inode数"
+								} )
+								add( new FormComponent( "javax.swing.JProgressBar" ) {
+									name: "inodeBarInMemory"
+									"maximum": 32
+									"orientation": 1
+									"stringPainted": true
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "inodeInDiskLabel"
+									"text": "000/512"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "inodeInMemoryLabel"
+									"text": "00/32"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label34"
+									"text": "内存空闲块"
+								} )
+								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+									name: "scrollPane5"
+									add( new FormComponent( "javax.swing.JList" ) {
+										name: "freeBlockList"
+									} )
+								} )
+								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+									name: "scrollPane9"
+									add( new FormComponent( "javax.swing.JList" ) {
+										name: "systemOpenFileTable"
+									} )
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label41"
+									"text": "系统打开文件表"
+								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label42"
+									"text": "  fd-------------------ino"
+								} )
+							} )
+							add( new FormComponent( "javax.swing.JButton" ) {
+								name: "testButton"
+								"text": "测试按钮"
+								addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "testButtonActionPerformed", true ) )
+							} )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "card3"
+						} )
+						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
+							"columns": 2
+						} ) {
+							name: "devicePanel"
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+								"$horizontalGroup": "par l {seq l {space :p:178:p, comp label4:::p:268:p, space ::168:x}}"
+								"$verticalGroup": "par l {seq l {space :p:156:p, comp label4:::p:283:p, space ::478:x}}"
+							} ) {
+								name: "subDevicePanel1"
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label4"
+									"text": "spooling"
+								} )
+							} )
+							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+								"$horizontalGroup": "par l {seq l {space :::p, comp panel5:::p::p, space :::x}}"
+								"$verticalGroup": "par l {seq l {comp panel5:::p::p, space :0:720:x}}"
+							} ) {
+								name: "devices"
+								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
+									"$horizontalGroup": "par l {seq {space :::p, par l {seq l {comp label5:::p::p, space :::p, comp diskUsedSituation:::p:190:p, space :::p, comp diskBar:::p::p, space ::152:x, comp findBlockContext:::p::p, space :p:26:p}, seq l {comp label33:::p::p, space :::p, comp diskUsedSituation2:::p:190:p, space :::p, comp diskBar2:::p::p, space ::155:x, comp findBlockContext2:::p::p, space :p:23:p}, seq t {par t {comp scrollPane6::l::697:x, comp scrollPane1::::697:x}, space :::p}}}}"
+									"$verticalGroup": "par l {seq l {space :::p, par b {comp label5::b:p:30:p, par b:b {comp diskUsedSituation::b:p::p, comp diskBar::l:::x, comp findBlockContext::b:p:31:p}}, space :::p, comp scrollPane1:::p:48:p, space :::x, par b {comp label33::b:p:30:p, comp diskUsedSituation2::b:p::p, comp diskBar2::b:p::p, comp findBlockContext2::b:p:31:p}, space :::p, comp scrollPane6:::p:57:p, space :::p}}"
+								} ) {
+									name: "panel5"
+									add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+										name: "scrollPane1"
+										add( new FormComponent( "javax.swing.JTextArea" ) {
+											name: "blockContext"
+										} )
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label5"
+										"text": "硬盘使用情况"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "diskUsedSituation"
+										"text": "共10485760B,已使用"
+									} )
+									add( new FormComponent( "javax.swing.JProgressBar" ) {
+										name: "diskBar"
+										"maximum": 10485760
+										"stringPainted": true
+									} )
+									add( new FormComponent( "javax.swing.JButton" ) {
+										name: "findBlockContext"
+										"text": "查询盘块中内容"
+										addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "findBlockContextActionPerformed", true ) )
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label33"
+										"text": "内存使用情况"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "diskUsedSituation2"
+										"text": "共32768B,已使用"
+									} )
+									add( new FormComponent( "javax.swing.JProgressBar" ) {
+										name: "diskBar2"
+										"maximum": 32768
+										"stringPainted": true
+									} )
+									add( new FormComponent( "javax.swing.JButton" ) {
+										name: "findBlockContext2"
+										"text": "查询盘块中内容"
+										addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "findBlockContext2ActionPerformed", true ) )
+									} )
+									add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+										name: "scrollPane6"
+										add( new FormComponent( "javax.swing.JTextArea" ) {
+											name: "blockContext2"
+										} )
+									} )
+								} )
+							} )
+						}, new FormLayoutConstraints( class java.lang.String ) {
+							"value": "card4"
+						} )
+					}, new FormLayoutConstraints( class java.lang.String ) {
+						"value": "Center"
+					} )
+				}, new FormLayoutConstraints( class java.lang.String ) {
+					"value": "Center"
+				} )
+			}, new FormLayoutConstraints( class java.lang.String ) {
+				"value": "North"
+			} )
+		}, new FormLayoutConstraints( null ) {
+			"location": new java.awt.Point( 70, 0 )
+			"size": new java.awt.Dimension( 1255, 1005 )
+		} )
+	}
+}

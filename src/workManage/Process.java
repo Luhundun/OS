@@ -1,5 +1,7 @@
 package workManage;
 
+import control.OS;
+import fileManage.Directory;
 import fileManage.File;
 import hardware.Block;
 
@@ -32,6 +34,11 @@ public class Process {
 
 
         pcb = new PCB(processPriority);
+        String fileName = OS.pathDirectory.getNameByFile(file);
+        if (fileName.equals("")){
+            throw new Exception("目录错误");
+        }
+        File.createFile("$~"+fileName, 0, 3, file.getfInode().getFileSize() + 1);
 //        blocksInMemory[0] =
     }
 }

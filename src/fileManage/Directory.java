@@ -277,6 +277,22 @@ public class Directory extends File{
         GUI.fileModeList.setListData(fileTypeList.toArray());
     }
 
+    /**
+     * @Description: 在当前目录下获取这个文件的文件名
+     * @param: []
+     * @return: java.lang.String
+     * @auther: Lu Ning
+     * @date: 2021/3/1 22:38
+     */
+    public String getNameByFile(File file){
+        for (FCB fcb : directoryItems){
+            if(fcb.getIno() == file.fInode.getInodeNum()){
+                return fcb.getFileName();
+            }
+        }
+        return "";
+    }
+
     public ArrayList<FCB> getDirectoryItems() {
         return directoryItems;
     }

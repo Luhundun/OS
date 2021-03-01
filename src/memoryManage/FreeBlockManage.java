@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class FreeBlockManage {
 
     /**
-     * @Description: 从位示图获取一个空闲的物理块
+     * @Description: 用户进程获取内存中的空闲物理块是四个四个的。
      * @param:
      * @return:
      * @auther: Lu Ning

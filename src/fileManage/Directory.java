@@ -36,7 +36,7 @@ public class Directory extends File{
     /**
      * @Description: 重装系统时初始化系统的目录文件
      * @param: [root]
-     * @return:
+     * @return:2
      * @auther: Lu Ning
      * @date: 2021/2/24 0:33
      */

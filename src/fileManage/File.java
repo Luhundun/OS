@@ -684,6 +684,41 @@ public class File {
     }
 
     /**
+     * @Description: 从可执行文件中读取第n条指令
+     * @param: []
+     * @return: short[]
+     * @auther: Lu Ning
+     * @date: 2021/3/1 11:08
+     */
+    public short[] readInstruction(int index){
+        short[] returnShort = new short[8];
+        Block thisBlock = dataBlockList.get(index/32);
+        for(int i=0;i<8;i++){
+            returnShort[i] = thisBlock.readAWord(index%32*8 + i);
+        }
+        return returnShort;
+    }
+
+    /**
+     * @Description: 判断当前文件是否为可执行文件
+     * @param: []
+     * @return: short 对于规范文件，返回优先级，对于不规范文件，返回负数
+     * @auther: Lu Ning
+     * @date: 2021/3/1 12:23
+     */
+    public short runnableFileJudgement(){
+        short[] temp = readInstruction(0);
+        if (Block.convertUTF16ToShort("p") == temp[0] && Block.convertUTF16ToShort("r") == temp[1] &&
+            Block.convertUTF16ToShort("i") == temp[2] && Block.convertUTF16ToShort("o") == temp[3] &&
+            Block.convertUTF16ToShort("r") == temp[4] && Block.convertUTF16ToShort(":") == temp[5] &&
+            temp[6] <= '9' && temp[6] >= '0')
+        {
+            return (short) (temp[6] - '0');
+        }
+        else return -1;
+    }
+
+    /**
      * @Description: 用inode来比较两个文件是否相同；
      * @param: [o]
      * @return: boolean

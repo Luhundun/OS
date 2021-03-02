@@ -2,6 +2,7 @@ package workManage;
 
 import control.OS;
 import hardware.Block;
+import hardware.CPU;
 
 /**
  * @ClassName: Instruction
@@ -28,38 +29,55 @@ public class Instruction {
         String tempP1= Block.convertShortToUTF16(context[5]) + Block.convertShortToUTF16(context[6]);
         //检查指令内容是否合法
         //加减乘除，两个操作数都是寄存器
-        if(tempType.equals("add") || tempType.equals("sub") || tempType.equals("mul") || tempType.equals("div")){
-            instructionType = tempType;
-            if(tempP0.equals("r0")||tempP0.equals("r1")||tempP0.equals("r2")||tempP0.equals("r3")){
-                p0 = tempP0;
-            }else {
-                throw new Exception("不合法的第0个操作数");
-            }
-            if(tempP1.equals("r0")||tempP1.equals("r1")||tempP1.equals("r2")||tempP1.equals("r3")){
-                p1 = tempP1;
-            }else {
-                throw new Exception("不合法的第1个操作数");
-            }
-            //mov，第0个是寄存器，第二个是立即数
-        } else if(tempType.equals("mov")){
-            instructionType = tempType;
-            if(tempP0.equals("r0")||tempP0.equals("r1")||tempP0.equals("r2")||tempP0.equals("r3")){
-                p0 = tempP0;
-            }else {
-                throw new Exception("不合法的第0个操作数");
-            }
-            try{
-                Short.valueOf(tempP1);    //如果报错说明不是纯数字
-                p1 = tempP1;
-            }catch (Exception e){
-                throw new Exception("不合法的第1个操作数");
-            }
-        } else if(tempType.equals("out") || tempType.equals("inn") || tempType.equals("rea") ||
-                tempType.equals("wri") || tempType.equals("pri") || tempType.equals("sle")){
-            p0 = "";
-            p1 = "";
-        } else {
-            throw new Exception("不合法的操作符");
+        switch (tempType) {
+            case "add":
+            case "sub":
+            case "mul":
+            case "div":
+            case "le<":
+            case "gr>":
+            case "equ":
+                instructionType = tempType;
+                if (tempP0.equals("r0") || tempP0.equals("r1") || tempP0.equals("r2") || tempP0.equals("r3")) {
+                    p0 = tempP0;
+                } else {
+                    p0= "r0";
+                    System.out.println("不合法的第0个操作数"+tempType+"已转化为r0");
+                }
+                if (tempP1.equals("r0") || tempP1.equals("r1") || tempP1.equals("r2") || tempP1.equals("r3")) {
+                    p1 = tempP1;
+                } else {
+                    p1= "r0";
+                    System.out.println("不合法的第1个操作数"+tempType+"已转化为r0");                }
+                //mov，第0个是寄存器，第二个是立即数
+                break;
+            case "mov":
+                instructionType = tempType;
+                if (tempP0.equals("r0") || tempP0.equals("r1") || tempP0.equals("r2") || tempP0.equals("r3")) {
+                    p0 = tempP0;
+                } else {
+                    p0= "r0";
+                    System.out.println("不合法的第0个操作数"+tempType+"已转化为r0");                }
+                try {
+                    Short.valueOf(tempP1);    //如果报错说明不是纯数字
+                    p1 = tempP1;
+                } catch (Exception e) {
+                    p1= "r0";
+                    System.out.println("不合法的第1个操作数"+tempType+"已转化为r0");
+                }
+                break;
+            case "out":
+            case "inn":
+            case "rea":
+            case "wri":
+            case "pri":
+            case "sle":
+                p0 = "";
+                p1 = "";
+                break;
+            default:
+                instructionType="sle";
+                System.out.println("不合法的操作符"+tempType+"已转化为sle");
         }
     }
     
@@ -106,6 +124,16 @@ public class Instruction {
                 break;
             case "sle":
                 temp[0] = 10;
+                break;
+            case "le<":
+                temp[0] = 11;
+                break;
+            case "gr>":
+                temp[0] = 12;
+                break;
+            case "equ":
+                temp[0] = 13;
+                break;
         }
         temp[0] = (short) (temp[0] * 256);
         switch (instruction.p0) {
@@ -154,18 +182,23 @@ public class Instruction {
         switch (instruction.instructionType) {
             case "add":
                 setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) + getCpuRegister(instruction.p1)));
+                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
                 break;
             case "sub":
-                setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) + getCpuRegister(instruction.p1)));
+                setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) - getCpuRegister(instruction.p1)));
+                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
                 break;
             case "mul":
                 setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) * getCpuRegister(instruction.p1)));
+                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
                 break;
             case "div":
                 setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) / getCpuRegister(instruction.p1)));
+                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
                 break;
             case "mov":
                 setCpuRegister(instruction.p0, Short.parseShort(instruction.p1));
+                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
                 break;
             case "out":
 
@@ -182,8 +215,31 @@ public class Instruction {
             case "pri":
 
                 break;
+            case "sle":
+                break;
+            case "le<":
+                if(getCpuRegister(instruction.p0) < getCpuRegister(instruction.p1)){
+                    setCpuRegister("psw",(short) 1);
+                }else {
+                    setCpuRegister("psw",(short) 0);
+                }
+                break;
+            case "gr>":
+                if(getCpuRegister(instruction.p0) > getCpuRegister(instruction.p1)){
+                    setCpuRegister("psw",(short) 1);
+                }else {
+                    setCpuRegister("psw", (short) 0);
+                }
+                break;
+            case "equ":
+                if(getCpuRegister(instruction.p0) == getCpuRegister(instruction.p1)){
+                    setCpuRegister("psw",(short) 1);
+                }else {
+                    setCpuRegister("psw",(short) 0);
+                }
+                break;
         }
-        return "执行了"+instruction.instructionType+res;
+        return "执行了"+instruction.instructionType+"  " + res;
     }
 
     /**
@@ -196,23 +252,25 @@ public class Instruction {
     public static void setCpuRegister(String register, short value){
         switch (register) {
             case "r0":
-                OS.cpu.setR0(value);
+                CPU.setR0(value);
                 break;
             case "r1":
-                OS.cpu.setR1(value);
+                CPU.setR1(value);
                 break;
             case "r2":
-                OS.cpu.setR2(value);
+                CPU.setR2(value);
                 break;
             case "r3":
-                OS.cpu.setR3(value);
+                CPU.setR3(value);
                 break;
             case "ir":
-                OS.cpu.setIr(value);
+                CPU.setIr(value);
                 break;
             case "pc":
-                OS.cpu.setPc(value);
+                CPU.setPc(value);
                 break;
+            case "psw":
+                CPU.setPsw(value);
         }
     }
 
@@ -226,20 +284,26 @@ public class Instruction {
     public static short getCpuRegister(String register) throws Exception {
         switch (register) {
             case "r0":
-                return OS.cpu.getR0();
+                return CPU.getR0();
             case "r1":
-                return OS.cpu.getR1();
+                return CPU.getR1();
             case "r2":
-                return OS.cpu.getR2();
+                return CPU.getR2();
             case "r3":
-                return OS.cpu.getR3();
+                return CPU.getR3();
             case "ir":
-                return OS.cpu.getIr();
+                return CPU.getIr();
             case "pc":
-                return OS.cpu.getPc();
+                return CPU.getPc();
+            case "psw":
+                return CPU.getPsw();
         }
         throw new Exception("尝试获取错误的寄存器");
     }
+
+
+
+
 
     public static void main(String[] args) {
 

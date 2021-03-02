@@ -6,6 +6,8 @@ import hardware.Disk;
 import hardware.Memory;
 import memoryManage.PageTable;
 import workManage.PCB;
+import workManage.PV;
+import workManage.Process;
 import workManage.ProcessSchduleThread;
 import workManage.Queues;
 
@@ -27,11 +29,15 @@ public class OS {
     public static ReentrantLock guiFlashTimerLock =new ReentrantLock();           //控制0.2秒执行一条cpu指令的锁
     public static Condition guiFlashTimerCondition = guiFlashTimerLock.newCondition();
 
-    public static String virtualDiskRootPath = "./src/hardware/virtualDisk/";
-    public static String virtualDiskMirrorPath = "./src/hardware/DiskMirror.mir";
+    public static final String virtualDiskRootPath = "./src/hardware/virtualDisk/";
+    public static final String virtualDiskMirrorPath = "./src/hardware/DiskMirror.mir";
+    public static final short timeSliceLength = 5;      //时间片长度
+    public static final int pcbPoolSize = 32;
+
+
 
     //模拟操作系统中的硬件
-    public static CPU cpu = new CPU();
+    public static CPU cpu;
     public static Disk disk = new Disk();
     public static Memory memory;
 
@@ -41,6 +47,7 @@ public class OS {
     public static PageTable systemPageTable = null;
 
     public static File topFile;
+    public static Process chooseProcess;
     public static Directory pathDirectory;
     public static ArrayList<String> path = new ArrayList<>();
     public static String selectedString;
@@ -54,7 +61,6 @@ public class OS {
      */
     public static void runSystem() {
         try {
-
             //加载硬盘
             disk.loadDisk();
 
@@ -65,16 +71,18 @@ public class OS {
             //加载内存
             memory = new Memory();
 
-
-
             //加载硬盘上成组空闲块链，并将链顶置入内存指定块
             GroupLink.runGroupLink();
+
+            //初始化信号量
+            PV.initPV();
 
             //初始化PCB池
             PCB.initPCBManagment();
 
             //初始化进程队列
             Queues.initQueues();
+            Process.initProcess();
 
             //初始化系统页表
             PageTable.initSystemPageTable();

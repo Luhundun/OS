@@ -208,7 +208,8 @@ public class GUI extends JFrame {
 
     public void runFileActionPerformed(ActionEvent e) {
         try {
-            Primitives.init(OS.topFile);
+
+            Primitives.init(OS.topFile, Short.parseShort(JOptionPane.showInputDialog("请输入启动优先级（0-10），0最大",5)));
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -218,6 +219,53 @@ public class GUI extends JFrame {
         Process p = Queues.readyQueue.get(0);
         Primitives.block(p,(short) 3);
     }
+
+    public void button3ActionPerformed(ActionEvent e) {
+        Process p = Queues.readyQueue.get(0);
+        try {
+            Primitives.hangup(p);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void button4ActionPerformed(ActionEvent e) {
+        Process p = Queues.hangUpReadyQueue.get(0);
+        try {
+            Primitives.destroy(p);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    public void showProcessActionPerformed(ActionEvent e) {
+        try {
+            new processInfomationDialog(this).setVisible(true);
+        }catch (Exception e1){
+            JOptionPane.showMessageDialog(null,"没有在内存中进程选中一个进程");
+        }
+
+    }
+
+
+    public void processInMemoryValueChanged(ListSelectionEvent e) {
+
+        try {
+            if (e.getValueIsAdjusting()){
+                for(Process process : Process.processInMemory){
+                    if (process.equals(processInMemory.getSelectedValue())){
+                        OS.chooseProcess = process;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
 
 
     private void initComponents() {
@@ -336,25 +384,36 @@ public class GUI extends JFrame {
         label35 = new JLabel();
         panel7 = new JPanel();
         scrollPane15 = new JScrollPane();
-        list4 = new JList();
+        systemPageTable = new JList();
         panel9 = new JPanel();
         label38 = new JLabel();
         label36 = new JLabel();
+        label43 = new JLabel();
         panel10 = new JPanel();
         label39 = new JLabel();
         systemTime = new JLabel();
         label40 = new JLabel();
-        systemTime2 = new JLabel();
-        label43 = new JLabel();
-        systemTime3 = new JLabel();
-        label44 = new JLabel();
-        systemTime4 = new JLabel();
+        IR = new JLabel();
         label45 = new JLabel();
-        systemTime5 = new JLabel();
+        PC = new JLabel();
         label46 = new JLabel();
-        systemTime6 = new JLabel();
+        workingProcessNum = new JLabel();
         label47 = new JLabel();
         systemTime7 = new JLabel();
+        label60 = new JLabel();
+        PSW = new JLabel();
+        label61 = new JLabel();
+        R0 = new JLabel();
+        R1 = new JLabel();
+        label62 = new JLabel();
+        R2 = new JLabel();
+        label63 = new JLabel();
+        R3 = new JLabel();
+        label64 = new JLabel();
+        scrollPane2 = new JScrollPane();
+        processInMemory = new JList();
+        label37 = new JLabel();
+        showProcess = new JButton();
         resourcePanel = new JPanel();
         processPanel = new JPanel();
         panel11 = new JPanel();
@@ -408,6 +467,8 @@ public class GUI extends JFrame {
         button2 = new JButton();
         button3 = new JButton();
         button4 = new JButton();
+        scrollPane8 = new JScrollPane();
+        outInfoArea = new JTextArea();
         devices = new JPanel();
         panel5 = new JPanel();
         scrollPane1 = new JScrollPane();
@@ -1188,9 +1249,9 @@ public class GUI extends JFrame {
                                 //======== scrollPane15 ========
                                 {
 
-                                    //---- list4 ----
-                                    list4.setPreferredSize(new Dimension(38, 49));
-                                    scrollPane15.setViewportView(list4);
+                                    //---- systemPageTable ----
+                                    systemPageTable.setPreferredSize(new Dimension(38, 49));
+                                    scrollPane15.setViewportView(systemPageTable);
                                 }
                                 panel7.add(scrollPane15, BorderLayout.CENTER);
 
@@ -1200,10 +1261,13 @@ public class GUI extends JFrame {
                                     panel9.setMinimumSize(new Dimension(179, 40));
 
                                     //---- label38 ----
-                                    label38.setText("\u903b\u8f91\u5185\u5b58");
+                                    label38.setText("\u903b\u8f91\u9875\u53f7");
 
                                     //---- label36 ----
                                     label36.setText("\u7cfb\u7edf\u7ea7\u9875\u8868");
+
+                                    //---- label43 ----
+                                    label43.setText("\u7269\u7406\u9875\u53f7");
 
                                     GroupLayout panel9Layout = new GroupLayout(panel9);
                                     panel9.setLayout(panel9Layout);
@@ -1211,11 +1275,15 @@ public class GUI extends JFrame {
                                         panel9Layout.createParallelGroup()
                                             .addGroup(panel9Layout.createSequentialGroup()
                                                 .addComponent(label38)
-                                                .addGap(0, 271, Short.MAX_VALUE))
-                                            .addGroup(panel9Layout.createSequentialGroup()
-                                                .addGap(113, 113, 113)
-                                                .addComponent(label36)
-                                                .addContainerGap(146, Short.MAX_VALUE))
+                                                .addGap(65, 65, 65)
+                                                .addGroup(panel9Layout.createParallelGroup()
+                                                    .addGroup(panel9Layout.createSequentialGroup()
+                                                        .addGap(6, 6, 6)
+                                                        .addComponent(label43)
+                                                        .addGap(0, 152, Short.MAX_VALUE))
+                                                    .addGroup(panel9Layout.createSequentialGroup()
+                                                        .addComponent(label36)
+                                                        .addContainerGap(146, Short.MAX_VALUE))))
                                     );
                                     panel9Layout.setVerticalGroup(
                                         panel9Layout.createParallelGroup()
@@ -1223,7 +1291,9 @@ public class GUI extends JFrame {
                                                 .addContainerGap(27, Short.MAX_VALUE)
                                                 .addComponent(label36)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(label38)
+                                                .addGroup(panel9Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(label38)
+                                                    .addComponent(label43))
                                                 .addGap(16, 16, 16))
                                     );
                                 }
@@ -1242,38 +1312,56 @@ public class GUI extends JFrame {
                                 //---- label40 ----
                                 label40.setText("IR:");
 
-                                //---- systemTime2 ----
-                                systemTime2.setText("00");
-
-                                //---- label43 ----
-                                label43.setText("\u7cfb\u7edf\u65f6\u95f4\uff1a");
-
-                                //---- systemTime3 ----
-                                systemTime3.setText("00");
-
-                                //---- label44 ----
-                                label44.setText("\u7cfb\u7edf\u65f6\u95f4\uff1a");
-
-                                //---- systemTime4 ----
-                                systemTime4.setText("00");
+                                //---- IR ----
+                                IR.setText("00");
 
                                 //---- label45 ----
-                                label45.setText("PSW:");
+                                label45.setText("PC:");
 
-                                //---- systemTime5 ----
-                                systemTime5.setText("00");
+                                //---- PC ----
+                                PC.setText("00");
 
                                 //---- label46 ----
                                 label46.setText("\u5f53\u524d\u8fd0\u884c\u8fdb\u7a0b\u53f7");
 
-                                //---- systemTime6 ----
-                                systemTime6.setText("00");
+                                //---- workingProcessNum ----
+                                workingProcessNum.setText("00");
 
                                 //---- label47 ----
                                 label47.setText("CPU\u72b6\u6001\uff1a");
 
                                 //---- systemTime7 ----
                                 systemTime7.setText("00");
+
+                                //---- label60 ----
+                                label60.setText("PSW:");
+
+                                //---- PSW ----
+                                PSW.setText("00");
+
+                                //---- label61 ----
+                                label61.setText("R0:");
+
+                                //---- R0 ----
+                                R0.setText("00");
+
+                                //---- R1 ----
+                                R1.setText("00");
+
+                                //---- label62 ----
+                                label62.setText("R1:");
+
+                                //---- R2 ----
+                                R2.setText("00");
+
+                                //---- label63 ----
+                                label63.setText("R2:");
+
+                                //---- R3 ----
+                                R3.setText("00");
+
+                                //---- label64 ----
+                                label64.setText("R3:");
 
                                 GroupLayout panel10Layout = new GroupLayout(panel10);
                                 panel10.setLayout(panel10Layout);
@@ -1282,71 +1370,114 @@ public class GUI extends JFrame {
                                         .addGroup(panel10Layout.createSequentialGroup()
                                             .addContainerGap()
                                             .addGroup(panel10Layout.createParallelGroup()
+                                                .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                    .addGroup(GroupLayout.Alignment.LEADING, panel10Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                                        .addGroup(GroupLayout.Alignment.LEADING, panel10Layout.createSequentialGroup()
+                                                            .addComponent(label60)
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(PSW))
+                                                        .addGroup(GroupLayout.Alignment.LEADING, panel10Layout.createSequentialGroup()
+                                                            .addComponent(label45)
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(PC))
+                                                        .addGroup(GroupLayout.Alignment.LEADING, panel10Layout.createSequentialGroup()
+                                                            .addComponent(label40)
+                                                            .addGap(39, 39, 39)
+                                                            .addComponent(IR)))
+                                                    .addGroup(panel10Layout.createSequentialGroup()
+                                                        .addGroup(panel10Layout.createParallelGroup()
+                                                            .addGroup(panel10Layout.createSequentialGroup()
+                                                                .addComponent(label39)
+                                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(systemTime))
+                                                            .addGroup(panel10Layout.createSequentialGroup()
+                                                                .addComponent(label47)
+                                                                .addGap(6, 6, 6)
+                                                                .addComponent(systemTime7)))
+                                                        .addGap(124, 124, 124)))
                                                 .addGroup(panel10Layout.createSequentialGroup()
-                                                    .addGroup(panel10Layout.createParallelGroup()
-                                                        .addGroup(panel10Layout.createSequentialGroup()
-                                                            .addComponent(label39)
-                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                            .addComponent(systemTime))
-                                                        .addGroup(panel10Layout.createSequentialGroup()
-                                                            .addComponent(label47)
-                                                            .addGap(6, 6, 6)
-                                                            .addComponent(systemTime7)))
-                                                    .addGap(43, 43, 43)
-                                                    .addGroup(panel10Layout.createParallelGroup()
-                                                        .addGroup(panel10Layout.createSequentialGroup()
-                                                            .addComponent(label43)
-                                                            .addGap(6, 6, 6)
-                                                            .addComponent(systemTime3))
-                                                        .addGroup(panel10Layout.createSequentialGroup()
-                                                            .addComponent(label44)
-                                                            .addGap(6, 6, 6)
-                                                            .addComponent(systemTime4))))
+                                                    .addComponent(label61)
+                                                    .addGap(34, 34, 34)
+                                                    .addComponent(R0))
+                                                .addGroup(panel10Layout.createSequentialGroup()
+                                                    .addComponent(label62)
+                                                    .addGap(34, 34, 34)
+                                                    .addComponent(R1))
+                                                .addGroup(panel10Layout.createSequentialGroup()
+                                                    .addComponent(label63)
+                                                    .addGap(34, 34, 34)
+                                                    .addComponent(R2))
+                                                .addGroup(panel10Layout.createSequentialGroup()
+                                                    .addComponent(label64)
+                                                    .addGap(34, 34, 34)
+                                                    .addComponent(R3))
                                                 .addGroup(panel10Layout.createSequentialGroup()
                                                     .addComponent(label46)
-                                                    .addGap(6, 6, 6)
-                                                    .addComponent(systemTime6))
-                                                .addComponent(label40)
-                                                .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                    .addComponent(systemTime2)
-                                                    .addGroup(panel10Layout.createSequentialGroup()
-                                                        .addComponent(label45)
-                                                        .addGap(6, 6, 6)
-                                                        .addComponent(systemTime5))))
-                                            .addContainerGap(50, Short.MAX_VALUE))
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(workingProcessNum)))
+                                            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 );
                                 panel10Layout.setVerticalGroup(
                                     panel10Layout.createParallelGroup()
                                         .addGroup(panel10Layout.createSequentialGroup()
                                             .addGap(14, 14, 14)
-                                            .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(label39)
-                                                    .addComponent(systemTime))
-                                                .addGroup(panel10Layout.createParallelGroup()
-                                                    .addComponent(label43)
-                                                    .addComponent(systemTime3)))
+                                            .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addComponent(label39)
+                                                .addComponent(systemTime))
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(panel10Layout.createParallelGroup()
-                                                .addComponent(label44)
-                                                .addComponent(systemTime4)
                                                 .addComponent(label47)
                                                 .addComponent(systemTime7))
                                             .addGap(13, 13, 13)
-                                            .addGroup(panel10Layout.createParallelGroup()
+                                            .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                 .addComponent(label40)
-                                                .addComponent(systemTime2))
+                                                .addComponent(IR, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addComponent(label45)
+                                                .addComponent(PC))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addComponent(label60)
+                                                .addComponent(PSW))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(label61, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(R0, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(panel10Layout.createParallelGroup()
-                                                .addComponent(label45)
-                                                .addComponent(systemTime5))
-                                            .addGap(18, 18, 18)
+                                                .addComponent(label62)
+                                                .addComponent(R1))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(panel10Layout.createParallelGroup()
+                                                .addComponent(label63)
+                                                .addComponent(R2))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(panel10Layout.createParallelGroup()
+                                                .addComponent(label64)
+                                                .addComponent(R3))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                 .addComponent(label46)
-                                                .addComponent(systemTime6))
-                                            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(workingProcessNum))
+                                            .addContainerGap(18, Short.MAX_VALUE))
                                 );
                             }
+
+                            //======== scrollPane2 ========
+                            {
+
+                                //---- processInMemory ----
+                                processInMemory.addListSelectionListener(e -> processInMemoryValueChanged(e));
+                                scrollPane2.setViewportView(processInMemory);
+                            }
+
+                            //---- label37 ----
+                            label37.setText("\u5185\u5b58\u4e2d\u8fdb\u7a0b");
+
+                            //---- showProcess ----
+                            showProcess.setText("\u67e5\u770b\u9009\u4e2d\u8fdb\u7a0b\u8be6\u7ec6\u4fe1\u606f");
+                            showProcess.addActionListener(e -> showProcessActionPerformed(e));
 
                             GroupLayout panel6Layout = new GroupLayout(panel6);
                             panel6.setLayout(panel6Layout);
@@ -1354,31 +1485,46 @@ public class GUI extends JFrame {
                                 panel6Layout.createParallelGroup()
                                     .addGroup(panel6Layout.createSequentialGroup()
                                         .addGap(18, 18, 18)
-                                        .addComponent(panel10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(35, 35, 35)
+                                        .addGroup(panel6Layout.createParallelGroup()
+                                            .addComponent(panel10, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(showProcess))
+                                        .addGroup(panel6Layout.createParallelGroup()
+                                            .addGroup(panel6Layout.createSequentialGroup()
+                                                .addGap(54, 54, 54)
+                                                .addComponent(scrollPane2, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(panel6Layout.createSequentialGroup()
+                                                .addGap(70, 70, 70)
+                                                .addComponent(label37)))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                                         .addGroup(panel6Layout.createParallelGroup()
                                             .addComponent(scrollPane7, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
                                             .addGroup(panel6Layout.createSequentialGroup()
                                                 .addGap(18, 18, 18)
                                                 .addComponent(label35)))
-                                        .addGap(48, 48, 48)
-                                        .addComponent(panel7, GroupLayout.PREFERRED_SIZE, 319, GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap(64, Short.MAX_VALUE))
+                                        .addGap(33, 33, 33)
+                                        .addComponent(panel7, GroupLayout.PREFERRED_SIZE, 319, GroupLayout.PREFERRED_SIZE))
                             );
                             panel6Layout.setVerticalGroup(
                                 panel6Layout.createParallelGroup()
                                     .addGroup(panel6Layout.createSequentialGroup()
+                                        .addGap(54, 54, 54)
+                                        .addComponent(panel10, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(showProcess)
+                                        .addContainerGap(127, Short.MAX_VALUE))
+                                    .addGroup(panel6Layout.createSequentialGroup()
+                                        .addContainerGap()
                                         .addGroup(panel6Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                            .addComponent(panel7, GroupLayout.PREFERRED_SIZE, 361, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(GroupLayout.Alignment.LEADING, panel6Layout.createSequentialGroup()
-                                                .addGap(54, 54, 54)
-                                                .addGroup(panel6Layout.createParallelGroup()
-                                                    .addComponent(panel10, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addGroup(panel6Layout.createSequentialGroup()
-                                                        .addComponent(label35)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                        .addComponent(scrollPane7, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)))))
-                                        .addContainerGap(105, Short.MAX_VALUE))
+                                            .addGroup(panel6Layout.createSequentialGroup()
+                                                .addGroup(panel6Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(label35)
+                                                    .addComponent(label37))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addGroup(panel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(scrollPane7, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                                                    .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)))
+                                            .addComponent(panel7, GroupLayout.PREFERRED_SIZE, 361, GroupLayout.PREFERRED_SIZE))
+                                        .addContainerGap(99, Short.MAX_VALUE))
                             );
                         }
 
@@ -1614,9 +1760,16 @@ public class GUI extends JFrame {
 
                             //---- button3 ----
                             button3.setText("text");
+                            button3.addActionListener(e -> button3ActionPerformed(e));
 
                             //---- button4 ----
                             button4.setText("text");
+                            button4.addActionListener(e -> button4ActionPerformed(e));
+
+                            //======== scrollPane8 ========
+                            {
+                                scrollPane8.setViewportView(outInfoArea);
+                            }
 
                             GroupLayout processPanelLayout = new GroupLayout(processPanel);
                             processPanel.setLayout(processPanelLayout);
@@ -1625,6 +1778,7 @@ public class GUI extends JFrame {
                                     .addGroup(processPanelLayout.createSequentialGroup()
                                         .addContainerGap()
                                         .addGroup(processPanelLayout.createParallelGroup()
+                                            .addComponent(scrollPane8, GroupLayout.PREFERRED_SIZE, 584, GroupLayout.PREFERRED_SIZE)
                                             .addGroup(processPanelLayout.createSequentialGroup()
                                                 .addGroup(processPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                                                     .addGroup(processPanelLayout.createSequentialGroup()
@@ -1652,13 +1806,12 @@ public class GUI extends JFrame {
                                                     .addGroup(processPanelLayout.createSequentialGroup()
                                                         .addComponent(panel18, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                        .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))))
-                                            .addGroup(processPanelLayout.createSequentialGroup()
-                                                .addComponent(button2)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(button3)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(button4)))
+                                                        .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addGroup(processPanelLayout.createParallelGroup()
+                                                            .addComponent(button2)
+                                                            .addComponent(button3)
+                                                            .addComponent(button4))))))
                                         .addContainerGap())
                             );
                             processPanelLayout.setVerticalGroup(
@@ -1673,18 +1826,24 @@ public class GUI extends JFrame {
                                             .addComponent(panel13, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                             .addComponent(panel12, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                             .addComponent(panel11, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
                                         .addGroup(processPanelLayout.createParallelGroup()
-                                            .addComponent(panel20, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(panel21, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(panel18, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(panel22, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(79, 79, 79)
-                                        .addGroup(processPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                            .addComponent(button2)
-                                            .addComponent(button3)
-                                            .addComponent(button4))
+                                            .addGroup(processPanelLayout.createSequentialGroup()
+                                                .addGap(18, 18, 18)
+                                                .addGroup(processPanelLayout.createParallelGroup()
+                                                    .addComponent(panel20, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(panel21, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(panel18, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(panel22, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)))
+                                            .addGroup(processPanelLayout.createSequentialGroup()
+                                                .addGap(71, 71, 71)
+                                                .addComponent(button2)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(button3)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(button4)))
+                                        .addGap(18, 18, 18)
+                                        .addComponent(scrollPane8, GroupLayout.PREFERRED_SIZE, 392, GroupLayout.PREFERRED_SIZE)
                                         .addContainerGap())
                             );
                         }
@@ -1934,25 +2093,36 @@ public class GUI extends JFrame {
     public static JLabel label35;
     public static JPanel panel7;
     public static JScrollPane scrollPane15;
-    public static JList list4;
+    public static JList systemPageTable;
     public static JPanel panel9;
     public static JLabel label38;
     public static JLabel label36;
+    public static JLabel label43;
     public static JPanel panel10;
     public static JLabel label39;
     public static JLabel systemTime;
     public static JLabel label40;
-    public static JLabel systemTime2;
-    public static JLabel label43;
-    public static JLabel systemTime3;
-    public static JLabel label44;
-    public static JLabel systemTime4;
+    public static JLabel IR;
     public static JLabel label45;
-    public static JLabel systemTime5;
+    public static JLabel PC;
     public static JLabel label46;
-    public static JLabel systemTime6;
+    public static JLabel workingProcessNum;
     public static JLabel label47;
     public static JLabel systemTime7;
+    public static JLabel label60;
+    public static JLabel PSW;
+    public static JLabel label61;
+    public static JLabel R0;
+    public static JLabel R1;
+    public static JLabel label62;
+    public static JLabel R2;
+    public static JLabel label63;
+    public static JLabel R3;
+    public static JLabel label64;
+    public static JScrollPane scrollPane2;
+    public static JList processInMemory;
+    public static JLabel label37;
+    public static JButton showProcess;
     public static JPanel resourcePanel;
     public static JPanel processPanel;
     public static JPanel panel11;
@@ -2006,6 +2176,8 @@ public class GUI extends JFrame {
     public static JButton button2;
     public static JButton button3;
     public static JButton button4;
+    public static JScrollPane scrollPane8;
+    public static JTextArea outInfoArea;
     public static JPanel devices;
     public static JPanel panel5;
     public static JScrollPane scrollPane1;

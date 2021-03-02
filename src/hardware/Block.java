@@ -228,16 +228,16 @@ public class Block {
     }
 
     /**
-     * @Description: 用于交换硬盘和内存的物理块
+     * @Description: 将一个物理块的内容复制到另一个物理块，用于交换硬盘和内存的物理块或者交换区文件生成
      * @param: []
      * @return: hardware.Block
      * @auther: Lu Ning
      * @date: 2021/2/21 14:35
      */
-    public Block cloneABlock(short newDno){
-        Block newBlock = new Block(this);
-        newBlock.setDno(newDno);
-        return newBlock;
+    public static void cloneABlock(Block newBlock, Block oldBlock){
+        for(short i=0;i<256;i++){
+            newBlock.writeAWord(oldBlock.readAWord(i),i);
+        }
     }
 
     /**

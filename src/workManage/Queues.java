@@ -2,6 +2,7 @@ package workManage;
 
 
 import control.GUI;
+import control.OS;
 import fileManage.File;
 
 import java.util.ArrayList;
@@ -55,6 +56,9 @@ public class Queues {
      */
     public static void showQueuesInformation(){
         GUI.readyQueue.setListData(readyQueue.toArray());
+        GUI.hangupBlockQueue.setListData(hangUpBlockedQueue.toArray());
+        GUI.hangupReadyQueue.setListData(hangUpReadyQueue.toArray());
+        GUI.initQueue.setListData(jobReadyQueue.toArray());
         GUI.blockedQueue1.setListData(blockedQueue[0].toArray());
         GUI.blockedQueue2.setListData(blockedQueue[1].toArray());
         GUI.blockedQueue3.setListData(blockedQueue[2].toArray());
@@ -63,5 +67,21 @@ public class Queues {
         GUI.blockedQueue6.setListData(blockedQueue[5].toArray());
         GUI.blockedQueue7.setListData(blockedQueue[6].toArray());
         GUI.blockedQueue8.setListData(blockedQueue[7].toArray());
+    }
+
+    /**
+     * @Description: 加入一个进程队列的静态方法
+     * @param: [queue, process]
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/3 00:27
+     */
+    public static void joinAQueue(LinkedList<Process> queue, Process process){
+        queue.offer(process);
+        process.getPcb().setInQueueTime((short) OS.getTime());
+    }
+
+    public static Process pollFromAQueue(LinkedList<Process> queue){
+        return queue.poll();
     }
 }

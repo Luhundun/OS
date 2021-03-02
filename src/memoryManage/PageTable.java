@@ -1,7 +1,10 @@
 package memoryManage;
 
+import control.GUI;
 import control.OS;
 import hardware.Block;
+import hardware.CPU;
+import workManage.Process;
 
 import java.util.ArrayList;
 
@@ -89,9 +92,62 @@ public class PageTable {
         }
     }
 
-    public PageTableItem[] getPageTable() {
+    public PageTableItem[] getTable() {
         return pageTable;
     }
 
+    /**
+     * @Description: 缺页中断会调用的换页，如果不需要换出则old < 0
+     * @param: [oldBlock, newBlock ,index]  index表示这个是当前进程在内存的第index块
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/4 00:11
+     */
+    public void exchangeInPageTable(short newBlock, short oldBlock,short index){
+        if(oldBlock >= 0){
+            pageTable[oldBlock].setPhysicalPageNumber((short)0);
+            pageTable[newBlock].setPhysicalPageNumber((short) (16 + 4*(CPU.workingProcess.getPcb().getIndexInMemory()) + index));
+        }else {
+            pageTable[newBlock].setPhysicalPageNumber((short) (16 + 4*(CPU.workingProcess.getPcb().getIndexInMemory()) + index));
+        }
+    }
 
+    public void exchangeInPageTable(short newBlock, short oldBlock,short index,Process process){
+        if(oldBlock >= 0){
+            pageTable[oldBlock].setPhysicalPageNumber((short)0);
+            pageTable[newBlock].setPhysicalPageNumber((short) ((16 + 4*process.getPcb().getIndexInMemory()) + index));
+        }else {
+            pageTable[newBlock].setPhysicalPageNumber((short) ((16 + 4*process.getPcb().getIndexInMemory()) + index));
+        }
+    }
+
+    /**
+     * @Description:判断是否在内存
+     * @param: [address]
+     * @return: boolean
+     * @auther: Lu Ning
+     * @date: 2021/3/4 00:25
+     */
+    public boolean isInMemory(short address){
+        if(pageTable[address/256].getPhysicalPageNumber() <= 0){
+            return false;
+        }else return true;
+    }
+
+    public Object[] showWhichPageInMemory(){
+        ArrayList<String> temp = new ArrayList<>();
+        for(int i=0;i<256;i++){
+            if(pageTable[i].getPhysicalPageNumber() > 0){
+                temp.add(pageTable[i].getLogicalPageNumber()+"-----------------"+pageTable[i].getPhysicalPageNumber());
+            }
+        }
+        return temp.toArray();
+    }
+
+    public static void showSystemPageTableInfo(){
+        if(CPU.workingProcess == null){
+            return;
+        }
+        GUI.systemPageTable.setListData(CPU.workingProcess.getPageTable().showWhichPageInMemory());
+    }
 }

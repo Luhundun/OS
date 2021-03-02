@@ -180,6 +180,7 @@ public class File {
             closeFileInMemory(thisFile.fd);
         }
     }
+
     
     /**
      * @Description: 根据文件名将文件打开
@@ -710,6 +711,7 @@ public class File {
         for(int i=0;i<8;i++){
             returnShort[i] = thisBlock.readAWord(index%32*8 + i);
         }
+
         return returnShort;
     }
 

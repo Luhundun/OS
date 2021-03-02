@@ -284,14 +284,15 @@ public class Directory extends File{
      * @auther: Lu Ning
      * @date: 2021/3/1 22:38
      */
-    public String getNameByFile(File file){
+    public String getNameByIno(short ino){
         for (FCB fcb : directoryItems){
-            if(fcb.getIno() == file.fInode.getInodeNum()){
+            if(fcb.getIno() == ino){
                 return fcb.getFileName();
             }
         }
         return "";
     }
+
 
     public ArrayList<FCB> getDirectoryItems() {
         return directoryItems;

@@ -19,7 +19,18 @@ public class PCB implements Comparable<PCB>{
     private short runTimes;           //进程运行时间
     private short turnTimes;          //进程周转时间
     private short timeSliceLeft;      //当前进程在cpu运行的剩余时间片，若非运行态则为0
+    private short directoryIno;         //当前进程所在目录
     private short processState;        //进程状态 0为未创建 1为就绪 2为运行 3挂起就绪 4为挂起等待 11-18为不同原因的阻塞
+
+    public short getInQueueTime() {
+        return inQueueTime;
+    }
+
+    public void setInQueueTime(short inQueueTime) {
+        this.inQueueTime = inQueueTime;
+    }
+
+    private short inQueueTime;          //设置进入相应队列时间
     private short psw;                  //状态字寄存器
     private short pc;    	            //程序计数器信息，记录下一条指令地址
     private short ir;                 //指令计数器信息，记录当前执行的指令类型d
@@ -31,6 +42,14 @@ public class PCB implements Comparable<PCB>{
     public static PCB[] pcbPool;        //PCB池
     public static short pcbNumberIndex;         //出现过的PCB数
 
+
+    /**
+     * @Description: PCB
+     * @param: [processPriority]
+     * @return:
+     * @auther: Lu Ning
+     * @date: 2021/3/1 23:56
+     */
     public PCB(short processPriority){
         this.pid = pcbNumberIndex++;
         this.processPriority = processPriority;
@@ -38,6 +57,7 @@ public class PCB implements Comparable<PCB>{
         this.runTimes = 0;
         this.turnTimes = 0;
         this.timeSliceLeft = 0;
+        this.indexInMemory = -1;
         this.processState = 1;
         this.psw = 0;
         this.pc = 0;
@@ -46,6 +66,7 @@ public class PCB implements Comparable<PCB>{
         this.r1 = 0;
         this.r2 = 0;
         this.r3 = 0;
+        this.directoryIno = 0;
     }
 
 
@@ -69,7 +90,7 @@ public class PCB implements Comparable<PCB>{
      * @date: 2021/3/1 12:40
      */
     public static void initPCBManagment(){
-       pcbPool = new PCB[32];
+       pcbPool = new PCB[OS.pcbPoolSize];
        pcbNumberIndex = 0;
     }
     
@@ -215,6 +236,14 @@ public class PCB implements Comparable<PCB>{
 
     public void setR3(short r3) {
         this.r3 = r3;
+    }
+
+    public short getDirectoryIno() {
+        return directoryIno;
+    }
+
+    public void setDirectoryIno(short directoryIno) {
+        this.directoryIno = directoryIno;
     }
 
 }

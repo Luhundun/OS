@@ -35,7 +35,7 @@ public class Page {
      * @date: 2021/2/27 17:03
      */
     public boolean isPageInMemory(){
-        if (PageTable.systemPageTable.getPageTable()[logicalPageNumber].isStateFlag()){
+        if (PageTable.systemPageTable.getTable()[logicalPageNumber].isStateFlag()){
             return true;
         }else {
             return false;

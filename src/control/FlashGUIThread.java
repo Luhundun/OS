@@ -4,7 +4,10 @@ import fileManage.Directory;
 import fileManage.File;
 import fileManage.GroupLink;
 import fileManage.Inode;
+import hardware.CPU;
 import memoryManage.FreeBlockManage;
+import memoryManage.PageTable;
+import workManage.Process;
 import workManage.Queues;
 
 /**
@@ -17,16 +20,16 @@ import workManage.Queues;
 public class FlashGUIThread extends Thread {
     public void run() {
         while(true) {
-            OS.guiFlashTimerLock.lock();//请求锁
+            OS.baseTimerLock.lock();//请求锁
             try {
-                OS.guiFlashTimerCondition.await();        //等到时钟进程发出时钟中断，再开始执行下面操作
+                OS.baseTimerCondition.await();        //等到时钟进程发出时钟中断，再开始执行下面操作
                 flashGUI();
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
             finally{
-                OS.guiFlashTimerLock.unlock();//释放锁
+                OS.baseTimerLock.unlock();//释放锁
             }
         }
     }
@@ -76,6 +79,11 @@ public class FlashGUIThread extends Thread {
 
         //更新进程信息
         Queues.showQueuesInformation();
+        Process.showProcessInfo();
+        CPU.showCPUInfo();
+
+        //更新页表信息
+        PageTable.showSystemPageTableInfo();
 
     }
 }

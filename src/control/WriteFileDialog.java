@@ -31,7 +31,7 @@ public class WriteFileDialog extends JDialog {
 
     public void okButtonActionPerformed(ActionEvent e) {
         try {
-            File.writeFile((short) 1,writeFileArea.getText());
+            File.writeFile(OS.topFile.getFd(),writeFileArea.getText());
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(null,exception,"写入时发生错误",JOptionPane.ERROR_MESSAGE);
         }

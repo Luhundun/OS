@@ -1,6 +1,9 @@
 package workManage;
 
 
+import control.GUI;
+import fileManage.File;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -12,12 +15,12 @@ import java.util.LinkedList;
  * @Version: v1.0
  */
 public class Queues {
-    public static LinkedList<Job> jobReadyQueue = new LinkedList<>();                   //后备作业队列
+    public static LinkedList<PCB> jobReadyQueue = new LinkedList<>();                   //后备作业队列
 
     public static LinkedList<Process> readyQueue = new LinkedList<>();                  //就绪队列
     public static LinkedList<Process> hangUpReadyQueue = new LinkedList<>();            //挂起就绪队列
     public static LinkedList<Process> hangUpBlockedQueue = new LinkedList<>();          //挂起等待队列
-    public static LinkedList[] blockedQueue = new LinkedList[8];                        //不同原因的阻塞队列
+    public static LinkedList<Process>[] blockedQueue = new LinkedList[8];                        //不同原因的阻塞队列
 
     /**
      * @Description: 开机时初始化阻塞队列
@@ -26,9 +29,39 @@ public class Queues {
      * @auther: Lu Ning
      * @date: 2021/3/1 10:06
      */
-    public static void initQueues(){
+    public static void initQueues() throws Exception {
         for(int i=0;i<8;i++){
             blockedQueue[i] = new LinkedList<Process>();
         }
+    }
+
+    /**
+     * @Description: 根据优先级对队列进行重排序
+     * @param: []
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/2 20:25
+     */
+    public void resortQueue(){
+
+    }
+
+    /**
+     * @Description: 在GUI显示队列详细信息
+     * @param: []
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/2 15:08
+     */
+    public static void showQueuesInformation(){
+        GUI.readyQueue.setListData(readyQueue.toArray());
+        GUI.blockedQueue1.setListData(blockedQueue[0].toArray());
+        GUI.blockedQueue2.setListData(blockedQueue[1].toArray());
+        GUI.blockedQueue3.setListData(blockedQueue[2].toArray());
+        GUI.blockedQueue4.setListData(blockedQueue[3].toArray());
+        GUI.blockedQueue5.setListData(blockedQueue[4].toArray());
+        GUI.blockedQueue6.setListData(blockedQueue[5].toArray());
+        GUI.blockedQueue7.setListData(blockedQueue[6].toArray());
+        GUI.blockedQueue8.setListData(blockedQueue[7].toArray());
     }
 }

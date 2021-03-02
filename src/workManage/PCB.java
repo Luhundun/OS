@@ -10,8 +10,8 @@ import control.OS;
  * @Version: v1.0
  */
 public class PCB implements Comparable<PCB>{
-    private short pid;          //进程编号
 
+    private short pid;                //进程编号
     private short processPriority;    //进程优先数
     private short indexInMemory;      //进程在内存位置，如果不在则为负数
     private short virtualMemoryInDisk;//进程在外存的映像的ino
@@ -19,7 +19,8 @@ public class PCB implements Comparable<PCB>{
     private short runTimes;           //进程运行时间
     private short turnTimes;          //进程周转时间
     private short timeSliceLeft;      //当前进程在cpu运行的剩余时间片，若非运行态则为0
-    private short psw;                //进程状态 0为未知 1为运行 2为就绪 3为阻塞 4为中止 5为挂起就绪 6为挂起等待
+    private short processState;        //进程状态 0为未创建 1为就绪 2为运行 3挂起就绪 4为挂起等待 11-18为不同原因的阻塞
+    private short psw;                  //状态字寄存器
     private short pc;    	            //程序计数器信息，记录下一条指令地址
     private short ir;                 //指令计数器信息，记录当前执行的指令类型d
     private short r0;                 //普通寄存器
@@ -37,6 +38,7 @@ public class PCB implements Comparable<PCB>{
         this.runTimes = 0;
         this.turnTimes = 0;
         this.timeSliceLeft = 0;
+        this.processState = 1;
         this.psw = 0;
         this.pc = 0;
         this.ir = 0;
@@ -86,4 +88,133 @@ public class PCB implements Comparable<PCB>{
         }
         return true;
     }
+
+    public short getPid() {
+        return pid;
+    }
+
+    public void setPid(short pid) {
+        this.pid = pid;
+    }
+
+    public short getProcessPriority() {
+        return processPriority;
+    }
+
+    public void setProcessPriority(short processPriority) {
+        this.processPriority = processPriority;
+    }
+
+    public short getIndexInMemory() {
+        return indexInMemory;
+    }
+
+    public void setIndexInMemory(short indexInMemory) {
+        this.indexInMemory = indexInMemory;
+    }
+
+    public short getVirtualMemoryInDisk() {
+        return virtualMemoryInDisk;
+    }
+
+    public void setVirtualMemoryInDisk(short virtualMemoryInDisk) {
+        this.virtualMemoryInDisk = virtualMemoryInDisk;
+    }
+
+    public short getInTimes() {
+        return inTimes;
+    }
+
+    public void setInTimes(short inTimes) {
+        this.inTimes = inTimes;
+    }
+
+    public short getRunTimes() {
+        return runTimes;
+    }
+
+    public void setRunTimes(short runTimes) {
+        this.runTimes = runTimes;
+    }
+
+    public short getTurnTimes() {
+        return turnTimes;
+    }
+
+    public void setTurnTimes(short turnTimes) {
+        this.turnTimes = turnTimes;
+    }
+
+    public short getTimeSliceLeft() {
+        return timeSliceLeft;
+    }
+
+    public void setTimeSliceLeft(short timeSliceLeft) {
+        this.timeSliceLeft = timeSliceLeft;
+    }
+
+    public short getProcessState() {
+        return processState;
+    }
+
+    public void setProcessState(short processState) {
+        this.processState = processState;
+    }
+
+    public short getPsw() {
+        return psw;
+    }
+
+    public void setPsw(short psw) {
+        this.psw = psw;
+    }
+
+    public short getPc() {
+        return pc;
+    }
+
+    public void setPc(short pc) {
+        this.pc = pc;
+    }
+
+    public short getIr() {
+        return ir;
+    }
+
+    public void setIr(short ir) {
+        this.ir = ir;
+    }
+
+    public short getR0() {
+        return r0;
+    }
+
+    public void setR0(short r0) {
+        this.r0 = r0;
+    }
+
+    public short getR1() {
+        return r1;
+    }
+
+    public void setR1(short r1) {
+        this.r1 = r1;
+    }
+
+    public short getR2() {
+        return r2;
+    }
+
+    public void setR2(short r2) {
+        this.r2 = r2;
+    }
+
+    public short getR3() {
+        return r3;
+    }
+
+    public void setR3(short r3) {
+        this.r3 = r3;
+    }
+
 }

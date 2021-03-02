@@ -20,6 +20,7 @@ public class File {
     protected short fCount;
     protected short fPos;
     protected Inode fInode;                    //这个文件的inode节点
+
     protected ArrayList<Block> dataBlockList;  //这个文件在磁盘的存储块链 (8个直接物理块块 -> 256个一级间址物理块 -> 32k个二级间址物理块)，这个成员仅仅为了方便展示
     public static File[] fileStructTable = new File[32];   //系统打开文件表，存储在内存的第8块。每个元素16B，共可同时打开32个。
 
@@ -134,11 +135,24 @@ public class File {
         }else {
             newFile = new Directory(OS.pathDirectory, mode);
         }
+        //建立文件后在当前目录加入目录项
         OS.pathDirectory.addToDirectory(new FCB(fileName,newFile.fInode.getInodeNum()));
         newFile.fInode.setFileCreateTime((short) (OS.getTime() + OS.getSuperBlock().getRunTime()));
         newFile.fInode.saveInodeToDisk();
         return newFile;
     }
+
+//    /**
+//     * @Description: 建立交换区
+//     * @param: [copyingFile, copiedFile]
+//     * @return: void
+//     * @auther: Lu Ning
+//     * @date: 2021/3/2 14:18
+//     */
+//    public static void copyFileContext(File copyingFile, File copiedFile){
+//        copyingFile.releaseAllBlocks();
+//        for()
+//    }
 
     
     /**
@@ -767,6 +781,15 @@ public class File {
     public Inode getfInode() {
         return fInode;
     }
+
+    public ArrayList<Block> getDataBlockList() {
+        return dataBlockList;
+    }
+
+    public void setDataBlockList(ArrayList<Block> dataBlockList) {
+        this.dataBlockList = dataBlockList;
+    }
+
 
 
 }

@@ -5,6 +5,7 @@ import fileManage.File;
 import fileManage.GroupLink;
 import fileManage.Inode;
 import memoryManage.FreeBlockManage;
+import workManage.Queues;
 
 /**
  * @ClassName: FlashGUIThread
@@ -16,18 +17,17 @@ import memoryManage.FreeBlockManage;
 public class FlashGUIThread extends Thread {
     public void run() {
         while(true) {
-            OS.timerLock.lock();//请求锁
+            OS.guiFlashTimerLock.lock();//请求锁
             try {
-                OS.timerCondition.await();        //等到时钟进程发出时钟中断，再开始执行下面操作
+                OS.guiFlashTimerCondition.await();        //等到时钟进程发出时钟中断，再开始执行下面操作
                 flashGUI();
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
             finally{
-                OS.timerLock.unlock();//释放锁
+                OS.guiFlashTimerLock.unlock();//释放锁
             }
-
         }
     }
 
@@ -73,6 +73,9 @@ public class FlashGUIThread extends Thread {
         }
         GUI.filePathLabel.setText(path.toString());
         Directory.showPathItems();
+
+        //更新进程信息
+        Queues.showQueuesInformation();
 
     }
 }

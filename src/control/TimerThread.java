@@ -6,17 +6,16 @@ package control;
  * @version V1.0
  */
 
-import hardware.Disk;
-
 /**
  * @Description 每秒发送一次中断信号的计时器线程
  *
  */
 public class TimerThread extends Thread {
 	private static boolean ifTimerSuspend = false;   //控制时钟是否运行
+	private static int count = 0;
 
 	/**
-	 *  线程激活后，每秒发送一次中断信号
+	 *  线程激活后，每0.2秒发送一次时钟中断信号，其中每5次中断信号发送1次刷新GUI信号
 	 */
 	public void run() {
 		int thisTime;
@@ -32,24 +31,30 @@ public class TimerThread extends Thread {
 				continue;
 			}
 
-			OS.timerLock.lock();//请求锁
+			OS.guiFlashTimerLock.lock();
+			OS.baseTimerLock.lock();//请求锁
 			try {
-				thisTime = OS.getTime();
-				GUI.timeLabel.setText("当前时间" + thisTime);
-				GUI.allTimeLabel.setText("累计时间" + (thisTime+allTime));
-//				GUI.textArea1.append("CPU时间：" + CPU.getTime() + "\n");
-				OS.timerCondition.signalAll();//唤醒其他所有加锁线程
-
+				OS.baseTimerCondition.signalAll();//唤醒其他所有加基础锁线程
+				if(count == 5){
+					OS.guiFlashTimerCondition.signalAll(); //唤醒秒锁
+				}
 			}
 			finally{
-				OS.timerLock.unlock();//释放锁
+				OS.baseTimerLock.unlock();//释放锁
+				OS.guiFlashTimerLock.unlock();
 			}
 
 			try {
-				Thread.sleep(1000);//进程休眠1秒，模拟时钟过去了1秒
-//				GUI.textArea1.setCaretPosition(GUI.textArea1.getText().length());   //为了让GUI的文本框滚动起来
-				OS.passTime();// 设置CPU过去了1秒
+				if(count ==5){
+					OS.passTime();// 设置CPU过去了1秒
+					thisTime = OS.getTime();
+					GUI.timeLabel.setText("当前时间" + thisTime);
+					GUI.allTimeLabel.setText("累计时间" + (thisTime+allTime));
 
+					count = 0;
+				}
+				Thread.sleep(200);//进程休眠0.2秒，模拟时钟过去了0.2秒
+				count++;
 			}
 			catch (InterruptedException e) {
 				e.printStackTrace();

@@ -6,6 +6,7 @@ import hardware.Disk;
 import hardware.Memory;
 import memoryManage.PageTable;
 import workManage.PCB;
+import workManage.ProcessSchduleThread;
 import workManage.Queues;
 
 import java.util.ArrayList;
@@ -20,8 +21,12 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Version: v1.0
  */
 public class OS {
-    public static ReentrantLock timerLock=new ReentrantLock();           //重入锁，主要用于控制时钟进程与其他进程的通信
-    public static Condition timerCondition =timerLock.newCondition();
+    //重入锁，主要用于控制时钟进程与其他进程的通信
+    public static ReentrantLock baseTimerLock =new ReentrantLock();           //控制0.2秒执行一条cpu指令的锁
+    public static Condition baseTimerCondition = baseTimerLock.newCondition();
+    public static ReentrantLock guiFlashTimerLock =new ReentrantLock();           //控制0.2秒执行一条cpu指令的锁
+    public static Condition guiFlashTimerCondition = guiFlashTimerLock.newCondition();
+
     public static String virtualDiskRootPath = "./src/hardware/virtualDisk/";
     public static String virtualDiskMirrorPath = "./src/hardware/DiskMirror.mir";
 
@@ -74,7 +79,7 @@ public class OS {
             //初始化系统页表
             PageTable.initSystemPageTable();
 
-            //打开根目录，加载根目录内文件
+            //打开根目录，加载根目录内文件inode
             Inode parentPathInode = new Inode(0,true);
             pathDirectory = new Directory(parentPathInode);
             Directory.getInDirectory(".");
@@ -82,6 +87,7 @@ public class OS {
             //启动对应进程
             new TimerThread().start();   //启动时钟进程
             new FlashGUIThread().start(); //启动刷新GUI进程
+            new ProcessSchduleThread().start();
         } catch (Exception exception) {
             exception.printStackTrace();
         }

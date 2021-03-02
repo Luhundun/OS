@@ -23,7 +23,7 @@ public class addFileDialog extends JDialog {
 
     public void okButtonActionPerformed(ActionEvent e) {
         try {
-            File.addFileContext((short) 1,addFileArea.getText());
+            File.addFileContext(OS.topFile.getFd(),addFileArea.getText());
         } catch (Exception exception) {
             JOptionPane.showMessageDialog(null,exception,"追加时发生错误",JOptionPane.ERROR_MESSAGE);
         }

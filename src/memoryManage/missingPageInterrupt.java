@@ -11,7 +11,7 @@ import hardware.CPU;
  * @Date: 2021/3/3 18:26
  * @Version: v1.0
  */
-public class missingPageInterrupt extends Throwable{
+public class MissingPageInterrupt extends Throwable{
 
     /**
      * @Description: 加载新页(逻辑页)至内存

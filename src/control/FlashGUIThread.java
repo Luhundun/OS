@@ -7,6 +7,7 @@ import fileManage.Inode;
 import hardware.CPU;
 import memoryManage.FreeBlockManage;
 import memoryManage.PageTable;
+import workManage.PCB;
 import workManage.Process;
 import workManage.Queues;
 
@@ -81,6 +82,7 @@ public class FlashGUIThread extends Thread {
         Queues.showQueuesInformation();
         Process.showProcessInfo();
         CPU.showCPUInfo();
+        PCB.showPCBPoll();
 
         //更新页表信息
         PageTable.showSystemPageTableInfo();

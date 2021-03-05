@@ -2,7 +2,10 @@ package workManage;
 
 import control.OS;
 import hardware.CPU;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * @ClassName: ProcessSchduleThread
@@ -12,7 +15,7 @@ import java.util.Collections;
  * @Version: v1.0
  */
 public class ProcessSchduleThread extends Thread{
-
+    int num = 0;
     /**
      * @Description: 进程调度线程的内容
      * @param: []
@@ -32,12 +35,25 @@ public class ProcessSchduleThread extends Thread{
             }
             try {
                 roundRobinScheduling();       //执行时间片轮转算法的一系列操作
+
+                if(num == OS.HANGUPCHECKTIME){
+                    hangupAndActiveSchedule();
+                    num = 0;
+                }
+                num ++;
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * @Description: 时间片轮转算法和时间片内CPU执行的指令
+     * @param: []
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/3 13:19
+     */
     public void roundRobinScheduling() throws Exception {
         Collections.sort(Queues.readyQueue);  //按优先级大小对就绪队列进行重新排队
         if(CPU.isCpuWork()) {
@@ -49,8 +65,8 @@ public class ProcessSchduleThread extends Thread{
                 CPU.workingProcess.getPcb().setInQueueTime((short) OS.getTime());
                 Queues.readyQueue.add(CPU.workingProcess);                                 //当前进程进入就绪队列
                 Collections.sort(Queues.readyQueue);  //按优先级大小对就绪队列进行重新排队
-                processContextSwitch(Queues.readyQueue.poll());   //进行进程上下文切换
-                CPU.workingProcess.getPcb().setTimeSliceLeft(OS.timeSliceLength);   //重设时间片长度
+                CPU.processContextSwitch(Queues.readyQueue.poll());   //进行进程上下文切换
+                CPU.workingProcess.getPcb().setTimeSliceLeft(OS.TIMESLICELENGTH);   //重设时间片长度
                 CPU.doInstruction();            //根据不同的指令执行对应的操作
             }
         }
@@ -60,43 +76,62 @@ public class ProcessSchduleThread extends Thread{
 
             }
             else {                                 //就绪队列不空，进行进程上下文切换，再从就绪队列取出优先级最高的进程执行
-                processContextSwitch(process);
+                CPU.processContextSwitch(process);
                 CPU.setCpuWork(true);       //检测到了还有指令没做完，CPU状态设为work
-                CPU.workingProcess.getPcb().setTimeSliceLeft(OS.timeSliceLength);   //重设时间片长度
+                CPU.workingProcess.getPcb().setTimeSliceLeft(OS.TIMESLICELENGTH);   //重设时间片长度
                 CPU.doInstruction();            //根据不同的指令执行对应的操作
             }
         }
     }
 
     /**
-     * @Description: 进程上下文切换的内容
-     * @param: [newRunProcess]
+     * @Description: 每隔一段时间进行一次的挂起和激活检测
+     * @param: []
      * @return: void
      * @auther: Lu Ning
-     * @date: 2021/3/3 00:15
+     * @date: 2021/3/5 17:39
      */
-    public void processContextSwitch(Process newRunProcess) {
-        if(CPU.workingProcess != null){
-            CPU.workingProcess.getPcb().setPc(CPU.getPc());
-            CPU.workingProcess.getPcb().setIr(CPU.getIr());
-            CPU.workingProcess.getPcb().setPsw(CPU.getPsw());
-            CPU.workingProcess.getPcb().setR0(CPU.getR0());
-            CPU.workingProcess.getPcb().setR1(CPU.getR1());
-            CPU.workingProcess.getPcb().setR2(CPU.getR2());
-            CPU.workingProcess.getPcb().setR3(CPU.getR3());
-        }
-        CPU.workingProcess = newRunProcess;
-        CPU.switchUserModeToKernelMode();       //进程上下文切换是要在CPU核心态下实现的
-        newRunProcess.getPcb().setProcessState((short) 1);
-        CPU.workingProcess = newRunProcess;
-        CPU.switchKernelModeToUserMode();
-        CPU.setPc(newRunProcess.getPcb().getPc());
-        CPU.setIr(newRunProcess.getPcb().getIr());
-        CPU.setPsw(newRunProcess.getPcb().getPsw());
-        CPU.setR0(newRunProcess.getPcb().getR0());
-        CPU.setR1(newRunProcess.getPcb().getR1());
-        CPU.setR2(newRunProcess.getPcb().getR2());
-        CPU.setR3(newRunProcess.getPcb().getR3());
+    public void hangupAndActiveSchedule() throws Exception {
+        short processNumInMemory = Process.getProcessInMemorySum();
 
+        if (processNumInMemory <= OS.MAXNUMPROCESSINMEMORY/2 ) {
+            //如果当前内存中进程数少于等于规定的一半，激活一个被挂起时间最长的进程
+            LinkedList<Process> tempList = new LinkedList<>();
+            tempList.addAll(Queues.hangUpBlockedQueue);
+            tempList.addAll(Queues.hangUpReadyQueue);
+            Process thisProcess = null;
+            short longestTime = 32767;
+            for (Process process : tempList) {
+                if (process.getPcb().getInTimes() < longestTime) {
+                    longestTime = process.getPcb().getInTimes();
+                    thisProcess = process;
+                }
+            }
+            if (thisProcess != null) {
+                Primitives.activate(thisProcess);
+            }
+        }else {
+            //如果当前内存进程数大于规定的一半，且有进程在相应队列等待时间超过某个值（在OS.java中规定），挂起超过这个值的进程中优先级最低的
+            Process thisProcess = null;
+            for (Process process : Queues.readyQueue){
+                if(OS.getTime() - process.getPcb().getInTimes() > OS.HANGUPWAITTIME && (thisProcess == null ||
+                        thisProcess.getPcb().getProcessPriority() < process.getPcb().getProcessPriority()) ){
+                    thisProcess = process;
+                }
+            }
+            for(LinkedList<Process> list : Queues.blockedQueue){
+                for(Process process : list){
+                    if(OS.getTime() - process.getPcb().getInTimes() > OS.HANGUPWAITTIME && (thisProcess == null ||
+                            thisProcess.getPcb().getProcessPriority() < process.getPcb().getProcessPriority()) ){
+                        thisProcess = process;
+                    }
+                }
+            }
+            if(thisProcess != null){
+                Primitives.hangup(thisProcess);
+            }
+        }
     }
+
+
 }

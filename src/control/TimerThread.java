@@ -31,19 +31,19 @@ public class TimerThread extends Thread {
 				continue;
 			}
 
-			OS.guiFlashTimerLock.lock();
+			OS.secondTimerLock.lock();
 			OS.baseTimerLock.lock();//请求锁
 			try {
+				System.out.println("Time--"+OS.getTime());
 				OS.baseTimerCondition.signalAll();//唤醒其他所有加基础锁线程
 				if(count == 5){
-					OS.guiFlashTimerCondition.signalAll(); //唤醒秒锁
+					OS.secondTimerCondition.signalAll(); //唤醒秒锁
 				}
 			}
 			finally{
 				OS.baseTimerLock.unlock();//释放锁
-				OS.guiFlashTimerLock.unlock();
+				OS.secondTimerLock.unlock();
 			}
-
 			try {
 				if(count ==5){
 					OS.passTime();// 设置CPU过去了1秒

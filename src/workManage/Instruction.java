@@ -1,6 +1,7 @@
 package workManage;
 
 import control.OS;
+import deviceManage.KeyBoardThread;
 import hardware.Block;
 import hardware.CPU;
 
@@ -12,9 +13,11 @@ import hardware.CPU;
  * @Version: v1.0
  */
 public class Instruction {
-    public String instructionType;  //操作数类型
-    public String p0;                //第0个操作数
-    public String p1;                //第1个操作数
+
+
+    private String instructionType;  //操作数类型
+    private String p0;                //第0个操作数
+    private String p1;                //第1个操作数
 
     /**
      * @Description: 从文件中读取并生成指令
@@ -24,6 +27,10 @@ public class Instruction {
      * @date: 2021/2/28 22:27
      */
     public Instruction(short[] context) throws Exception {
+        if(context[0] == 0 && context[1] == 0 && context[2] == 0 && context[3] == 0) {
+            return;
+        }
+
         String tempType = Block.convertShortToUTF16(context[0]) + Block.convertShortToUTF16(context[1]) + Block.convertShortToUTF16(context[2]);
         String tempP0= Block.convertShortToUTF16(context[3]) + Block.convertShortToUTF16(context[4]);
         String tempP1= Block.convertShortToUTF16(context[5]) + Block.convertShortToUTF16(context[6]);
@@ -72,6 +79,7 @@ public class Instruction {
             case "wri":
             case "pri":
             case "sle":
+                instructionType = tempType;
                 p0 = "";
                 p1 = "";
                 break;
@@ -149,6 +157,8 @@ public class Instruction {
             case "r3":
                 temp[0] += 3;
                 break;
+            default:
+                temp[0] += 9;
         }
         switch (instruction.p1) {
             case "r0":
@@ -164,7 +174,8 @@ public class Instruction {
                 temp[1] += 3;
                 break;
             default:
-                temp[1] = Short.parseShort(instruction.p1);
+//                temp[1] += Short.parseShort(instruction.p1);
+                temp[1] += 9;
                 break;
         }
         return temp;
@@ -179,6 +190,10 @@ public class Instruction {
      */
     public static String executeInstruction(Instruction instruction) throws Exception {
         String res = "";
+        if(instruction == null){
+            Primitives.destroy(CPU.workingProcess);
+            return "指令执行完毕，进入中止态";
+        }
         switch (instruction.instructionType) {
             case "add":
                 setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) + getCpuRegister(instruction.p1)));
@@ -201,10 +216,15 @@ public class Instruction {
                 res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
                 break;
             case "out":
-
+                PV.PDisplay(CPU.workingProcess);
+                res = "P操作申请显示器";
+                CPU.setCpuWork(false);
                 break;
             case "inn":
-
+                //P操作，申请一个键盘资源
+                PV.PKeyboard(CPU.workingProcess);
+                res = "P操作申请键盘资源";
+                CPU.setCpuWork(false);
                 break;
             case "rea":
 
@@ -302,6 +322,29 @@ public class Instruction {
     }
 
 
+    public String getInstructionType() {
+        return instructionType;
+    }
+
+    public void setInstructionType(String instructionType) {
+        this.instructionType = instructionType;
+    }
+
+    public String getP0() {
+        return p0;
+    }
+
+    public void setP0(String p0) {
+        this.p0 = p0;
+    }
+
+    public String getP1() {
+        return p1;
+    }
+
+    public void setP1(String p1) {
+        this.p1 = p1;
+    }
 
 
 

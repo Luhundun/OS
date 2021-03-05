@@ -30,6 +30,8 @@ public class CPU {
         workingProcess.getPcb().setTimeSliceLeft((short) (workingProcess.getPcb().getTimeSliceLeft() - 1));
         workingProcess.getPcb().setRunTimes((short) (workingProcess.getPcb().getRunTimes() + 1));
         System.out.print(workingProcess.getPcb().getPid()+"号进程");
+
+        //获取指令 执行指令 输出信息
         System.out.println(Instruction.executeInstruction(workingProcess.getNextInstruction()));
 //        workingProcess.plusProcessRunTime();
 //        workingProcess.useTimeSlice();
@@ -89,6 +91,37 @@ public class CPU {
         CPU.ifCpuCloseInterrupt = ifCpuCloseInterrupt;
     }
 
+    /**
+     * @Description: 进程上下文切换的内容
+     * @param: [newRunProcess]
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/3 00:15
+     */
+    public static void processContextSwitch(Process newRunProcess) {
+        if(CPU.workingProcess != null){
+            CPU.workingProcess.getPcb().setPc(CPU.getPc());
+            CPU.workingProcess.getPcb().setIr(CPU.getIr());
+            CPU.workingProcess.getPcb().setPsw(CPU.getPsw());
+            CPU.workingProcess.getPcb().setR0(CPU.getR0());
+            CPU.workingProcess.getPcb().setR1(CPU.getR1());
+            CPU.workingProcess.getPcb().setR2(CPU.getR2());
+            CPU.workingProcess.getPcb().setR3(CPU.getR3());
+        }
+        CPU.workingProcess = newRunProcess;
+        CPU.switchUserModeToKernelMode();       //进程上下文切换是要在CPU核心态下实现的
+        newRunProcess.getPcb().setProcessState((short) 1);
+        CPU.workingProcess = newRunProcess;
+        CPU.switchKernelModeToUserMode();
+        CPU.setPc(newRunProcess.getPcb().getPc());
+        CPU.setIr(newRunProcess.getPcb().getIr());
+        CPU.setPsw(newRunProcess.getPcb().getPsw());
+        CPU.setR0(newRunProcess.getPcb().getR0());
+        CPU.setR1(newRunProcess.getPcb().getR1());
+        CPU.setR2(newRunProcess.getPcb().getR2());
+        CPU.setR3(newRunProcess.getPcb().getR3());
+
+    }
 
     public static void switchUserModeToKernelMode() {
         CPU.ifCpuCloseInterrupt = true;  //关中断
@@ -120,16 +153,27 @@ public class CPU {
      * @date: 2021/3/3 16:06
      */
     public static void showCPUInfo(){
-        GUI.systemTime.setText(String.valueOf(OS.getTime()));
-        GUI.IR.setText(String.valueOf(ir));
-        GUI.PC.setText(String.valueOf(pc));
-        GUI.PSW.setText(String.valueOf(psw));
-        GUI.R0.setText(String.valueOf(r0));
-        GUI.R1.setText(String.valueOf(r1));
-        GUI.R2.setText(String.valueOf(r2));
-        GUI.R3.setText(String.valueOf(r3));
         if(workingProcess != null){
             GUI.workingProcessNum.setText(String.valueOf(workingProcess.getPcb().getPid()));
+            GUI.systemTime.setText(String.valueOf(OS.getTime()));
+            GUI.IR.setText(String.valueOf(ir));
+            GUI.PC.setText(String.valueOf(pc));
+            GUI.PSW.setText(String.valueOf(psw));
+            GUI.R0.setText(String.valueOf(r0));
+            GUI.R1.setText(String.valueOf(r1));
+            GUI.R2.setText(String.valueOf(r2));
+            GUI.R3.setText(String.valueOf(r3));
+            if(CPU.ifCpuCloseInterrupt){
+                GUI.cpuState.setText("内核态");
+            }else {
+                GUI.cpuState.setText("用户态");
+            }
+        }else {
+            GUI.systemTime.setText(String.valueOf(OS.getTime()));
+            GUI.workingProcessNum.setText("null");
+        }
+        if(OS.chooseProcess != null){
+            GUI.chosenProcess.setText(OS.chooseProcess.getPcb().toString());
         }
 
     }

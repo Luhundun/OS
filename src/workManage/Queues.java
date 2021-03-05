@@ -16,7 +16,7 @@ import java.util.LinkedList;
  * @Version: v1.0
  */
 public class Queues {
-    public static LinkedList<PCB> jobReadyQueue = new LinkedList<>();                   //后备作业队列
+    public static LinkedList<JCB> jobReadyQueue = new LinkedList<>();                   //后备作业队列
 
     public static LinkedList<Process> readyQueue = new LinkedList<>();                  //就绪队列
     public static LinkedList<Process> hangUpReadyQueue = new LinkedList<>();            //挂起就绪队列
@@ -58,7 +58,7 @@ public class Queues {
         GUI.readyQueue.setListData(readyQueue.toArray());
         GUI.hangupBlockQueue.setListData(hangUpBlockedQueue.toArray());
         GUI.hangupReadyQueue.setListData(hangUpReadyQueue.toArray());
-        GUI.initQueue.setListData(jobReadyQueue.toArray());
+//        GUI.initQueue.setListData(jobReadyQueue.toArray());
         GUI.blockedQueue1.setListData(blockedQueue[0].toArray());
         GUI.blockedQueue2.setListData(blockedQueue[1].toArray());
         GUI.blockedQueue3.setListData(blockedQueue[2].toArray());
@@ -67,6 +67,7 @@ public class Queues {
         GUI.blockedQueue6.setListData(blockedQueue[5].toArray());
         GUI.blockedQueue7.setListData(blockedQueue[6].toArray());
         GUI.blockedQueue8.setListData(blockedQueue[7].toArray());
+        GUI.jobReadyQueue.setListData(jobReadyQueue.toArray());
     }
 
     /**

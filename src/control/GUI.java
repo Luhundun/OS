@@ -15,6 +15,7 @@ import net.miginfocom.swing.*;
 import workManage.Primitives;
 import workManage.Process;
 import workManage.Queues;
+import workManage.RequestFile;
 /*
  * Created by JFormDesigner on Wed Jan 27 17:22:33 CST 2021
  */
@@ -168,7 +169,7 @@ public class GUI extends JFrame {
     }
 
     public void readFileButtonActionPerformed(ActionEvent e) {
-        JOptionPane.showMessageDialog(null, File.readFile((OS.topFile.getFd())));
+        new ReadFileDialog(this).setVisible(true);
 
     }
 
@@ -266,6 +267,44 @@ public class GUI extends JFrame {
 
     }
 
+    public void hangupReadyQueueValueChanged(ListSelectionEvent e) {
+        try {
+            if (e.getValueIsAdjusting()){
+                for(Process process : Queues.hangUpReadyQueue){
+                    if (process.equals(hangupReadyQueue.getSelectedValue())){
+                        OS.chooseProcess = process;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void hangupBlockQueueValueChanged(ListSelectionEvent e) {
+        try {
+            if (e.getValueIsAdjusting()){
+                for(Process process : Queues.hangUpBlockedQueue){
+                    if (process.equals(hangupBlockQueue.getSelectedValue())){
+                        OS.chooseProcess = process;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void runRequestFileActionPerformed(ActionEvent e) {
+        try{
+            RequestFile.readRequestFile(OS.topFile);
+        }catch (Exception e2){
+            JOptionPane.showMessageDialog(null,"打开的不是作业请求文件或者文件内容不规范");
+        }
+    }
+
 
 
     private void initComponents() {
@@ -358,6 +397,7 @@ public class GUI extends JFrame {
         openFile = new JButton();
         getInDirectory = new JButton();
         runFile = new JButton();
+        runRequestFile = new JButton();
         panel4 = new JPanel();
         label6 = new JLabel();
         scrollPane3 = new JScrollPane();
@@ -399,7 +439,7 @@ public class GUI extends JFrame {
         label46 = new JLabel();
         workingProcessNum = new JLabel();
         label47 = new JLabel();
-        systemTime7 = new JLabel();
+        cpuState = new JLabel();
         label60 = new JLabel();
         PSW = new JLabel();
         label61 = new JLabel();
@@ -410,10 +450,15 @@ public class GUI extends JFrame {
         label63 = new JLabel();
         R3 = new JLabel();
         label64 = new JLabel();
+        label44 = new JLabel();
+        chosenProcess = new JLabel();
         scrollPane2 = new JScrollPane();
         processInMemory = new JList();
         label37 = new JLabel();
         showProcess = new JButton();
+        label4 = new JLabel();
+        scrollPane12 = new JScrollPane();
+        jobReadyQueue = new JList();
         resourcePanel = new JPanel();
         processPanel = new JPanel();
         panel11 = new JPanel();
@@ -452,10 +497,6 @@ public class GUI extends JFrame {
         label56 = new JLabel();
         scrollPane24 = new JScrollPane();
         blockedQueue8 = new JList();
-        panel20 = new JPanel();
-        label57 = new JLabel();
-        scrollPane25 = new JScrollPane();
-        initQueue = new JList();
         panel21 = new JPanel();
         label58 = new JLabel();
         scrollPane26 = new JScrollPane();
@@ -966,11 +1007,11 @@ public class GUI extends JFrame {
                             writeFileButton.addActionListener(e -> writeFileButtonActionPerformed(e));
 
                             //---- readFileButton ----
-                            readFileButton.setText("\u8bfb\u6587\u4ef6");
+                            readFileButton.setText("\u8bfb\u53d6\u6587\u4ef6");
                             readFileButton.addActionListener(e -> readFileButtonActionPerformed(e));
 
                             //---- addFileButton ----
-                            addFileButton.setText("\u8ffd\u52a0\u6587\u4ef6");
+                            addFileButton.setText("\u8ffd\u52a0\u5185\u5bb9");
                             addFileButton.addActionListener(e -> addFileButtonActionPerformed(e));
 
                             //======== panel8 ========
@@ -1009,12 +1050,16 @@ public class GUI extends JFrame {
                             openFile.addActionListener(e -> fileDetailActionPerformed(e));
 
                             //---- getInDirectory ----
-                            getInDirectory.setText("\u8fdb\u5165\u4e0b\u4e00\u7ea7");
+                            getInDirectory.setText("\u8fdb\u5165\u4e0b\u7ea7");
                             getInDirectory.addActionListener(e -> getInDirectoryActionPerformed(e));
 
                             //---- runFile ----
                             runFile.setText("\u8fd0\u884c\u6587\u4ef6");
                             runFile.addActionListener(e -> runFileActionPerformed(e));
+
+                            //---- runRequestFile ----
+                            runRequestFile.setText("\u8fd0\u884c\u4f5c\u4e1a\u8bf7\u6c42\u6587\u4ef6");
+                            runRequestFile.addActionListener(e -> runRequestFileActionPerformed(e));
 
                             GroupLayout panel3Layout = new GroupLayout(panel3);
                             panel3.setLayout(panel3Layout);
@@ -1023,37 +1068,41 @@ public class GUI extends JFrame {
                                     .addGroup(panel3Layout.createSequentialGroup()
                                         .addContainerGap()
                                         .addGroup(panel3Layout.createParallelGroup()
-                                            .addGroup(panel3Layout.createSequentialGroup()
-                                                .addComponent(label3)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(filePathLabel)
-                                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                             .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                .addComponent(panel8, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                                                .addGroup(panel3Layout.createParallelGroup()
+                                                    .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                        .addGroup(panel3Layout.createParallelGroup()
+                                                            .addComponent(deleteFile, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+                                                            .addGroup(panel3Layout.createSequentialGroup()
+                                                                .addGroup(panel3Layout.createParallelGroup()
+                                                                    .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(readFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                                        .addComponent(addFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                                        .addComponent(createFile, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(button1, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE))
+                                                                    .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                                        .addComponent(openFile, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(writeFileButton, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)))
+                                                                .addGap(1, 1, 1)))
+                                                        .addComponent(runFile, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
                                                     .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(1, 1, 1)
+                                                        .addComponent(getInDirectory, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)))
+                                                .addGap(14, 14, 14))
+                                            .addGroup(panel3Layout.createSequentialGroup()
+                                                .addGroup(panel3Layout.createParallelGroup()
+                                                    .addGroup(panel3Layout.createSequentialGroup()
+                                                        .addComponent(label3)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(fileJump, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-                                                        .addGap(0, 0, Short.MAX_VALUE))
-                                                    .addComponent(panel8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                    .addGroup(panel3Layout.createParallelGroup()
-                                                        .addComponent(getInDirectory, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 77, GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(deleteFile, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(panel3Layout.createSequentialGroup()
-                                                            .addGroup(panel3Layout.createParallelGroup()
-                                                                .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                                    .addComponent(readFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                                                    .addComponent(addFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                                                    .addComponent(createFile, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-                                                                    .addComponent(button1, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE))
-                                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                                    .addComponent(openFile, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-                                                                    .addComponent(writeFileButton, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)))
-                                                            .addGap(1, 1, 1)))
-                                                    .addComponent(runFile, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
-                                                .addGap(21, 21, 21))))
+                                                        .addComponent(filePathLabel))
+                                                    .addGroup(panel3Layout.createSequentialGroup()
+                                                        .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                        .addComponent(fileJump, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(runRequestFile, GroupLayout.PREFERRED_SIZE, 168, GroupLayout.PREFERRED_SIZE))
+                                                .addContainerGap(97, Short.MAX_VALUE))))
                             );
                             panel3Layout.setVerticalGroup(
                                 panel3Layout.createParallelGroup()
@@ -1066,8 +1115,8 @@ public class GUI extends JFrame {
                                                     .addComponent(filePathLabel))
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(fileJump))
+                                                    .addComponent(fileJump)
+                                                    .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE))
                                                 .addGap(42, 42, 42)
                                                 .addComponent(panel8, GroupLayout.PREFERRED_SIZE, 300, GroupLayout.PREFERRED_SIZE))
                                             .addGroup(panel3Layout.createSequentialGroup()
@@ -1089,7 +1138,9 @@ public class GUI extends JFrame {
                                                 .addComponent(getInDirectory)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(runFile)))
-                                        .addContainerGap(44, Short.MAX_VALUE))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(runRequestFile)
+                                        .addContainerGap(8, Short.MAX_VALUE))
                             );
                         }
 
@@ -1275,15 +1326,13 @@ public class GUI extends JFrame {
                                         panel9Layout.createParallelGroup()
                                             .addGroup(panel9Layout.createSequentialGroup()
                                                 .addComponent(label38)
-                                                .addGap(65, 65, 65)
-                                                .addGroup(panel9Layout.createParallelGroup()
-                                                    .addGroup(panel9Layout.createSequentialGroup()
-                                                        .addGap(6, 6, 6)
-                                                        .addComponent(label43)
-                                                        .addGap(0, 152, Short.MAX_VALUE))
-                                                    .addGroup(panel9Layout.createSequentialGroup()
-                                                        .addComponent(label36)
-                                                        .addContainerGap(146, Short.MAX_VALUE))))
+                                                .addGap(71, 71, 71)
+                                                .addComponent(label43)
+                                                .addGap(0, 38, Short.MAX_VALUE))
+                                            .addGroup(panel9Layout.createSequentialGroup()
+                                                .addGap(82, 82, 82)
+                                                .addComponent(label36)
+                                                .addContainerGap(63, Short.MAX_VALUE))
                                     );
                                     panel9Layout.setVerticalGroup(
                                         panel9Layout.createParallelGroup()
@@ -1330,8 +1379,8 @@ public class GUI extends JFrame {
                                 //---- label47 ----
                                 label47.setText("CPU\u72b6\u6001\uff1a");
 
-                                //---- systemTime7 ----
-                                systemTime7.setText("00");
+                                //---- cpuState ----
+                                cpuState.setText("00");
 
                                 //---- label60 ----
                                 label60.setText("PSW:");
@@ -1363,6 +1412,12 @@ public class GUI extends JFrame {
                                 //---- label64 ----
                                 label64.setText("R3:");
 
+                                //---- label44 ----
+                                label44.setText("\u5f53\u524d\u9009\u4e2d\u8fdb\u7a0b\u53f7");
+
+                                //---- chosenProcess ----
+                                chosenProcess.setText("text");
+
                                 GroupLayout panel10Layout = new GroupLayout(panel10);
                                 panel10.setLayout(panel10Layout);
                                 panel10Layout.setHorizontalGroup(
@@ -1393,7 +1448,7 @@ public class GUI extends JFrame {
                                                             .addGroup(panel10Layout.createSequentialGroup()
                                                                 .addComponent(label47)
                                                                 .addGap(6, 6, 6)
-                                                                .addComponent(systemTime7)))
+                                                                .addComponent(cpuState)))
                                                         .addGap(124, 124, 124)))
                                                 .addGroup(panel10Layout.createSequentialGroup()
                                                     .addComponent(label61)
@@ -1414,8 +1469,11 @@ public class GUI extends JFrame {
                                                 .addGroup(panel10Layout.createSequentialGroup()
                                                     .addComponent(label46)
                                                     .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                    .addComponent(workingProcessNum)))
-                                            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                    .addComponent(workingProcessNum))
+                                                .addGroup(panel10Layout.createSequentialGroup()
+                                                    .addComponent(label44)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(chosenProcess))))
                                 );
                                 panel10Layout.setVerticalGroup(
                                     panel10Layout.createParallelGroup()
@@ -1427,7 +1485,7 @@ public class GUI extends JFrame {
                                             .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                             .addGroup(panel10Layout.createParallelGroup()
                                                 .addComponent(label47)
-                                                .addComponent(systemTime7))
+                                                .addComponent(cpuState))
                                             .addGap(13, 13, 13)
                                             .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                 .addComponent(label40)
@@ -1460,7 +1518,11 @@ public class GUI extends JFrame {
                                             .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                                 .addComponent(label46)
                                                 .addComponent(workingProcessNum))
-                                            .addContainerGap(18, Short.MAX_VALUE))
+                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(panel10Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                .addComponent(label44)
+                                                .addComponent(chosenProcess))
+                                            .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 );
                             }
 
@@ -1479,6 +1541,14 @@ public class GUI extends JFrame {
                             showProcess.setText("\u67e5\u770b\u9009\u4e2d\u8fdb\u7a0b\u8be6\u7ec6\u4fe1\u606f");
                             showProcess.addActionListener(e -> showProcessActionPerformed(e));
 
+                            //---- label4 ----
+                            label4.setText("\u540e\u5907\u4f5c\u4e1a\u961f\u5217");
+
+                            //======== scrollPane12 ========
+                            {
+                                scrollPane12.setViewportView(jobReadyQueue);
+                            }
+
                             GroupLayout panel6Layout = new GroupLayout(panel6);
                             panel6.setLayout(panel6Layout);
                             panel6Layout.setHorizontalGroup(
@@ -1495,35 +1565,42 @@ public class GUI extends JFrame {
                                             .addGroup(panel6Layout.createSequentialGroup()
                                                 .addGap(70, 70, 70)
                                                 .addComponent(label37)))
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                                         .addGroup(panel6Layout.createParallelGroup()
-                                            .addComponent(scrollPane7, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(panel6Layout.createSequentialGroup()
+                                            .addGroup(GroupLayout.Alignment.TRAILING, panel6Layout.createSequentialGroup()
+                                                .addComponent(scrollPane7, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
                                                 .addGap(18, 18, 18)
-                                                .addComponent(label35)))
-                                        .addGap(33, 33, 33)
-                                        .addComponent(panel7, GroupLayout.PREFERRED_SIZE, 319, GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(scrollPane12, GroupLayout.PREFERRED_SIZE, 103, GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(GroupLayout.Alignment.TRAILING, panel6Layout.createSequentialGroup()
+                                                .addComponent(label35)
+                                                .addGap(64, 64, 64)
+                                                .addComponent(label4)
+                                                .addGap(14, 14, 14)))
+                                        .addGap(26, 26, 26)
+                                        .addComponent(panel7, GroupLayout.PREFERRED_SIZE, 205, GroupLayout.PREFERRED_SIZE))
                             );
                             panel6Layout.setVerticalGroup(
                                 panel6Layout.createParallelGroup()
                                     .addGroup(panel6Layout.createSequentialGroup()
                                         .addGap(54, 54, 54)
-                                        .addComponent(panel10, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(panel10, GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(showProcess)
                                         .addContainerGap(127, Short.MAX_VALUE))
                                     .addGroup(panel6Layout.createSequentialGroup()
                                         .addContainerGap()
                                         .addGroup(panel6Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                            .addComponent(panel7, GroupLayout.PREFERRED_SIZE, 361, GroupLayout.PREFERRED_SIZE)
                                             .addGroup(panel6Layout.createSequentialGroup()
                                                 .addGroup(panel6Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                    .addComponent(label37)
                                                     .addComponent(label35)
-                                                    .addComponent(label37))
+                                                    .addComponent(label4))
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addGroup(panel6Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(scrollPane7, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
-                                                    .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)))
-                                            .addComponent(panel7, GroupLayout.PREFERRED_SIZE, 361, GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(scrollPane2, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                                                    .addComponent(scrollPane12, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                                                    .addComponent(scrollPane7, GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE))))
                                         .addContainerGap(99, Short.MAX_VALUE))
                             );
                         }
@@ -1535,9 +1612,9 @@ public class GUI extends JFrame {
                                 .addGroup(filePanelLayout.createSequentialGroup()
                                     .addContainerGap()
                                     .addGroup(filePanelLayout.createParallelGroup()
-                                        .addComponent(panel3, GroupLayout.PREFERRED_SIZE, 341, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(panel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .addGap(61, 61, 61)
+                                        .addComponent(panel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(panel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                    .addGap(58, 58, 58)
                                     .addGroup(filePanelLayout.createParallelGroup()
                                         .addComponent(panel4, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(filePanelLayout.createSequentialGroup()
@@ -1550,11 +1627,11 @@ public class GUI extends JFrame {
                                 .addGroup(filePanelLayout.createSequentialGroup()
                                     .addGroup(filePanelLayout.createParallelGroup()
                                         .addGroup(filePanelLayout.createSequentialGroup()
-                                            .addGap(47, 47, 47)
-                                            .addComponent(panel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(filePanelLayout.createSequentialGroup()
                                             .addGap(19, 19, 19)
-                                            .addComponent(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(panel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(filePanelLayout.createSequentialGroup()
+                                            .addGap(47, 47, 47)
+                                            .addComponent(panel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(filePanelLayout.createParallelGroup()
                                         .addGroup(filePanelLayout.createSequentialGroup()
                                             .addGap(43, 43, 43)
@@ -1709,21 +1786,6 @@ public class GUI extends JFrame {
                                 panel19.add(scrollPane24, BorderLayout.CENTER);
                             }
 
-                            //======== panel20 ========
-                            {
-                                panel20.setLayout(new BorderLayout(1, 1));
-
-                                //---- label57 ----
-                                label57.setText("\u6fc0\u6d3b\u961f\u5217");
-                                panel20.add(label57, BorderLayout.NORTH);
-
-                                //======== scrollPane25 ========
-                                {
-                                    scrollPane25.setViewportView(initQueue);
-                                }
-                                panel20.add(scrollPane25, BorderLayout.CENTER);
-                            }
-
                             //======== panel21 ========
                             {
                                 panel21.setLayout(new BorderLayout(1, 1));
@@ -1734,6 +1796,9 @@ public class GUI extends JFrame {
 
                                 //======== scrollPane26 ========
                                 {
+
+                                    //---- hangupReadyQueue ----
+                                    hangupReadyQueue.addListSelectionListener(e -> hangupReadyQueueValueChanged(e));
                                     scrollPane26.setViewportView(hangupReadyQueue);
                                 }
                                 panel21.add(scrollPane26, BorderLayout.CENTER);
@@ -1749,6 +1814,9 @@ public class GUI extends JFrame {
 
                                 //======== scrollPane27 ========
                                 {
+
+                                    //---- hangupBlockQueue ----
+                                    hangupBlockQueue.addListSelectionListener(e -> hangupBlockQueueValueChanged(e));
                                     scrollPane27.setViewportView(hangupBlockQueue);
                                 }
                                 panel22.add(scrollPane27, BorderLayout.CENTER);
@@ -1780,10 +1848,8 @@ public class GUI extends JFrame {
                                         .addGroup(processPanelLayout.createParallelGroup()
                                             .addComponent(scrollPane8, GroupLayout.PREFERRED_SIZE, 584, GroupLayout.PREFERRED_SIZE)
                                             .addGroup(processPanelLayout.createSequentialGroup()
-                                                .addGroup(processPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(processPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                                                     .addGroup(processPanelLayout.createSequentialGroup()
-                                                        .addComponent(panel20, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                         .addComponent(panel21, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                         .addComponent(panel22, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
@@ -1830,7 +1896,6 @@ public class GUI extends JFrame {
                                             .addGroup(processPanelLayout.createSequentialGroup()
                                                 .addGap(18, 18, 18)
                                                 .addGroup(processPanelLayout.createParallelGroup()
-                                                    .addComponent(panel20, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(panel21, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(panel18, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                                     .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
@@ -2067,6 +2132,7 @@ public class GUI extends JFrame {
     public static JButton openFile;
     public static JButton getInDirectory;
     public static JButton runFile;
+    public static JButton runRequestFile;
     public static JPanel panel4;
     public static JLabel label6;
     public static JScrollPane scrollPane3;
@@ -2108,7 +2174,7 @@ public class GUI extends JFrame {
     public static JLabel label46;
     public static JLabel workingProcessNum;
     public static JLabel label47;
-    public static JLabel systemTime7;
+    public static JLabel cpuState;
     public static JLabel label60;
     public static JLabel PSW;
     public static JLabel label61;
@@ -2119,10 +2185,15 @@ public class GUI extends JFrame {
     public static JLabel label63;
     public static JLabel R3;
     public static JLabel label64;
+    public static JLabel label44;
+    public static JLabel chosenProcess;
     public static JScrollPane scrollPane2;
     public static JList processInMemory;
     public static JLabel label37;
     public static JButton showProcess;
+    public static JLabel label4;
+    public static JScrollPane scrollPane12;
+    public static JList jobReadyQueue;
     public static JPanel resourcePanel;
     public static JPanel processPanel;
     public static JPanel panel11;
@@ -2161,10 +2232,6 @@ public class GUI extends JFrame {
     public static JLabel label56;
     public static JScrollPane scrollPane24;
     public static JList blockedQueue8;
-    public static JPanel panel20;
-    public static JLabel label57;
-    public static JScrollPane scrollPane25;
-    public static JList initQueue;
     public static JPanel panel21;
     public static JLabel label58;
     public static JScrollPane scrollPane26;

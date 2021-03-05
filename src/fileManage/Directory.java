@@ -211,7 +211,7 @@ public class Directory extends File{
         for (int i=0;i<=FCBNums/8;i++){
             Block thisBlock = OS.disk.findBlockByDno(getFileNextBlock());
             for (int j=0;j<8&&i*8+j<FCBNums;j++){
-                short[] temp =directoryItems.get(j).convertFCBToShortArray();
+                short[] temp =directoryItems.get(i*8+j).convertFCBToShortArray();
                 for(int k=0;k<31;k++){
                     thisBlock.writeAWord(temp[k],j*32+k);
                     if(temp[k] == 0){

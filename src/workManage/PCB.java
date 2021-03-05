@@ -1,5 +1,6 @@
 package workManage;
 
+import control.GUI;
 import control.OS;
 
 /**
@@ -50,10 +51,10 @@ public class PCB implements Comparable<PCB>{
      * @auther: Lu Ning
      * @date: 2021/3/1 23:56
      */
-    public PCB(short processPriority){
+    public PCB(short processPriority, short inTime){
         this.pid = pcbNumberIndex++;
         this.processPriority = processPriority;
-        this.inTimes = (short) OS.getTime();
+        this.inTimes = inTime;
         this.runTimes = 0;
         this.turnTimes = 0;
         this.timeSliceLeft = 0;
@@ -90,24 +91,57 @@ public class PCB implements Comparable<PCB>{
      * @date: 2021/3/1 12:40
      */
     public static void initPCBManagment(){
-       pcbPool = new PCB[OS.pcbPoolSize];
+       pcbPool = new PCB[OS.PCBPOOLSIZE];
        pcbNumberIndex = 0;
     }
     
     /**
-     * @Description: 判断PCB池是否满 
+     * @Description: 从PCB池获取空闲PCB，若未满返回下标，满了返回-1
      * @param: []
-     * @return: boolean
+     * @return: short
      * @auther: Lu Ning
      * @date: 2021/3/1 11:02
      */
-    public static boolean pcbIsFull(){
-        for(int i=0 ;i<32 ;i++){
+    public synchronized static short getFreeFromPCBPool(){
+        for(short i=0 ;i<OS.PCBPOOLSIZE ;i++){
             if(pcbPool[i] == null){
-                return false;
+                return i;
             }
         }
-        return true;
+        return -1;
+    }
+
+    /**
+     * @Description: 从PCB池中找到PCB，如果不存在则返回-1
+     * @param: []
+     * @return: short
+     * @auther: Lu Ning
+     * @date: 2021/3/4 23:01
+     */
+    public synchronized static short getPCBIndexIfInPool(PCB pcb){
+        for(short i=0 ;i<OS.PCBPOOLSIZE ;i++){
+            if(pcbPool[i] == pcb){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * @Description: 在GUI展示PCB池
+     * @param: []
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/4 22:55
+     */
+    public static void showPCBPoll() {
+        GUI.pcbPool.setListData(pcbPool);
+    }
+
+
+    @Override
+    public String toString() {
+        return String.valueOf(pid);
     }
 
     public short getPid() {

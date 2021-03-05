@@ -93,8 +93,8 @@ new FormModel {
 							"value": "card2"
 						} )
 						add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-							"$horizontalGroup": "par l {seq l {space :::p, par l {comp panel3:::p:341:p, comp panel1::l:p::p}, space :p:61:p, par l {comp panel4:::::x, seq {comp panel6:::p::p, space :0:0:x}}, space :::x}}"
-							"$verticalGroup": "par l {seq l {par l {seq {space :p:47:p, comp panel3:::p::p}, seq l {space :p:19:p, comp panel4:::p::p}}, par l {seq {space :p:43:p, comp panel1:::p::p, space :::x}, seq t {space :::x, comp panel6:::p::p}}}}"
+							"$horizontalGroup": "par l {seq l {space :::p, par l {comp panel1:::p::p, comp panel3:::p::p}, space :p:58:p, par l {comp panel4:::::x, seq {comp panel6:::p::p, space :0:0:x}}, space :::x}}"
+							"$verticalGroup": "par l {seq l {par l {seq {space :p:19:p, comp panel4:::p::p}, seq l {space :p:47:p, comp panel3:::p::p}}, par l {seq {space :p:43:p, comp panel1:::p::p, space :::x}, seq t {space :::x, comp panel6:::p::p}}}}"
 						} ) {
 							name: "filePanel"
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -290,8 +290,8 @@ new FormModel {
 								} )
 							} )
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-								"$horizontalGroup": "par l {seq {space :::p, par l {seq {comp label3:::p::p, space :::p, comp filePathLabel:::p::p, space :::x}, seq t {par t {seq t {comp textField1:::p:177:p, space :::p, comp fileJump:::p:53:p, space :0:0:x}, comp panel8:::::x}, space :::p, par l:::p {par l {comp getInDirectory::t:p:77:p, comp deleteFile::t:p:76:p, seq {par l {par l:t::p {comp readFileButton::l::0:x, comp addFileButton::l::0:x, comp createFile::t:p:76:p, comp button1::l:p:76:p}, par t:l {comp openFile::t:p:76:p, comp writeFileButton:::p:76:p}}, space :1:1:p}}, comp runFile::::0:x}, space :p:21:p}}}}"
-								"$verticalGroup": "par l {seq {par l {seq l {space :p:8:p, par b {comp label3::b:p::p, comp filePathLabel::b:p::p}, space :::p, par b {comp textField1::b:p:30:p, comp fileJump::b:p::p}, space :p:42:p, comp panel8:::p:300:p}, seq l {space :p:69:p, comp createFile:::p::p, space :::p, comp openFile:::p::p, space :::p, comp writeFileButton:::p::p, space :::p, comp readFileButton:::p::p, space :::p, comp addFileButton:::p::p, space :::p, comp button1:::p::p, space :::p, comp deleteFile:::p::p, space :::p, comp getInDirectory:::p::p, space :::p, comp runFile:::p::p}}, space ::44:x}}"
+								"$horizontalGroup": "par l {seq {space :::p, par l {seq t {comp panel8:::p:261:p, space ::29:x, par l {par l:l::p {par l {comp deleteFile::t:p:76:p, seq {par l {par l:t::p {comp readFileButton::l::0:x, comp addFileButton::l::0:x, comp createFile::t:p:76:p, comp button1::l:p:76:p}, par t:l {comp openFile::t:p:76:p, comp writeFileButton:::p:76:p}}, space :1:1:p}}, comp runFile::::0:x}, seq l {space :p:1:p, comp getInDirectory:::p:77:p}}, space :p:14:p}, seq {par l {seq {comp label3:::p::p, space :::p, comp filePathLabel:::p::p}, seq {comp textField1:::p:220:p, space u:::p, comp fileJump:::p:53:p}, comp runRequestFile::l:p:168:p}, space ::97:x}}}}"
+								"$verticalGroup": "par l {seq {par l {seq l {space :p:8:p, par b {comp label3::b:p::p, comp filePathLabel::b:p::p}, space :::p, par b {comp fileJump::b:p::p, comp textField1::b:p:30:p}, space :p:42:p, comp panel8:::p:300:p}, seq l {space :p:69:p, comp createFile:::p::p, space :::p, comp openFile:::p::p, space :::p, comp writeFileButton:::p::p, space :::p, comp readFileButton:::p::p, space :::p, comp addFileButton:::p::p, space :::p, comp button1:::p::p, space :::p, comp deleteFile:::p::p, space :::p, comp getInDirectory:::p::p, space :::p, comp runFile:::p::p}}, space :::p, comp runRequestFile:::p::p, space ::8:x}}"
 							} ) {
 								name: "panel3"
 								add( new FormComponent( "javax.swing.JTextField" ) {
@@ -325,12 +325,12 @@ new FormModel {
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "readFileButton"
-									"text": "读文件"
+									"text": "读取文件"
 									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "readFileButtonActionPerformed", true ) )
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "addFileButton"
-									"text": "追加文件"
+									"text": "追加内容"
 									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "addFileButtonActionPerformed", true ) )
 								} )
 								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
@@ -370,13 +370,18 @@ new FormModel {
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "getInDirectory"
-									"text": "进入下一级"
+									"text": "进入下级"
 									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "getInDirectoryActionPerformed", true ) )
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "runFile"
 									"text": "运行文件"
 									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "runFileActionPerformed", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "runRequestFile"
+									"text": "运行作业请求文件"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "runRequestFileActionPerformed", true ) )
 								} )
 							} )
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
@@ -458,8 +463,8 @@ new FormModel {
 								} )
 							} )
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-								"$horizontalGroup": "par l {seq l {space :p:18:p, par l {comp panel10:::p:125:p, comp showProcess:::p::p}, par l {seq {space :p:54:p, comp scrollPane2:::p:96:p}, seq l {space :p:70:p, comp label37:::p::p}}, space ::41:x, par l {comp scrollPane7:::p:86:p, seq l {space :p:18:p, comp label35:::p::p}}, space :p:33:p, comp panel7:::p:319:p}}"
-								"$verticalGroup": "par l {seq l {space :p:54:p, comp panel10:::::x, space :::p, comp showProcess:::p::p, space ::127:x}, seq l {space :::p, par t {seq {par b {comp label35::b:p::p, comp label37::b:p::p}, space u:::p, par l:::p {comp scrollPane7::::280:x, comp scrollPane2::::280:x}}, comp panel7:::p:361:p}, space ::99:x}}"
+								"$horizontalGroup": "par l {seq l {space :p:18:p, par l {comp panel10:::p:125:p, comp showProcess:::p::p}, par l {seq {space :p:54:p, comp scrollPane2:::p:96:p}, seq l {space :p:70:p, comp label37:::p::p}}, space ::35:x, par l {seq t {comp scrollPane7:::p:92:p, space s:::p, comp scrollPane12:::p:103:p}, seq t {comp label35:::p::p, space :p:64:p, comp label4:::p::p, space :p:14:p}}, space :p:26:p, comp panel7:::p:205:p}}"
+								"$verticalGroup": "par l {seq l {space :p:54:p, comp panel10::::249:x, space :::p, comp showProcess:::p::p, space ::127:x}, seq l {space :::p, par t {comp panel7:::p:361:p, seq {par b {comp label37::b:p::p, comp label35::b:p::p, comp label4::b:p::p}, space u:::p, par l:::p {comp scrollPane2::::280:x, comp scrollPane12::l::280:x, comp scrollPane7::l::280:x}}}, space ::99:x}}"
 							} ) {
 								name: "panel6"
 								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
@@ -484,7 +489,7 @@ new FormModel {
 										"value": "Center"
 									} )
 									add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-										"$horizontalGroup": "par l {seq l {comp label38:::p::p, space :p:65:p, par l {seq {space :6:6:p, comp label43:::p::p, space :0:152:x}, seq {comp label36:::p::p, space ::146:x}}}}"
+										"$horizontalGroup": "par l {seq l {comp label38:::p::p, space :p:71:p, comp label43:::p::p, space :0:38:x}, seq l {space :p:82:p, comp label36:::p::p, space ::63:x}}"
 										"$verticalGroup": "par l {seq t {space ::27:x, comp label36:::p::p, space u:::p, par b {comp label38::b:p::p, comp label43::b:p::p}, space :p:16:p}}"
 									} ) {
 										name: "panel9"
@@ -507,8 +512,8 @@ new FormModel {
 									} )
 								} )
 								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-									"$horizontalGroup": "par l {seq {space :::p, par l {par t {par t:l::p {seq l {comp label60:::p::p, space :::x, comp PSW:::p::p}, seq l {comp label45:::p::p, space :::x, comp PC:::p::p}, seq l {comp label40:::p::p, space :p:39:p, comp IR:::p::p}}, seq {par l {seq {comp label39:::p::p, space :::p, comp systemTime:::p::p}, seq l {comp label47:::p::p, space :6:6:p, comp systemTime7:::p::p}}, space :p:124:p}}, seq l {comp label61:::p::p, space :p:34:p, comp R0:::p::p}, seq l {comp label62:::p::p, space :34:34:p, comp R1:::p::p}, seq l {comp label63:::p::p, space :34:34:p, comp R2:::p::p}, seq l {comp label64:::p::p, space :34:34:p, comp R3:::p::p}, seq l {comp label46:::p::p, space :::p, comp workingProcessNum:::p::p}}, space :::x}}"
-									"$verticalGroup": "par l {seq l {space :p:14:p, par b {comp label39::b:p::p, comp systemTime::b:p::p}, space :::p, par l {comp label47:::p::p, comp systemTime7:::p::p}, space :p:13:p, par b {comp label40::b:p::p, comp IR::b:::x}, space :::p, par b {comp label45::b:p::p, comp PC::b:p::p}, space :::p, par b {comp label60::b:p::p, comp PSW::b:p::p}, space :::p, par l:::p {comp label61:::::x, comp R0:::::x}, space :::p, par l {comp label62:::p::p, comp R1:::p::p}, space :::p, par l {comp label63:::p::p, comp R2:::p::p}, space :::p, par l {comp label64:::p::p, comp R3:::p::p}, space u:::p, par b {comp label46::b:p::p, comp workingProcessNum::b:p::p}, space ::18:x}}"
+									"$horizontalGroup": "par l {seq {space :::p, par l {par t {par t:l::p {seq l {comp label60:::p::p, space :::x, comp PSW:::p::p}, seq l {comp label45:::p::p, space :::x, comp PC:::p::p}, seq l {comp label40:::p::p, space :p:39:p, comp IR:::p::p}}, seq {par l {seq {comp label39:::p::p, space :::p, comp systemTime:::p::p}, seq l {comp label47:::p::p, space :6:6:p, comp cpuState:::p::p}}, space :p:124:p}}, seq l {comp label61:::p::p, space :p:34:p, comp R0:::p::p}, seq l {comp label62:::p::p, space :34:34:p, comp R1:::p::p}, seq l {comp label63:::p::p, space :34:34:p, comp R2:::p::p}, seq l {comp label64:::p::p, space :34:34:p, comp R3:::p::p}, seq l {comp label46:::p::p, space :::p, comp workingProcessNum:::p::p}, seq l {comp label44:::p::p, space :::p, comp chosenProcess:::p::p}}}}"
+									"$verticalGroup": "par l {seq l {space :p:14:p, par b {comp label39::b:p::p, comp systemTime::b:p::p}, space :::p, par l {comp label47:::p::p, comp cpuState:::p::p}, space :p:13:p, par b {comp label40::b:p::p, comp IR::b:::x}, space :::p, par b {comp label45::b:p::p, comp PC::b:p::p}, space :::p, par b {comp label60::b:p::p, comp PSW::b:p::p}, space :::p, par l:::p {comp label61:::::x, comp R0:::::x}, space :::p, par l {comp label62:::p::p, comp R1:::p::p}, space :::p, par l {comp label63:::p::p, comp R2:::p::p}, space :::p, par l {comp label64:::p::p, comp R3:::p::p}, space u:::p, par b {comp label46::b:p::p, comp workingProcessNum::b:p::p}, space :::p, par b {comp label44::b:p::p, comp chosenProcess::b:p::p}, space :::x}}"
 								} ) {
 									name: "panel10"
 									add( new FormComponent( "javax.swing.JLabel" ) {
@@ -548,7 +553,7 @@ new FormModel {
 										"text": "CPU状态："
 									} )
 									add( new FormComponent( "javax.swing.JLabel" ) {
-										name: "systemTime7"
+										name: "cpuState"
 										"text": "00"
 									} )
 									add( new FormComponent( "javax.swing.JLabel" ) {
@@ -591,6 +596,14 @@ new FormModel {
 										name: "label64"
 										"text": "R3:"
 									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "label44"
+										"text": "当前选中进程号"
+									} )
+									add( new FormComponent( "javax.swing.JLabel" ) {
+										name: "chosenProcess"
+										"text": "text"
+									} )
 								} )
 								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
 									name: "scrollPane2"
@@ -608,6 +621,16 @@ new FormModel {
 									"text": "查看选中进程详细信息"
 									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "showProcessActionPerformed", true ) )
 								} )
+								add( new FormComponent( "javax.swing.JLabel" ) {
+									name: "label4"
+									"text": "后备作业队列"
+								} )
+								add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
+									name: "scrollPane12"
+									add( new FormComponent( "javax.swing.JList" ) {
+										name: "jobReadyQueue"
+									} )
+								} )
 							} )
 						}, new FormLayoutConstraints( class java.lang.String ) {
 							"value": "card3"
@@ -617,8 +640,8 @@ new FormModel {
 						} ) {
 							name: "resourcePanel"
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-								"$horizontalGroup": "par l {seq l {space :::p, par l {comp scrollPane8:::p:584:p, seq {par t:::p {seq {comp panel20:::p:71:p, space :::x, comp panel21:::p:71:p, space :::p, comp panel22:::p:71:p}, seq {comp panel11:::p:71:p, space :::p, comp panel12:::p:71:p, space :p:12:p, comp panel13:::p:71:p}}, space u:::p, par l {seq {comp panel14:::p:71:p, space u:::p, comp panel15:::p:71:p, space u:::p, comp panel16:::p:71:p, space u:::p, comp panel17:::p:71:p}, seq {comp panel18:::p:71:p, space u:::p, comp panel19:::p:71:p, space :::p, par l {comp button2:::p::p, comp button3:::p::p, comp button4:::p::p}}}}}, space :::p}}"
-								"$verticalGroup": "par l {seq l {space :::p, par t {comp panel17:::p:236:p, comp panel16:::p:236:p, comp panel15:::p:236:p, comp panel14:::p:236:p, comp panel13:::p:236:p, comp panel12:::p:236:p, comp panel11:::p:236:p}, par l {seq {space s:::p, par l {comp panel20:::p:236:p, comp panel21:::p:236:p, comp panel18:::p:236:p, comp panel19:::p:236:p, comp panel22:::p:236:p}}, seq l {space :p:71:p, comp button2:::p::p, space :::p, comp button3:::p::p, space :::p, comp button4:::p::p}}, space s:::p, comp scrollPane8:::p:392:p, space :::p}}"
+								"$horizontalGroup": "par l {seq l {space :::p, par l {comp scrollPane8:::p:584:p, seq {par t {seq {comp panel21:::p:71:p, space :::p, comp panel22:::p:71:p}, seq {comp panel11:::p:71:p, space :::p, comp panel12:::p:71:p, space :p:12:p, comp panel13:::p:71:p}}, space u:::p, par l {seq {comp panel14:::p:71:p, space u:::p, comp panel15:::p:71:p, space u:::p, comp panel16:::p:71:p, space u:::p, comp panel17:::p:71:p}, seq {comp panel18:::p:71:p, space u:::p, comp panel19:::p:71:p, space :::p, par l {comp button2:::p::p, comp button3:::p::p, comp button4:::p::p}}}}}, space :::p}}"
+								"$verticalGroup": "par l {seq l {space :::p, par t {comp panel17:::p:236:p, comp panel16:::p:236:p, comp panel15:::p:236:p, comp panel14:::p:236:p, comp panel13:::p:236:p, comp panel12:::p:236:p, comp panel11:::p:236:p}, par l {seq {space s:::p, par l {comp panel21:::p:236:p, comp panel18:::p:236:p, comp panel19:::p:236:p, comp panel22:::p:236:p}}, seq l {space :p:71:p, comp button2:::p::p, space :::p, comp button3:::p::p, space :::p, comp button4:::p::p}}, space s:::p, comp scrollPane8:::p:392:p, space :::p}}"
 							} ) {
 								name: "processPanel"
 								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) {
@@ -805,26 +828,6 @@ new FormModel {
 									"hgap": 1
 									"vgap": 1
 								} ) {
-									name: "panel20"
-									add( new FormComponent( "javax.swing.JLabel" ) {
-										name: "label57"
-										"text": "激活队列"
-									}, new FormLayoutConstraints( class java.lang.String ) {
-										"value": "North"
-									} )
-									add( new FormContainer( "javax.swing.JScrollPane", new FormLayoutManager( class javax.swing.JScrollPane ) ) {
-										name: "scrollPane25"
-										add( new FormComponent( "javax.swing.JList" ) {
-											name: "initQueue"
-										} )
-									}, new FormLayoutConstraints( class java.lang.String ) {
-										"value": "Center"
-									} )
-								} )
-								add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) {
-									"hgap": 1
-									"vgap": 1
-								} ) {
 									name: "panel21"
 									add( new FormComponent( "javax.swing.JLabel" ) {
 										name: "label58"
@@ -836,6 +839,7 @@ new FormModel {
 										name: "scrollPane26"
 										add( new FormComponent( "javax.swing.JList" ) {
 											name: "hangupReadyQueue"
+											addEvent( new FormEvent( "javax.swing.event.ListSelectionListener", "valueChanged", "hangupReadyQueueValueChanged", true ) )
 										} )
 									}, new FormLayoutConstraints( class java.lang.String ) {
 										"value": "Center"
@@ -856,6 +860,7 @@ new FormModel {
 										name: "scrollPane27"
 										add( new FormComponent( "javax.swing.JList" ) {
 											name: "hangupBlockQueue"
+											addEvent( new FormEvent( "javax.swing.event.ListSelectionListener", "valueChanged", "hangupBlockQueueValueChanged", true ) )
 										} )
 									}, new FormLayoutConstraints( class java.lang.String ) {
 										"value": "Center"

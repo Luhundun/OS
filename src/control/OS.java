@@ -1,15 +1,15 @@
 package control;
 
+import deviceManage.DisplayThread;
+import deviceManage.KeyBoardThread;
 import fileManage.*;
 import hardware.CPU;
 import hardware.Disk;
 import hardware.Memory;
+import memoryManage.MissingPageInterruptThread;
 import memoryManage.PageTable;
-import workManage.PCB;
-import workManage.PV;
+import workManage.*;
 import workManage.Process;
-import workManage.ProcessSchduleThread;
-import workManage.Queues;
 
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
@@ -26,13 +26,17 @@ public class OS {
     //重入锁，主要用于控制时钟进程与其他进程的通信
     public static ReentrantLock baseTimerLock =new ReentrantLock();           //控制0.2秒执行一条cpu指令的锁
     public static Condition baseTimerCondition = baseTimerLock.newCondition();
-    public static ReentrantLock guiFlashTimerLock =new ReentrantLock();           //控制0.2秒执行一条cpu指令的锁
-    public static Condition guiFlashTimerCondition = guiFlashTimerLock.newCondition();
+    public static ReentrantLock secondTimerLock =new ReentrantLock();           //控制0.2秒执行一条cpu指令的锁
+    public static Condition secondTimerCondition = secondTimerLock.newCondition();
 
     public static final String virtualDiskRootPath = "./src/hardware/virtualDisk/";
     public static final String virtualDiskMirrorPath = "./src/hardware/DiskMirror.mir";
-    public static final short timeSliceLength = 5;      //时间片长度
-    public static final int pcbPoolSize = 32;
+    public static final short TIMESLICELENGTH = 5;          //时间片长度
+    public static final short PCBPOOLSIZE = 12;             //PCB池大小
+    public static final short MAXNUMPROCESSINMEMORY = 8;   //进程在内存的最大数，分配内存块为16 - 16+4*max  max<=12
+    public static final short HANGUPWAITTIME = 40;        //在就绪或者阻塞队列等待的时间超过这个值，就有可能被挂起
+    public static final short HANGUPCHECKTIME = 25;        //每隔x隔时间片检查一次中级调度
+    public static final short JOBCHECKTIME = 25;        //每隔x隔时间片检查作业请求情况
 
 
 
@@ -96,6 +100,11 @@ public class OS {
             new TimerThread().start();   //启动时钟进程
             new FlashGUIThread().start(); //启动刷新GUI进程
             new ProcessSchduleThread().start();
+            new KeyBoardThread().start();
+            new DisplayThread().start();
+            new VisitDIskThread().start();
+            new JobSchduleThread().start();
+            new MissingPageInterruptThread().start();
         } catch (Exception exception) {
             exception.printStackTrace();
         }

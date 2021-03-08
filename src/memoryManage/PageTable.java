@@ -134,20 +134,26 @@ public class PageTable {
         }else return true;
     }
 
-    public Object[] showWhichPageInMemory(){
-        ArrayList<String> temp = new ArrayList<>();
-        for(int i=0;i<256;i++){
-            if(pageTable[i].getPhysicalPageNumber() > 0){
-                temp.add(pageTable[i].getLogicalPageNumber()+"-----------------"+pageTable[i].getPhysicalPageNumber());
-            }
-        }
-        return temp.toArray();
-    }
+//    public Object[] showWhichPageInMemory(){
+//        ArrayList<String> temp = new ArrayList<>();
+//        for()
+//        for(int i=0;i<256;i++){
+//            if(pageTable[i].getPhysicalPageNumber() > 0){
+//                temp.add(pageTable[i].getLogicalPageNumber()+"-----------------"+pageTable[i].getPhysicalPageNumber());
+//            }
+//        }
+//        return temp.toArray();
+//    }
 
     public static void showSystemPageTableInfo(){
         if(CPU.workingProcess == null){
             return;
         }
-        GUI.systemPageTable.setListData(CPU.workingProcess.getPageTable().showWhichPageInMemory());
+        systemPageTable = CPU.workingProcess.getPageTable();
+        ArrayList<String> temp = new ArrayList<>();
+        for(short number : CPU.workingProcess.getUserStack()){
+            temp.add(systemPageTable.pageTable[number].getLogicalPageNumber()+"-----------------"+systemPageTable.pageTable[number].getPhysicalPageNumber());
+        }
+        GUI.systemPageTable.setListData(temp.toArray());
     }
 }

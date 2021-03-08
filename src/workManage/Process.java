@@ -7,7 +7,7 @@ import hardware.Block;
 import hardware.CPU;
 import memoryManage.LRU;
 import memoryManage.PageTable;
-import memoryManage.MissingPageInterruptThread;
+import memoryManage.MMUThread;
 
 import java.util.Stack;
 
@@ -56,6 +56,7 @@ public class Process implements Comparable<Process>{
             Block.cloneABlock(tempFile.getDataBlockList().get(i),file.getDataBlockList().get(i));
         }
         tempFile.getDataBlockList().get(file.getfInode().getFileSize()).setBlockFF();
+        tempFile.openFileByFile();
         //PCB中记录临时交换区文件、当前文件位置和创建时间
         pcb.setVirtualMemoryInDisk(tempFile.getfInode().getInodeNum());
         pcb.setDirectoryIno(OS.pathDirectory.getfInode().getInodeNum());
@@ -88,8 +89,9 @@ public class Process implements Comparable<Process>{
         }
 
         CPU.setPc((short) (CPU.getPc() + 8));
-        //需要换页的情况
-        if(CPU.getPc()%256 == 0){
+        //可能需要换页的情况:下一条指令地址/256是0或者这条语句要调用跳转指令
+        if(CPU.getPc()%256 == 0  || instruction.getInstructionType().equals("jmp")
+                || instruction.getInstructionType().equals("jmz") ){
             short newPage = (short) (CPU.getPc()/256);
             short oldPage = LRU.lru(userStack, newPage);
             if(oldPage > -5){
@@ -97,7 +99,7 @@ public class Process implements Comparable<Process>{
                 //引发缺页中断,在页表进行替换 或 引发缺页中断但内存未满，加载新页即可
 
                 //向缺页中断线程发起缺页中断请求，由此线程处理缺页中断
-                MissingPageInterruptThread.callMissingPage(newPage,oldPage);
+                MMUThread.callMissingPage(newPage,oldPage);
             }
         }
 

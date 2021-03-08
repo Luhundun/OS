@@ -189,8 +189,10 @@ public class File {
      * @auther: Lu Ning
      * @date: 2021/2/25 0:19
      */
-    public static void openFile(String fileName){
-
+    public static short openFile(String fileName) throws Exception {
+        File file = OS.pathDirectory.findFileInDirectory(fileName);
+        file.openFileByFile();
+        return file.fd;
     }
 
     /**
@@ -370,6 +372,12 @@ public class File {
         GUI.directAddress8.setText(String.valueOf(directAddress[7]));
         GUI.indirectAddress1.setText(String.valueOf(fInode.getFileAddressIndirect1()));
         GUI.indirectAddress2.setText(String.valueOf(fInode.getFileAddressIndirect2()));
+        StringBuffer path = new StringBuffer("/");
+        for(String subPath : OS.path){
+            path.append(subPath);
+            path.append("/");
+        }
+        GUI.filePath.setText(path.toString()+OS.selectedString);
     }
 
     /**
@@ -430,7 +438,7 @@ public class File {
      * @auther: Lu Ning
      * @date: 2021/2/23 15:21
      */
-    public static String readFile(short fd){
+    public synchronized static String readFile(short fd){
         File thisFile = getFileFromFd(fd);
         StringBuffer stringBuffer = new StringBuffer();
         for(Block block : thisFile.dataBlockList){
@@ -452,7 +460,7 @@ public class File {
      * @auther: Lu Ning
      * @date: 2021/2/23 0:59
      */
-    public static void writeFile(short fd, String context) throws Exception {
+    public synchronized static void writeFile(short fd, String context) throws Exception {
         File thisFile = getFileFromFd(fd);
         thisFile.releaseAllBlocks();
         short[] directAddress = thisFile.fInode.getFileAddressDirect();

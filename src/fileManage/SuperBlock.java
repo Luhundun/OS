@@ -25,7 +25,7 @@ public class SuperBlock extends Block {
     final short freeBlocksInDiskGroupLink = 43;                        //硬盘中登记的存放成组链表的第一个块号
     final short freeBlocksSumInDisk = 44;                      //记录磁盘中的空闲盘块数目
     final short ifChanged = 45;                               //记录超级块装载入内存后是否有变动
-    final short runTime = 255;
+    final short runTime = 254;                              //系统运行的累计时间
 
 
     /**

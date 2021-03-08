@@ -39,6 +39,21 @@ public class JCB implements Comparable<JCB>{
         System.out.println("生成作业"+toString());
     }
 
+    /**
+     * @Description: JCB构造函数的另一个重载，可以规定作业创建时间
+     * @param: []
+     * @return:
+     * @auther: Lu Ning
+     * @date: 2021/3/5 12:41
+     */
+    public JCB(File file, short priority, short inTime) {
+        jobID = jobNum++;
+        jobInTime = inTime;
+        jobFile = file;
+        jobPriority = priority;
+        System.out.println("生成作业"+toString());
+    }
+
     @Override
     public String toString() {
         return String.valueOf(jobID) + "--" + OS.pathDirectory.getNameByIno(jobFile.getfInode().getInodeNum());

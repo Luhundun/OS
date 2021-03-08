@@ -31,7 +31,6 @@ public class Inode {
     public short[] fileAddressDirect; //文件直接索引块8块  共8*512B=4KB
     public short fileAddressIndirect1; //文件一级间接索引块   可以存放256*512B=128KB
     public short fileAddressIndirect2; //文件二级间接索引块   可以存放256*128KB=32MB
-//    public short[] fileAddress;    //标记文件内容的位置
 
     public static Inode[] activeInodeInMemoryTable = new Inode[32];  //内存活动inode表，其实质已经模拟在内存的物理块中，此处列出单纯为了展示
                                                         //其存放在内存的 9、10块

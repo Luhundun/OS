@@ -1,5 +1,7 @@
 package control;
 
+import deviceManage.Spooling;
+import deviceManage.SystemDeviceTable;
 import fileManage.Directory;
 import fileManage.File;
 import fileManage.GroupLink;
@@ -87,5 +89,8 @@ public class FlashGUIThread extends Thread {
         //更新页表信息
         PageTable.showSystemPageTableInfo();
 
+        //更新设备和spooling井信息
+        SystemDeviceTable.showSystemDeviceTable();
+        Spooling.showSpoolingInfo();
     }
 }

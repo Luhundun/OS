@@ -11,7 +11,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import net.miginfocom.swing.*;
 import workManage.Primitives;
 import workManage.Process;
 import workManage.Queues;
@@ -301,7 +300,8 @@ public class GUI extends JFrame {
         try{
             RequestFile.readRequestFile(OS.topFile);
         }catch (Exception e2){
-            JOptionPane.showMessageDialog(null,"打开的不是作业请求文件或者文件内容不规范");
+//            JOptionPane.showMessageDialog(null,"打开的不是作业请求文件或者文件内容不规范或运行程序数量不匹配");
+            e2.printStackTrace();
         }
     }
 
@@ -315,7 +315,6 @@ public class GUI extends JFrame {
         fileButton = new JButton();
         deviceManage = new JButton();
         reinstallOS = new JButton();
-        loadOSFile = new JButton();
         saveOS = new JButton();
         runSystem = new JButton();
         continueButton = new JButton();
@@ -391,8 +390,6 @@ public class GUI extends JFrame {
         fileNameList = new JList();
         scrollPane11 = new JScrollPane();
         fileModeList = new JList();
-        scrollPane13 = new JScrollPane();
-        fileUserList = new JList();
         createFile = new JButton();
         openFile = new JButton();
         getInDirectory = new JButton();
@@ -505,9 +502,6 @@ public class GUI extends JFrame {
         label59 = new JLabel();
         scrollPane27 = new JScrollPane();
         hangupBlockQueue = new JList();
-        button2 = new JButton();
-        button3 = new JButton();
-        button4 = new JButton();
         scrollPane8 = new JScrollPane();
         outInfoArea = new JTextArea();
         devices = new JPanel();
@@ -524,6 +518,33 @@ public class GUI extends JFrame {
         findBlockContext2 = new JButton();
         scrollPane6 = new JScrollPane();
         blockContext2 = new JTextArea();
+        panel20 = new JPanel();
+        label66 = new JLabel();
+        label75 = new JLabel();
+        label71 = new JLabel();
+        label74 = new JLabel();
+        label67 = new JLabel();
+        label70 = new JLabel();
+        d01 = new JLabel();
+        d11 = new JLabel();
+        d21 = new JLabel();
+        d31 = new JLabel();
+        label77 = new JLabel();
+        d02 = new JLabel();
+        d12 = new JLabel();
+        d22 = new JLabel();
+        d32 = new JLabel();
+        label81 = new JLabel();
+        d03 = new JLabel();
+        d13 = new JLabel();
+        d23 = new JLabel();
+        d33 = new JLabel();
+        scrollPane14 = new JScrollPane();
+        inputWell = new JTextArea();
+        label57 = new JLabel();
+        scrollPane25 = new JScrollPane();
+        outputWell = new JTextArea();
+        label65 = new JLabel();
 
         //======== this ========
         Container contentPane = getContentPane();
@@ -548,7 +569,7 @@ public class GUI extends JFrame {
                     buttonPanel.add(fileButton);
 
                     //---- deviceManage ----
-                    deviceManage.setText("\u8fdb\u7a0b\u548c\u8d44\u6e90\u7ba1\u7406\u5668");
+                    deviceManage.setText("\u8fdb\u7a0b\u8be6\u60c5\u548c\u8bbe\u5907\u7ba1\u7406");
                     deviceManage.addActionListener(e -> deviceManageActionPerformed(e));
                     buttonPanel.add(deviceManage);
 
@@ -556,11 +577,6 @@ public class GUI extends JFrame {
                     reinstallOS.setText("\u91cd\u88c5\u64cd\u4f5c\u7cfb\u7edf");
                     reinstallOS.addActionListener(e -> reinstallOSActionPerformed(e));
                     buttonPanel.add(reinstallOS);
-
-                    //---- loadOSFile ----
-                    loadOSFile.setText("\u52a0\u8f7d\u64cd\u4f5c\u7cfb\u7edf\u955c\u50cf");
-                    loadOSFile.addActionListener(e -> loadOSFileActionPerformed(e));
-                    buttonPanel.add(loadOSFile);
 
                     //---- saveOS ----
                     saveOS.setText("\u4fdd\u5b58\u64cd\u4f5c\u7cfb\u7edf\u955c\u50cf");
@@ -1033,12 +1049,6 @@ public class GUI extends JFrame {
                                     scrollPane11.setViewportView(fileModeList);
                                 }
                                 panel8.add(scrollPane11);
-
-                                //======== scrollPane13 ========
-                                {
-                                    scrollPane13.setViewportView(fileUserList);
-                                }
-                                panel8.add(scrollPane13);
                             }
 
                             //---- createFile ----
@@ -1822,18 +1832,6 @@ public class GUI extends JFrame {
                                 panel22.add(scrollPane27, BorderLayout.CENTER);
                             }
 
-                            //---- button2 ----
-                            button2.setText("text");
-                            button2.addActionListener(e -> button2ActionPerformed(e));
-
-                            //---- button3 ----
-                            button3.setText("text");
-                            button3.addActionListener(e -> button3ActionPerformed(e));
-
-                            //---- button4 ----
-                            button4.setText("text");
-                            button4.addActionListener(e -> button4ActionPerformed(e));
-
                             //======== scrollPane8 ========
                             {
                                 scrollPane8.setViewportView(outInfoArea);
@@ -1872,13 +1870,8 @@ public class GUI extends JFrame {
                                                     .addGroup(processPanelLayout.createSequentialGroup()
                                                         .addComponent(panel18, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                        .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addGroup(processPanelLayout.createParallelGroup()
-                                                            .addComponent(button2)
-                                                            .addComponent(button3)
-                                                            .addComponent(button4))))))
-                                        .addContainerGap())
+                                                        .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)))))
+                                        .addContainerGap(24, Short.MAX_VALUE))
                             );
                             processPanelLayout.setVerticalGroup(
                                 processPanelLayout.createParallelGroup()
@@ -1892,22 +1885,13 @@ public class GUI extends JFrame {
                                             .addComponent(panel13, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                             .addComponent(panel12, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
                                             .addComponent(panel11, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(processPanelLayout.createParallelGroup()
-                                            .addGroup(processPanelLayout.createSequentialGroup()
-                                                .addGap(18, 18, 18)
-                                                .addGroup(processPanelLayout.createParallelGroup()
-                                                    .addComponent(panel21, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(panel18, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(panel22, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)))
-                                            .addGroup(processPanelLayout.createSequentialGroup()
-                                                .addGap(71, 71, 71)
-                                                .addComponent(button2)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(button3)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(button4)))
                                         .addGap(18, 18, 18)
+                                        .addGroup(processPanelLayout.createParallelGroup()
+                                            .addComponent(panel21, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(panel18, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(panel19, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(panel22, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
+                                        .addGap(20, 20, 20)
                                         .addComponent(scrollPane8, GroupLayout.PREFERRED_SIZE, 392, GroupLayout.PREFERRED_SIZE)
                                         .addContainerGap())
                             );
@@ -2013,20 +1997,143 @@ public class GUI extends JFrame {
                                 );
                             }
 
+                            //======== panel20 ========
+                            {
+                                panel20.setLayout(new GridLayout(4, 5, 5, 5));
+
+                                //---- label66 ----
+                                label66.setText("\u8bbe\u5907\u53f7:");
+                                panel20.add(label66);
+
+                                //---- label75 ----
+                                label75.setText("1");
+                                panel20.add(label75);
+
+                                //---- label71 ----
+                                label71.setText("2");
+                                panel20.add(label71);
+
+                                //---- label74 ----
+                                label74.setText("3");
+                                panel20.add(label74);
+
+                                //---- label67 ----
+                                label67.setText("4");
+                                panel20.add(label67);
+
+                                //---- label70 ----
+                                label70.setText("\u8bbe\u5907\u540d:");
+                                panel20.add(label70);
+
+                                //---- d01 ----
+                                d01.setText("text");
+                                panel20.add(d01);
+
+                                //---- d11 ----
+                                d11.setText("text");
+                                panel20.add(d11);
+                                panel20.add(d21);
+
+                                //---- d31 ----
+                                d31.setText("text");
+                                panel20.add(d31);
+
+                                //---- label77 ----
+                                label77.setText("\u5904\u7406\u6240\u9700\u65f6\u95f4:");
+                                panel20.add(label77);
+
+                                //---- d02 ----
+                                d02.setText("text");
+                                panel20.add(d02);
+                                panel20.add(d12);
+
+                                //---- d22 ----
+                                d22.setText("text");
+                                panel20.add(d22);
+
+                                //---- d32 ----
+                                d32.setText("text");
+                                panel20.add(d32);
+
+                                //---- label81 ----
+                                label81.setText("\u4e2d\u65ad\u5411\u91cf\u5730\u5740");
+                                panel20.add(label81);
+
+                                //---- d03 ----
+                                d03.setText("text");
+                                panel20.add(d03);
+
+                                //---- d13 ----
+                                d13.setText("text");
+                                panel20.add(d13);
+
+                                //---- d23 ----
+                                d23.setText("text");
+                                panel20.add(d23);
+
+                                //---- d33 ----
+                                d33.setText("text");
+                                panel20.add(d33);
+                            }
+
+                            //======== scrollPane14 ========
+                            {
+                                scrollPane14.setViewportView(inputWell);
+                            }
+
+                            //---- label57 ----
+                            label57.setText("Spooling\u8f93\u5165\u4e95");
+
+                            //======== scrollPane25 ========
+                            {
+                                scrollPane25.setViewportView(outputWell);
+                            }
+
+                            //---- label65 ----
+                            label65.setText("Spooling\u8f93\u51fa\u4e95");
+
                             GroupLayout devicesLayout = new GroupLayout(devices);
                             devices.setLayout(devicesLayout);
                             devicesLayout.setHorizontalGroup(
                                 devicesLayout.createParallelGroup()
                                     .addGroup(devicesLayout.createSequentialGroup()
                                         .addContainerGap()
-                                        .addComponent(panel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGroup(devicesLayout.createParallelGroup()
+                                            .addGroup(devicesLayout.createSequentialGroup()
+                                                .addGap(6, 6, 6)
+                                                .addComponent(panel20, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addComponent(scrollPane14, GroupLayout.DEFAULT_SIZE, 806, Short.MAX_VALUE)
+                                            .addGroup(devicesLayout.createSequentialGroup()
+                                                .addComponent(panel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addGroup(devicesLayout.createSequentialGroup()
+                                                .addComponent(scrollPane25, GroupLayout.PREFERRED_SIZE, 800, GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGroup(GroupLayout.Alignment.TRAILING, devicesLayout.createSequentialGroup()
+                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                .addGroup(devicesLayout.createParallelGroup()
+                                                    .addGroup(GroupLayout.Alignment.TRAILING, devicesLayout.createSequentialGroup()
+                                                        .addComponent(label57)
+                                                        .addGap(301, 301, 301))
+                                                    .addGroup(GroupLayout.Alignment.TRAILING, devicesLayout.createSequentialGroup()
+                                                        .addComponent(label65)
+                                                        .addGap(299, 299, 299))))))
                             );
                             devicesLayout.setVerticalGroup(
                                 devicesLayout.createParallelGroup()
                                     .addGroup(devicesLayout.createSequentialGroup()
                                         .addComponent(panel5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 768, Short.MAX_VALUE))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(panel20, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(label57)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(scrollPane14, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                                        .addGap(31, 31, 31)
+                                        .addComponent(label65, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(scrollPane25, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 302, Short.MAX_VALUE))
                             );
                         }
                         resourcePanel.add(devices);
@@ -2050,7 +2157,6 @@ public class GUI extends JFrame {
     public static JButton fileButton;
     public static JButton deviceManage;
     public static JButton reinstallOS;
-    public static JButton loadOSFile;
     public static JButton saveOS;
     public static JButton runSystem;
     public static JButton continueButton;
@@ -2126,8 +2232,6 @@ public class GUI extends JFrame {
     public static JList fileNameList;
     public static JScrollPane scrollPane11;
     public static JList fileModeList;
-    public static JScrollPane scrollPane13;
-    public static JList fileUserList;
     public static JButton createFile;
     public static JButton openFile;
     public static JButton getInDirectory;
@@ -2240,9 +2344,6 @@ public class GUI extends JFrame {
     public static JLabel label59;
     public static JScrollPane scrollPane27;
     public static JList hangupBlockQueue;
-    public static JButton button2;
-    public static JButton button3;
-    public static JButton button4;
     public static JScrollPane scrollPane8;
     public static JTextArea outInfoArea;
     public static JPanel devices;
@@ -2259,6 +2360,33 @@ public class GUI extends JFrame {
     public static JButton findBlockContext2;
     public static JScrollPane scrollPane6;
     public static JTextArea blockContext2;
+    public static JPanel panel20;
+    public static JLabel label66;
+    public static JLabel label75;
+    public static JLabel label71;
+    public static JLabel label74;
+    public static JLabel label67;
+    public static JLabel label70;
+    public static JLabel d01;
+    public static JLabel d11;
+    public static JLabel d21;
+    public static JLabel d31;
+    public static JLabel label77;
+    public static JLabel d02;
+    public static JLabel d12;
+    public static JLabel d22;
+    public static JLabel d32;
+    public static JLabel label81;
+    public static JLabel d03;
+    public static JLabel d13;
+    public static JLabel d23;
+    public static JLabel d33;
+    public static JScrollPane scrollPane14;
+    public static JTextArea inputWell;
+    public static JLabel label57;
+    public static JScrollPane scrollPane25;
+    public static JTextArea outputWell;
+    public static JLabel label65;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 
 

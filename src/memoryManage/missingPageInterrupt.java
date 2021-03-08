@@ -1,5 +1,6 @@
 package memoryManage;
 
+import control.GUI;
 import control.OS;
 import hardware.Block;
 import hardware.CPU;
@@ -21,7 +22,7 @@ public class MissingPageInterrupt extends Throwable{
      * @date: 2021/3/3 18:28
      */
     public static void loadNewPage(short newPage, short oldPage) throws Exception {
-        checkInterruptValid();
+//        checkInterruptValid();
         //确定交换的位置
         if(oldPage >= 0){
             //需要替换页面的情况
@@ -31,12 +32,13 @@ public class MissingPageInterrupt extends Throwable{
             CPU.workingProcess.getPageTable().exchangeInPageTable(newPage,oldPage,relateIndex);
             //在内存交换
             Block.cloneABlock(OS.memory.findBlockByNumber(physicalIndex),CPU.workingProcess.getTempFile().getDataBlockList().get(newPage));
+            GUI.outInfoArea.append("逻辑页面"+oldPage+"被换出，新页面"+newPage+"换入到物理页号"+physicalIndex+"\n");
         }else {
             short physicalIndex = (short) (-oldPage + 4*CPU.workingProcess.getPcb().getIndexInMemory() + 16);
             //不需要替换页面的情况，直接修改页表并且存入内存相应位置
             CPU.workingProcess.getPageTable().getTable()[newPage].setPhysicalPageNumber(physicalIndex);
             Block.cloneABlock(OS.memory.findBlockByNumber(physicalIndex),CPU.workingProcess.getTempFile().getDataBlockList().get(newPage));
-
+            GUI.outInfoArea.append("新页面"+newPage+"载入到物理页号"+physicalIndex+"\n");
         }
 
     }

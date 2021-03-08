@@ -93,21 +93,22 @@ public class ProcessSchduleThread extends Thread{
      */
     public void hangupAndActiveSchedule() throws Exception {
         short processNumInMemory = Process.getProcessInMemorySum();
-
+        System.out.println("挂起激活检查");
         if (processNumInMemory <= OS.MAXNUMPROCESSINMEMORY/2 ) {
             //如果当前内存中进程数少于等于规定的一半，激活一个被挂起时间最长的进程
             LinkedList<Process> tempList = new LinkedList<>();
             tempList.addAll(Queues.hangUpBlockedQueue);
             tempList.addAll(Queues.hangUpReadyQueue);
             Process thisProcess = null;
-            short longestTime = 32767;
+            short longestTime = 32766;
             for (Process process : tempList) {
-                if (process.getPcb().getInTimes() < longestTime) {
-                    longestTime = process.getPcb().getInTimes();
+                if (process.getPcb().getInQueueTime() < longestTime) {
+                    longestTime = process.getPcb().getInQueueTime();
                     thisProcess = process;
                 }
             }
             if (thisProcess != null) {
+                System.out.println("尝试激活线程");
                 Primitives.activate(thisProcess);
             }
         }else {
@@ -128,6 +129,7 @@ public class ProcessSchduleThread extends Thread{
                 }
             }
             if(thisProcess != null){
+                System.out.println("尝试挂起线程");
                 Primitives.hangup(thisProcess);
             }
         }

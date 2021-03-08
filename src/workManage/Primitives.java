@@ -1,10 +1,14 @@
 package workManage;
 
+import control.GUI;
 import control.OS;
+import deviceManage.DisplayThread;
+import deviceManage.KeyBoardThread;
 import fileManage.File;
 import fileManage.Inode;
 import hardware.Block;
 import hardware.CPU;
+import memoryManage.MMUThread;
 import memoryManage.PageTable;
 
 import java.util.Collections;
@@ -29,7 +33,9 @@ public class Primitives {
     public synchronized static void init(File file, short priority) throws Exception {
         if(PCB.getFreeFromPCBPool() == -1){
             //PCB池满，建立后备作业
-            Queues.jobReadyQueue.add(new JCB(file, priority));
+            JCB job = new JCB(file, priority);
+            Queues.jobReadyQueue.add(job);
+            GUI.outInfoArea.append("由于PCB池满，新作业"+job.toString()+"进入后备作业队列\n");
         }else {
             //创建进程
             //查看内存情况
@@ -40,6 +46,7 @@ public class Primitives {
                 Process newProcess = new Process(file, priority, jcb.getJobInTime());
                 Queues.readyQueue.add(newProcess);
                 Collections.sort(Queues.readyQueue);
+//                file.openFileByFile();
                 //加载至内存，
                 Process.processInMemory[index] = newProcess;
                 newProcess.getPcb().setIndexInMemory(index);
@@ -58,9 +65,69 @@ public class Primitives {
                                                                 newProcess.getTempFile().getDataBlockList().get(0));
                 PCB.pcbPool[PCB.getFreeFromPCBPool()] = newProcess.getPcb();
 
+                newProcess.getPcb().setInQueueTime((short) OS.getTime());
+                GUI.outInfoArea.append("作业"+newProcess.toString()+"创建成功，生成进程进入就绪队列\n");
+
             }else {
                 //如果没有空间也进入后备队列
-                Queues.jobReadyQueue.add(new JCB(file, priority));
+                JCB job = new JCB(file, priority);
+                Queues.jobReadyQueue.add(job);
+                GUI.outInfoArea.append("由于内存空间满,新作业"+job.toString()+"进入后备作业队列\n");
+            }
+        }
+    }
+
+    /**
+     * @Description: 创建进程原语的另一个重载，由作业请求文件额外指定作业进入的时间.
+     *                  新的时间为系统时间+作业指定时间
+     * @param: []
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/1 10:40
+     */
+    public synchronized static void init(File file, short priority, short inTime) throws Exception {
+
+        if(PCB.getFreeFromPCBPool() == -1 || inTime > 0){
+            //PCB池满，或时间未到，建立后备作业
+            JCB job = new JCB(file, priority,(short)(inTime + OS.getTime()));
+            Queues.jobReadyQueue.add(job);
+            GUI.outInfoArea.append("由于PCB池满或进入时间未到，新作业"+job.toString()+"进入后备作业队列\n");
+        }else {
+            //创建进程
+            //查看内存情况
+            short index = Process.getFreeIndex();
+            if(index >= 0){
+                //创建PCB，加入就绪队列
+                JCB jcb = new JCB(file, priority, (short) (inTime+OS.getTime()));
+                Process newProcess = new Process(file, priority, jcb.getJobInTime());
+                Queues.readyQueue.add(newProcess);
+                Collections.sort(Queues.readyQueue);
+                //加载至内存，
+                Process.processInMemory[index] = newProcess;
+                newProcess.getPcb().setIndexInMemory(index);
+                for(int i=0;i<4;i++){
+                    newProcess.getBlocksInMemory()[i] = OS.memory.findBlockByNumber(16+4*index+i);
+                }                //进程的第一块(交换区文件的最后一块)常驻内存，其他三块通过调度
+                Block.cloneABlock(newProcess.getBlocksInMemory()[0],
+                        newProcess.getTempFile().getDataBlockList().get(file.getfInode().getFileSize()));
+                //交换区文件inode读入内存
+                newProcess.getPcb().setIndexInMemory(index);
+                //虚存第一块直接导入内存
+//                newProcess.getUserStack().push((short)0);
+                MMUThread.callMissingPage((short) 0,(short) -1);
+//                //更新页表
+//                newProcess.getPageTable().exchangeInPageTable((short) 0, (short) -1, (short) 1, newProcess);
+                Block.cloneABlock(OS.memory.findBlockByNumber(newProcess.getPcb().getIndexInMemory()*4+16+1),
+                        newProcess.getTempFile().getDataBlockList().get(0));
+                PCB.pcbPool[PCB.getFreeFromPCBPool()] = newProcess.getPcb();
+
+                newProcess.getPcb().setInQueueTime((short) OS.getTime());
+                GUI.outInfoArea.append("作业"+newProcess.toString()+"创建成功，生成进程进入就绪队列\n");
+            }else {
+                //如果没有空间也进入后备队列
+                JCB job = new JCB(file, priority, (short)(inTime + OS.getTime()));
+                Queues.jobReadyQueue.add(job);
+                GUI.outInfoArea.append("由于PCB池满，新作业"+job.toString()+"进入后备作业队列\n");
             }
         }
     }
@@ -121,6 +188,8 @@ public class Primitives {
 
         //更新信息，输出信息
         System.out.println("周转时间为"+(OS.getTime() - process.getPcb().getInTimes())+"，运行了"+process.getPcb().getRunTimes()/8 + "秒");
+        GUI.outInfoArea.append("进程"+process.toString()+"被销毁,"+"周转时间为"+(OS.getTime() - process.getPcb().getInTimes())
+                +"，运行了"+process.getPcb().getRunTimes()/8 + "秒\n");
 
     }
 
@@ -147,7 +216,7 @@ public class Primitives {
         Collections.sort(Queues.blockedQueue[reason]);
         //进程上下文切换
 //        CPU.processContextSwitch();
-
+        GUI.outInfoArea.append("进程"+process.toString()+"被阻塞，加入阻塞队列" + (reason+1)+'\n');
 
     }
 
@@ -164,7 +233,7 @@ public class Primitives {
         process.getPcb().setTimeSliceLeft((short) 5);
         Queues.readyQueue.add(process);
         Collections.sort(Queues.readyQueue);
-
+        GUI.outInfoArea.append("进程"+process.toString()+"被唤醒，重回就绪队列\n");
     }
 
 
@@ -193,7 +262,7 @@ public class Primitives {
                 if(process.getPcb().getProcessState() > 10 && process.getPcb().getProcessState() < 19){
                     //先从对应阻塞队列中移除，加入挂起阻塞队列
                     Queues.blockedQueue[process.getPcb().getProcessState() - 11].remove(process);
-                    process.getPcb().setProcessState((short) 4);
+//                    process.getPcb().setProcessState((short) 4);
                     Queues.hangUpBlockedQueue.add(process);
                     Collections.sort(Queues.hangUpBlockedQueue);
                 }else {
@@ -204,19 +273,33 @@ public class Primitives {
         Process.processInMemory[process.getPcb().getIndexInMemory()] = null;
         process.getUserStack().clear();
         process.setPageTable(new PageTable());
+        process.getPcb().setInQueueTime((short) OS.getTime());
+        System.out.println("进程"+process.toString()+"被挂起");
+        GUI.outInfoArea.append("进程"+process.toString()+"已经有很长时间没有被响应，进入挂起队列\n");
     }
 
     public synchronized static void activate(Process process) throws Exception{
         //从挂起队列加载到相应队列
-        if(process.getPcb().getProcessState() == 1){
-            process.getPcb().setProcessState((short) 3);
-            Queues.readyQueue.remove(process);
-            Queues.hangUpReadyQueue.add(process);
-            Collections.sort(Queues.hangUpReadyQueue);
-        }else if(process.getPcb().getProcessState() >10){
-            Queues.blockedQueue[process.getPcb().getProcessState()].remove(process);
-            Queues.hangUpBlockedQueue.add(process);
-            Collections.sort(Queues.hangUpBlockedQueue);
+        if(process.getPcb().getProcessState() == 3){
+            process.getPcb().setProcessState((short) 1);
+            Queues.hangUpReadyQueue.remove(process);
+            Queues.readyQueue.add(process);
+            Collections.sort(Queues.readyQueue);
+        }else if(process.getPcb().getProcessState() > 10){
+            Queues.blockedQueue[process.getPcb().getProcessState() - 11].add(process);
+            Queues.hangUpBlockedQueue.remove(process);
+            Collections.sort(Queues.blockedQueue[process.getPcb().getProcessState() - 11]);
+            switch (process.getPcb().getProcessState()){
+                case 11:
+                    VisitDIskThread.ifRequestDisk = true;
+                    break;
+                case 12:
+                    KeyBoardThread.ifKeyboardWork = true;
+                    break;
+                case 13:
+                    DisplayThread.ifDisplayWork = true;
+                    break;
+            }
         }
         short index = Process.getFreeIndex();
         Process.processInMemory[index] = process;
@@ -228,6 +311,11 @@ public class Primitives {
         Block.cloneABlock(process.getBlocksInMemory()[0],
                 process.getTempFile().getDataBlockList().get(process.getTempFile().getfInode().getFileSize()-1));
         process.getPcb().setIndexInMemory(index);
-        process.getPageTable().exchangeInPageTable((short) 0, (short) -1, (short) 1, process);
+        process.getUserStack().push((short) (process.getPcb().getPc()/256));
+//        MissingPageInterruptThread.callMissingPage((short) (process.getPcb().getPc()/256),(short) -1);
+        process.getPageTable().exchangeInPageTable((short) (process.getPcb().getPc()/256), (short) -1, (short) 1, process);
+        process.getPcb().setInQueueTime((short) OS.getTime());
+        System.out.println("进程"+process.toString()+"被激活");
+        GUI.outInfoArea.append("进程"+process.toString()+"被激活\n");
     }
 }

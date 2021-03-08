@@ -3,8 +3,11 @@ package fileManage;
 import control.GUI;
 import control.OS;
 import hardware.Block;
+import workManage.RequestFile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @ClassName: Directory
@@ -109,6 +112,7 @@ public class Directory extends File{
             //在内存情况下
             if (inode != null) {
                 getFileFromInode(inode).openFileByFile();
+//                inode.loadInodeToMemory();
                 flashFileSturctTableInMemory();
             }else {//不在内存情况下
                 inode = new Inode(fcb.getIno(), true);
@@ -182,6 +186,7 @@ public class Directory extends File{
     public File findFileInDirectory(String name) throws Exception {
         short ino = -1;
         for(FCB fcb : directoryItems){
+            System.out.println(name + " " + fcb.getFileName()+ " " +Arrays.toString(name.getBytes(StandardCharsets.UTF_8)) +" "+ Arrays.toString(fcb.getFileName().getBytes(StandardCharsets.UTF_8)));
             if(fcb.getFileName().equals(name)){
                 ino = fcb.getIno();
                 break;
@@ -213,10 +218,10 @@ public class Directory extends File{
             for (int j=0;j<8&&i*8+j<FCBNums;j++){
                 short[] temp =directoryItems.get(i*8+j).convertFCBToShortArray();
                 for(int k=0;k<31;k++){
-                    thisBlock.writeAWord(temp[k],j*32+k);
                     if(temp[k] == 0){
                         break;
                     }
+                    thisBlock.writeAWord(temp[k],j*32+k);
                 }
                 thisBlock.writeAWord(temp[31],j*32+31);
             }

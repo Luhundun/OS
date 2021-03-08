@@ -22,23 +22,14 @@ public class PCB implements Comparable<PCB>{
     private short timeSliceLeft;      //当前进程在cpu运行的剩余时间片，若非运行态则为0
     private short directoryIno;         //当前进程所在目录
     private short processState;        //进程状态 0为未创建 1为就绪 2为运行 3挂起就绪 4为挂起等待 11-18为不同原因的阻塞
-
-    public short getInQueueTime() {
-        return inQueueTime;
-    }
-
-    public void setInQueueTime(short inQueueTime) {
-        this.inQueueTime = inQueueTime;
-    }
-
     private short inQueueTime;          //设置进入相应队列时间
     private short psw;                  //状态字寄存器
     private short pc;    	            //程序计数器信息，记录下一条指令地址
     private short ir;                 //指令计数器信息，记录当前执行的指令类型d
-    private short r0;                 //普通寄存器
-    private short r1;                 //普通寄存器
-    private short r2;                 //普通寄存器
-    private short r3;                 //普通寄存器
+    private short r0;                 //通用寄存器r0
+    private short r1;                 //通用寄存器r1
+    private short r2;                 //通用寄存器r2
+    private short r3;                 //通用寄存器r3
 
     public static PCB[] pcbPool;        //PCB池
     public static short pcbNumberIndex;         //出现过的PCB数
@@ -92,7 +83,7 @@ public class PCB implements Comparable<PCB>{
      */
     public static void initPCBManagment(){
        pcbPool = new PCB[OS.PCBPOOLSIZE];
-       pcbNumberIndex = 0;
+       pcbNumberIndex = 1;
     }
     
     /**
@@ -278,6 +269,14 @@ public class PCB implements Comparable<PCB>{
 
     public void setDirectoryIno(short directoryIno) {
         this.directoryIno = directoryIno;
+    }
+
+    public short getInQueueTime() {
+        return inQueueTime;
+    }
+
+    public void setInQueueTime(short inQueueTime) {
+        this.inQueueTime = inQueueTime;
     }
 
 }

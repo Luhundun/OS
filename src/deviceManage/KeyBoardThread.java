@@ -20,7 +20,6 @@ public class KeyBoardThread extends Thread {
         while(true) {
             OS.baseTimerLock.lock();//请求锁
             try {
-
                 OS.baseTimerCondition.await();        //等到时钟进程发出时钟中断，再开始执行下面操作
                 doWhatKeyBoardDoEverySecond();                   //执行每秒此线程被唤醒后该执行的程序
             }
@@ -40,13 +39,13 @@ public class KeyBoardThread extends Thread {
      */
     private void doWhatKeyBoardDoEverySecond() throws InterruptedException {
         //模拟键盘需要3秒时间来回应
-        if(ifKeyboardWork && OS.getTime()-lastTime==3){
+        if(ifKeyboardWork && OS.getTime()-lastTime==OS.KEYBOARD.getDeviceDealTime()){
             //V操作释放资源
-            Process usingProcess = Queues.blockedQueue[0].get(0);
+            Process usingProcess = Queues.blockedQueue[PV.keyboard.getBlockedQueueIndex()].get(0);
             PV.VKeyboard(usingProcess);
 
             //检查阻塞队列是否还有其他进程排队
-            if(PV.keyboard.getValue() == 1){
+            if(Queues.blockedQueue[PV.keyboard.getBlockedQueueIndex()].size() == 0){
                 ifKeyboardWork = false;
             }else {
                 lastTime = (short) OS.getTime();

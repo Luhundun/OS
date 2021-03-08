@@ -87,4 +87,15 @@ public class Memory {
         OS.memory.findBlockByNumber(address/256).writeAWord(context, address%256);
     }
 
+    public void loadToBufferArea(Block block){
+        Block.cloneABlock(findBlockByNumber(OS.BUFFERAREA),block);
+    }
+
+    public void getFromBufferArea(Block block){
+        Block.cloneABlock(block,findBlockByNumber(OS.BUFFERAREA));
+    }
+
+    public void loadGroupLinkTop(Block block){
+        Block.cloneABlock(memory[1],block);
+    }
 }

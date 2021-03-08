@@ -35,6 +35,7 @@ public class TimerThread extends Thread {
 			OS.baseTimerLock.lock();//请求锁
 			try {
 				System.out.println("Time--"+OS.getTime());
+				GUI.outInfoArea.append("\n\n\nTime--"+OS.getTime()+"."+(count-1)*2+'\n');
 				OS.baseTimerCondition.signalAll();//唤醒其他所有加基础锁线程
 				if(count == 5){
 					OS.secondTimerCondition.signalAll(); //唤醒秒锁

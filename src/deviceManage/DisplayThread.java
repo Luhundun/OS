@@ -40,13 +40,13 @@ public class DisplayThread extends Thread{
          */
         private void doDisplayDoEverySecond() throws InterruptedException {
             //模拟显示器需要1秒时间来回应
-            if(ifDisplayWork && OS.getTime()-lastTime==1){
+            if(ifDisplayWork && OS.getTime()-lastTime==OS.DISPLAY.getDeviceDealTime()){
                 //V操作释放资源
-                Process usingProcess = Queues.blockedQueue[1].get(0);
+                Process usingProcess = Queues.blockedQueue[PV.display.getBlockedQueueIndex()].get(0);
                 PV.VDisplay(usingProcess);
 
                 //检查阻塞队列是否还有其他进程排队
-                if(PV.display.getValue() == 1){
+                if(Queues.blockedQueue[PV.display.getBlockedQueueIndex()].size() == 0){
                     ifDisplayWork = false;
                 }else {
                     lastTime = (short) OS.getTime();

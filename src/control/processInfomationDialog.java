@@ -21,14 +21,14 @@ public class processInfomationDialog extends JDialog {
         Process p = OS.chooseProcess;
         label1.setText("进程号:"+p.getPcb().getPid());
         label2.setText("进程优先级:"+p.getPcb().getProcessPriority());
-        label3.setText("内存位置:"+p.getPcb().getIndexInMemory()+"-"+(p.getPcb().getIndexInMemory()+4));
+        label3.setText("内存位置:"+(16+4*p.getPcb().getIndexInMemory())+"-"+(16+4*p.getPcb().getIndexInMemory()+3));
         label4.setText("交换区ino:"+p.getPcb().getVirtualMemoryInDisk());
         label5.setText("创建时间:"+p.getPcb().getInTimes());
         label6.setText("运行时间:"+p.getPcb().getRunTimes());
         label7.setText("剩余时间片:"+p.getPcb().getTimeSliceLeft());
         label8.setText("进程状态:"+p.getPcb().getProcessState());
         label9.setText("所在目录:"+p.getPcb().getDirectoryIno());
-        label10.setText("进入相应队列时长:"+p.getPcb().getInQueueTime());
+        label10.setText("进入相应队列时间:"+p.getPcb().getInQueueTime());
         label11.setText("psw:"+p.getPcb().getPsw());
         label12.setText("r0:"+p.getPcb().getR0());
         label13.setText("r1:"+p.getPcb().getR1());
@@ -80,16 +80,19 @@ public class processInfomationDialog extends JDialog {
         okButton = new JButton();
 
         //======== this ========
+        setMinimumSize(new Dimension(500, 400));
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
 
         //======== dialogPane ========
         {
             dialogPane.setBorder(new EmptyBorder(12, 12, 12, 12));
+            dialogPane.setMinimumSize(new Dimension(500, 400));
             dialogPane.setLayout(new BorderLayout());
 
             //======== contentPanel ========
             {
+                contentPanel.setMinimumSize(new Dimension(500, 400));
                 contentPanel.setLayout(new GridLayout(9, 3));
 
                 //---- label1 ----

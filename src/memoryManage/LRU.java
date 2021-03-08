@@ -21,7 +21,9 @@ public class LRU {
      */
     public static short lru(Stack<Short> recodeStack, short comingPage){
         if (recodeStack.size() < 3){
-            recodeStack.push(comingPage);
+            if(!recodeStack.contains(comingPage)){
+                recodeStack.push(comingPage);
+            }
             return (short) -recodeStack.size();//内存没满，直接置入新页，但引发缺页中断
         }
         ArrayList<Short> arrayList = new ArrayList<>();

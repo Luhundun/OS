@@ -117,7 +117,7 @@ public class Block {
      * @auther: Lu Ning
      * @date: 2021/1/30 0:05
      */
-    public void writeAWord(short context, int index){
+    public synchronized void writeAWord(short context, int index){
         block[index] = context;
     }
 
@@ -282,11 +282,11 @@ public class Block {
      * @date: 2021/2/26 16:42
      */
     public static String convertShortToAddress(short thisShort){
-        String temp = Integer.toHexString(Short.toUnsignedInt(thisShort));
+        String temp = Integer.toHexString(Short.toUnsignedInt(thisShort)).toUpperCase();
         while (temp.length()<4){
             temp = '0' + temp;
         }
-        return temp;
+        return temp + "H";
     }
     
     public void setDno(short dno) {

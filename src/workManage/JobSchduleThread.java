@@ -53,12 +53,11 @@ public class JobSchduleThread extends Thread{
     public static void checkJob() throws Exception {
         //当后备作业队列非空且有空闲PCB池时且内存充足时分配作业
         Collections.sort(Queues.jobReadyQueue);
-        while (!Queues.jobReadyQueue.isEmpty() && PCB.getFreeFromPCBPool() != -1 && Process.getFreeIndex() != -1 ){
+
+        while (!Queues.jobReadyQueue.isEmpty() && PCB.getFreeFromPCBPool() != -1
+                && Process.getFreeIndex() != -1 && Queues.jobReadyQueue.peekFirst().getJobInTime() < OS.getTime()){
             JCB firstJob = Queues.jobReadyQueue.pollFirst();
             //作业队列按照进入时间排序了，有些作业事先规定了进入时间，如果最早的请求都没达到要求时间，那么没有后备作业可以被创建
-            if(firstJob.getJobInTime() < OS.getTime()){
-                break;
-            }
             Primitives.init(firstJob.getJobFile(), firstJob.getJobPriority());
         }
     }

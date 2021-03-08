@@ -1,9 +1,10 @@
 package workManage;
 
-import control.OS;
-import deviceManage.KeyBoardThread;
+import control.GUI;
+import deviceManage.Spooling;
 import hardware.Block;
 import hardware.CPU;
+import memoryManage.MMUThread;
 
 /**
  * @ClassName: Instruction
@@ -77,14 +78,27 @@ public class Instruction {
             case "inn":
             case "rea":
             case "wri":
-            case "pri":
             case "sle":
                 instructionType = tempType;
                 p0 = "";
                 p1 = "";
                 break;
+            case "pri":
+            case "jmp":
+            case "jmz":
+                instructionType = tempType;
+                if (tempP0.equals("r0") || tempP0.equals("r1") || tempP0.equals("r2") || tempP0.equals("r3")) {
+                    p0 = tempP0;
+                } else {
+                    p0= "r0";
+                    System.out.println("不合法的第0个操作数"+tempType+"已转化为r0");
+                }
+                p1 = "";
+                break;
             default:
                 instructionType="sle";
+                p0 = "";
+                p1 = "";
                 System.out.println("不合法的操作符"+tempType+"已转化为sle");
         }
     }
@@ -142,6 +156,10 @@ public class Instruction {
             case "equ":
                 temp[0] = 13;
                 break;
+            case  "jmp":
+                temp[0] = 14;
+            case "jmz":
+                temp[0] = 15;
         }
         temp[0] = (short) (temp[0] * 256);
         switch (instruction.p0) {
@@ -162,7 +180,7 @@ public class Instruction {
         }
         switch (instruction.p1) {
             case "r0":
-                temp[1] += 0;
+                temp[0] += 0;
                 break;
             case "r1":
                 temp[1] += 1;
@@ -188,78 +206,139 @@ public class Instruction {
      * @auther: Lu Ning
      * @date: 2021/2/28 23:35
      */
-    public static String executeInstruction(Instruction instruction) throws Exception {
-        String res = "";
+    public static void executeInstruction(Instruction instruction) throws Exception {
+        //显示物理地址
         if(instruction == null){
             Primitives.destroy(CPU.workingProcess);
-            return "指令执行完毕，进入中止态";
+            GUI.outInfoArea.append("指令执行完毕，进入中止态\n");
+            return;
         }
+        //-8是因为获取指令到时候pc已经自动+8了。
+        String res = "当前逻辑地址"+Block.convertShortToAddress((short) (getCpuRegister("pc")-8))+",执行了"+instruction.instructionType+"情况如下：\n";
+
+        //根据不同指令执行命令
         switch (instruction.instructionType) {
             case "add":
                 setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) + getCpuRegister(instruction.p1)));
-                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                res += instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                GUI.outInfoArea.append(res);
                 break;
             case "sub":
                 setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) - getCpuRegister(instruction.p1)));
-                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                res += instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                GUI.outInfoArea.append(res);
                 break;
             case "mul":
                 setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) * getCpuRegister(instruction.p1)));
-                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                res += instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                GUI.outInfoArea.append(res);
                 break;
             case "div":
                 setCpuRegister(instruction.p0, (short) (getCpuRegister(instruction.p0) / getCpuRegister(instruction.p1)));
-                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                res += instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                GUI.outInfoArea.append(res);
                 break;
             case "mov":
                 setCpuRegister(instruction.p0, Short.parseShort(instruction.p1));
-                res = instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+//                short[] temp = CPU.workingProcess.getTempFile().readInstruction(getCpuRegister("pc"));
+//                int value =  (temp[6]-'0')+10*(temp[5]-'0')+100*(temp[4]-'0')+1000*(temp[3]-'0')+10000*(temp[2]-'0');
+//                setCpuRegister(instruction.p0, (short) value);
+//                setCpuRegister("pc", (short) (getCpuRegister("pc")+8));
+                res += instruction.p0 + "<-" + getCpuRegister(instruction.p0);
+                GUI.outInfoArea.append(res);
                 break;
             case "out":
+                res += "尝试使CPU进入核心态去去P操作申请显示器";
+                GUI.outInfoArea.append(res);
                 PV.PDisplay(CPU.workingProcess);
-                res = "P操作申请显示器";
                 CPU.setCpuWork(false);
                 break;
             case "inn":
                 //P操作，申请一个键盘资源
+                res += "尝试使CPU进入核心态去去P操作申请键盘资源";
+                GUI.outInfoArea.append(res);
                 PV.PKeyboard(CPU.workingProcess);
-                res = "P操作申请键盘资源";
                 CPU.setCpuWork(false);
                 break;
             case "rea":
-
+                //P操作，申请访问磁盘
+                res += "尝试使CPU进入核心态去读取磁盘文件";
+                GUI.outInfoArea.append(res);
+                PV.PDisk(CPU.workingProcess);
+                CPU.setCpuWork(false);
                 break;
             case "wri":
-
+                //P操作，申请访问磁盘
+                res += "尝试使CPU进入核心态去写入磁盘文件";
+                GUI.outInfoArea.append(res);
+                PV.PDisk(CPU.workingProcess);
+                CPU.setCpuWork(false);
                 break;
             case "pri":
-
+                res += "请求打印机服务，准备向缓冲区和输入井提交信息";
+                GUI.outInfoArea.append(res);
+                Spooling.typeAHead(CPU.workingProcess,(short) 3, String.valueOf(getCpuRegister(instruction.p0)));
                 break;
             case "sle":
+                res += "在这个时间片不做任何操作";
+                GUI.outInfoArea.append(res);
                 break;
             case "le<":
                 if(getCpuRegister(instruction.p0) < getCpuRegister(instruction.p1)){
                     setCpuRegister("psw",(short) 1);
+                    res += "条件成立，zf标志位为1";
                 }else {
                     setCpuRegister("psw",(short) 0);
+                    res += "条件不成立，zf标志位为0";
+
                 }
+                GUI.outInfoArea.append(res);
                 break;
             case "gr>":
                 if(getCpuRegister(instruction.p0) > getCpuRegister(instruction.p1)){
                     setCpuRegister("psw",(short) 1);
+                    res += "条件成立，zf标志位为1";
+
                 }else {
                     setCpuRegister("psw", (short) 0);
+                    res += "条件不成立，zf标志位为0";
                 }
+                GUI.outInfoArea.append(res);
                 break;
             case "equ":
                 if(getCpuRegister(instruction.p0) == getCpuRegister(instruction.p1)){
                     setCpuRegister("psw",(short) 1);
+                    res += "条件成立，zf标志位为1";
+
                 }else {
                     setCpuRegister("psw",(short) 0);
+                    res += "条件不成立，zf标志位为0";
                 }
+                GUI.outInfoArea.append(res);
                 break;
+            case "jmz":
+                if(getCpuRegister("psw") == 0){
+                    break;
+                }
+            case "jmp":
+                short address = getCpuRegister(instruction.p0);
+                if(address % 8 != 0) {
+                    address += 8 - address % 8;
+                }
+                if(address <0 || address/256+1 >= CPU.workingProcess.getTempFile().getfInode().getFileSize() ||
+                        CPU.workingProcess.getTempFile().readInstruction(address/8)[0]==0 ||
+                        CPU.workingProcess.getTempFile().readInstruction(address/8)[0]==-1 ){
+                    CPU.setCpuWork(false);
+                    MMUThread.setNeedMMUWork(false);
+                    Primitives.destroy(CPU.workingProcess);
+                    res = "跳跃指令位置过远，进程强行中止";
+                    GUI.outInfoArea.append(res);
+                    return ;
+                }
+                setCpuRegister("pc",address);
+                GUI.outInfoArea.append(res);
         }
-        return "执行了"+instruction.instructionType+"  " + res;
+        GUI.outInfoArea.append("\n");
     }
 
     /**

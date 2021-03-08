@@ -1,12 +1,11 @@
 package control;
 
-import deviceManage.DisplayThread;
-import deviceManage.KeyBoardThread;
+import deviceManage.*;
 import fileManage.*;
 import hardware.CPU;
 import hardware.Disk;
 import hardware.Memory;
-import memoryManage.MissingPageInterruptThread;
+import memoryManage.MMUThread;
 import memoryManage.PageTable;
 import workManage.*;
 import workManage.Process;
@@ -37,7 +36,14 @@ public class OS {
     public static final short HANGUPWAITTIME = 40;        //在就绪或者阻塞队列等待的时间超过这个值，就有可能被挂起
     public static final short HANGUPCHECKTIME = 25;        //每隔x隔时间片检查一次中级调度
     public static final short JOBCHECKTIME = 25;        //每隔x隔时间片检查作业请求情况
+    public static final short BUFFERAREA = 15;       //缓冲区在内存的位置
 
+    //默认加载的设备，创建参数依次是 设备名，设备号，设备处理一条指令所需秒数
+    public static final Device DISK = new Device("硬盘",(short) 0, (short) 0);
+    public static final Device KEYBOARD = new Device("键盘",(short) 1, (short) 3);
+    public static final Device DISPLAY = new Device("显示器",(short) 2, (short) 1);
+    public static final Device PRINTER = new Device("打印机",(short) 3, (short) 10);
+    public static final short SPOOLINGWORKTABLEMAXSIZE = 20;  //井中作业表最大容量
 
 
     //模拟操作系统中的硬件
@@ -45,7 +51,7 @@ public class OS {
     public static Disk disk = new Disk();
     public static Memory memory;
 
-    private static int time = 0;
+    private static short time = 0;
     private static SuperBlock superBlock = null;
 
     public static PageTable systemPageTable = null;
@@ -96,6 +102,8 @@ public class OS {
             pathDirectory = new Directory(parentPathInode);
             Directory.getInDirectory(".");
 
+            //初始化spooling的井
+            Spooling.initSpooling();
             //启动对应进程
             new TimerThread().start();   //启动时钟进程
             new FlashGUIThread().start(); //启动刷新GUI进程
@@ -104,7 +112,9 @@ public class OS {
             new DisplayThread().start();
             new VisitDIskThread().start();
             new JobSchduleThread().start();
-            new MissingPageInterruptThread().start();
+            new MMUThread().start();
+            new VisitDIskThread().start();
+            new PrinterThread().start();
         } catch (Exception exception) {
             exception.printStackTrace();
         }
@@ -172,7 +182,7 @@ public class OS {
      * @auther: Lu Ning
      * @date: 2021/1/27 19:29
      */
-    public static int getTime(){
+    public static short getTime(){
         return time;
     }
 

@@ -2,6 +2,9 @@ package fileManage;
 
 import hardware.Block;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
 /**
  * @ClassName: FCB
  * @Description: 是虚拟的类，仅在目录文件的数据块中调用，由62B的文件名和2B的inode号组成。
@@ -64,13 +67,12 @@ public class FCB {
      */
     public short[] convertFCBToShortArray(){
         short[] shortArray = new short[32];
-        fileName = fileName + '\0';
-        for(int i=0;i<31&&i<fileName.length();i++){
-            if(fileName.charAt(i) == '\0'){
-                shortArray[i] = 0;
+        String tempFileName = fileName + '\0';
+        for(int i=0;i<31&&i<tempFileName.length();i++){
+            if(tempFileName.charAt(i) == '\0'){
                 break;
             }else {
-                shortArray[i] = Block.convertUTF16ToShort(fileName.substring(i,i+1));
+                shortArray[i] = Block.convertUTF16ToShort(tempFileName.substring(i,i+1));
             }
         }
         shortArray[31] = ino;

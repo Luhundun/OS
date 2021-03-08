@@ -5,14 +5,17 @@ new FormModel {
 	root: new FormRoot {
 		add( new FormWindow( "javax.swing.JDialog", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 			name: "this"
+			"minimumSize": new java.awt.Dimension( 500, 400 )
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.BorderLayout ) ) {
 				name: "dialogPane"
 				"border": new javax.swing.border.EmptyBorder( 12, 12, 12, 12 )
+				"minimumSize": new java.awt.Dimension( 500, 400 )
 				add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridLayout ) {
 					"columns": 3
 					"rows": 9
 				} ) {
 					name: "contentPanel"
+					"minimumSize": new java.awt.Dimension( 500, 400 )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label1"
 						"text": "进程号:"

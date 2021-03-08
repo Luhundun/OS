@@ -29,49 +29,12 @@ public class CPU {
     public static void doInstruction() throws Exception {
         workingProcess.getPcb().setTimeSliceLeft((short) (workingProcess.getPcb().getTimeSliceLeft() - 1));
         workingProcess.getPcb().setRunTimes((short) (workingProcess.getPcb().getRunTimes() + 1));
-        System.out.print(workingProcess.getPcb().getPid()+"号进程");
+        String info = workingProcess.getPcb().getPid()+"号进程";
+        GUI.outInfoArea.append(info);
+        Instruction.executeInstruction(workingProcess.getNextInstruction());
+        System.out.println(info);
 
-        //获取指令 执行指令 输出信息
-        System.out.println(Instruction.executeInstruction(workingProcess.getNextInstruction()));
-//        workingProcess.plusProcessRunTime();
-//        workingProcess.useTimeSlice();
-//        workingProcess.setIRNewInstructionState();  //确保每次执行指令时，当前指令都是最新的
-//        ir = workingProcess.getIR();
-//        OperatingSystemGUI.textField2.setText(String.valueOf(workingProcess.getID()));
-//        OperatingSystemGUI.textField3.setText(String.valueOf(workingProcess.getPC()));
-//        OperatingSystemGUI.textField4.setText(String.valueOf(workingProcess.getIR()));
-//        OperatingSystemGUI.textArea1.append("CPU状态：用户态，正在执行进程" + workingProcess.getID() + "的" + workingProcess.getCurrentInstructionID() + "号指令，类型为" + ir +"\n");
-//        if(ir == 0) {              //正常执行指令
-//            CPU.setCpuWorkState(true);
-//            OperatingSystemGUI.textField1.setText("用户态");
-//            workingProcess.cpuPlusPCAndCheckIfNeedToCancelTheProcess();                 	  //进程PCB指向下一条指令。
-//        }
-//        else if(ir == 1 ) {                                                             	 //系统调用键盘
-//            switchUserModeToKernelMode();     												//CPU用户态转化核心态
-//            if(KeyBoard.getKeyBoardState())
-//                workingProcess.blockProcess(); 											    //用阻塞原语加入对应的阻塞队列排队
-//            else
-//                KeyBoard.setKeyBoardWorkForAProcess(workingProcess);
-//            switchKernelModeToUserMode();   												 //核心态转化为用户态
-//            CPU.ifCpuWork = false;             												 //设置false更多为了强制用完剩余时间片，并且方便判断指令是否全部执行完
-//        }else if(ir == 3) {       															 //系统调用显示器
-//            switchUserModeToKernelMode();    												//CPU用户态转化核心态
-//            if(Display.getDisplayState())
-//                workingProcess.blockProcess();  											 //用阻塞原语加入对应的阻塞队列排队
-//            else
-//                Display.setDisplayWork(workingProcess);
-//            switchKernelModeToUserMode();   												//核心态转化为用户态
-//            CPU.ifCpuWork = false;
-//        }
-//        else if(ir == 2) {        														    //系统调用PV通信线程
-//            if(PV.getPVState())
-//                workingProcess.blockProcess();
-//            else
-//                PV.setPVWork(workingProcess);
-//            CPU.ifCpuWork = false;
-//        }
-//        OperatingSystemGUI.textArea1.append("就绪队列有" + PCB.getReadyQueueLength() + "个进程:");
-//        PCB.showReadyQueueIds();
+
     }
 
 
@@ -107,11 +70,12 @@ public class CPU {
             CPU.workingProcess.getPcb().setR1(CPU.getR1());
             CPU.workingProcess.getPcb().setR2(CPU.getR2());
             CPU.workingProcess.getPcb().setR3(CPU.getR3());
+            GUI.outInfoArea.append("进程"+CPU.workingProcess.toString()+"时间片用完，现场信息保存至PCB\n");
         }
         CPU.workingProcess = newRunProcess;
         CPU.switchUserModeToKernelMode();       //进程上下文切换是要在CPU核心态下实现的
         newRunProcess.getPcb().setProcessState((short) 1);
-        CPU.workingProcess = newRunProcess;
+        GUI.outInfoArea.append("通过静态优先级的时间片轮转算法调度，进程"+newRunProcess.toString()+"获得CPU\n");
         CPU.switchKernelModeToUserMode();
         CPU.setPc(newRunProcess.getPcb().getPc());
         CPU.setIr(newRunProcess.getPcb().getIr());
@@ -125,6 +89,7 @@ public class CPU {
 
     public static void switchUserModeToKernelMode() {
         CPU.ifCpuCloseInterrupt = true;  //关中断
+        GUI.outInfoArea.append("CPU响应请求进入核心态\n");
 //        workingProcess.inCoreStack(pc);    //模拟现场保护
 //        workingProcess.inCoreStack(ir);
 //        workingProcess.inCoreStack(psw);
@@ -140,6 +105,8 @@ public class CPU {
 //        ir = workingProcess.outCoreStack();     //模拟返回现场
 //        pc = workingProcess.outCoreStack();
 //        OperatingSystemGUI.textField1.setText("用户态");
+        GUI.outInfoArea.append("CPU执行完特权指令返回用户态\n");
+
         CPU.ifCpuCloseInterrupt = false;      //模拟开中断
 
     }

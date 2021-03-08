@@ -54,6 +54,7 @@ public class GroupLink {
      */
     public static void runGroupLink(){
         topGroupLinkBlock = OS.disk.findBlockByDno(OS.getSuperBlock().getFreeBlocksInDiskGroupLink());
+        OS.memory.loadGroupLinkTop(topGroupLinkBlock);
     }
 
     /**
@@ -124,6 +125,7 @@ public class GroupLink {
     public static void changeTopGroupLinkBlock(short dno){
         OS.getSuperBlock().setFreeBlocksInDiskGroupLink(dno);
         topGroupLinkBlock = OS.disk.findBlockByDno(dno);
+        OS.memory.loadGroupLinkTop(topGroupLinkBlock);
     }
 
     /**

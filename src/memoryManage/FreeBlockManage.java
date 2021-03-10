@@ -40,6 +40,19 @@ public class FreeBlockManage {
         return (short)(i);
     }
 
+    public static void useABlock(short num){
+        boolean[][] map = OS.getSuperBlock().getFreeBlocksInMemoryMap();
+        System.out.println(num);
+        map[(num-16)/16][num%16] = true;
+        OS.getSuperBlock().setFreeBlocksInMemoryMap(map);
+    }
+
+    public static void releaseABlock(short num){
+        boolean[][] map = OS.getSuperBlock().getFreeBlocksInMemoryMap();
+        map[(num-16)/16][num%16] = false;
+        OS.getSuperBlock().setFreeBlocksInMemoryMap(map);
+    }
+
     /**
      * @Description: 在GUI展示内存中的空闲块
      * @param: []

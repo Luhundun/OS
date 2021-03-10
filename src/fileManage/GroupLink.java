@@ -2,6 +2,7 @@ package fileManage;
 
 import control.OS;
 import hardware.Block;
+import hardware.Disk;
 
 import java.util.ArrayList;
 
@@ -42,7 +43,7 @@ public class GroupLink {
             tempBlock.writeAWord((short) (k-2),0);      //每个块的第0号字表示空闲块计数
             tempBlock.setBlockUsedBytes(512);
         }
-        runGroupLink();
+        topGroupLinkBlock = OS.disk.findBlockByDno(OS.getSuperBlock().getFreeBlocksInDiskGroupLink());
     }
 
     /**
@@ -103,6 +104,8 @@ public class GroupLink {
                 throw new Exception("物理空间不足");
             }
             changeTopGroupLinkBlock(nextBlockDno);
+            OS.disk.findBlockByDno(lastBlockDno).setBlock00();
+            OS.disk.findBlockByDno(lastBlockDno).setBlockUsedBytes(512);
             return lastBlockDno;
 
 //            index = topGroupLinkBlock.readAWord(0);

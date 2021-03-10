@@ -58,7 +58,7 @@ public class JobSchduleThread extends Thread{
                 && Process.getFreeIndex() != -1 && Queues.jobReadyQueue.peekFirst().getJobInTime() < OS.getTime()){
             JCB firstJob = Queues.jobReadyQueue.pollFirst();
             //作业队列按照进入时间排序了，有些作业事先规定了进入时间，如果最早的请求都没达到要求时间，那么没有后备作业可以被创建
-            Primitives.init(firstJob.getJobFile(), firstJob.getJobPriority());
+            Primitives.init(firstJob.getJobFile(), firstJob.getJobPriority(),firstJob.getInstructionNum());
         }
     }
 

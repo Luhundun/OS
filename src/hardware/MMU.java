@@ -13,7 +13,7 @@ import workManage.Process;
 public class MMU {
     //占位符
     //说明：实际主机中MMU作为硬件，负责地址变化和内存保护等
-    //而本系统中，为了保证每一个软件模块的完整性，与MMU有关的方法都实现在了memoryManage包中,尤其是缺页中断线程
+    //而本系统中，为了保证每一个软件模块的完整性，与MMU有关的方法都实现在了memoryManage包的PageTable和MMUThread
 
 //    public static void loadNewPage(short newPage, short oldPage) throws Exception {
 ////        checkInterruptValid();

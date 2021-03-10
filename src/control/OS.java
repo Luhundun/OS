@@ -5,7 +5,7 @@ import fileManage.*;
 import hardware.CPU;
 import hardware.Disk;
 import hardware.Memory;
-import memoryManage.MMUThread;
+import memoryManage.MissingPageInterruptThread;
 import memoryManage.PageTable;
 import workManage.*;
 import workManage.Process;
@@ -33,15 +33,15 @@ public class OS {
     public static final short TIMESLICELENGTH = 5;          //时间片长度
     public static final short PCBPOOLSIZE = 12;             //PCB池大小
     public static final short MAXNUMPROCESSINMEMORY = 8;   //进程在内存的最大数，分配内存块为16 - 16+4*max  max<=12
-    public static final short HANGUPWAITTIME = 40;        //在就绪或者阻塞队列等待的时间超过这个值，就有可能被挂起
+    public static final short HANGUPWAITTIME = 20;        //在就绪或者阻塞队列等待的时间超过这个值，就有可能被挂起
     public static final short HANGUPCHECKTIME = 25;        //每隔x隔时间片检查一次中级调度
     public static final short JOBCHECKTIME = 25;        //每隔x隔时间片检查作业请求情况
     public static final short BUFFERAREA = 15;       //缓冲区在内存的位置
 
     //默认加载的设备，创建参数依次是 设备名，设备号，设备处理一条指令所需秒数
     public static final Device DISK = new Device("硬盘",(short) 0, (short) 0);
-    public static final Device KEYBOARD = new Device("键盘",(short) 1, (short) 3);
-    public static final Device DISPLAY = new Device("显示器",(short) 2, (short) 1);
+    public static final Device KEYBOARD = new Device("键盘",(short) 1, (short) 4);
+    public static final Device DISPLAY = new Device("显示器",(short) 2, (short) 2);
     public static final Device PRINTER = new Device("打印机",(short) 3, (short) 10);
     public static final short SPOOLINGWORKTABLEMAXSIZE = 20;  //井中作业表最大容量
 
@@ -112,7 +112,7 @@ public class OS {
             new DisplayThread().start();
             new VisitDIskThread().start();
             new JobSchduleThread().start();
-            new MMUThread().start();
+            new MissingPageInterruptThread().start();
             new VisitDIskThread().start();
             new PrinterThread().start();
         } catch (Exception exception) {

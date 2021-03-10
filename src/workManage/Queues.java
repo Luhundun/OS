@@ -63,10 +63,10 @@ public class Queues {
         GUI.blockedQueue2.setListData(blockedQueue[1].toArray());
         GUI.blockedQueue3.setListData(blockedQueue[2].toArray());
         GUI.blockedQueue4.setListData(blockedQueue[3].toArray());
-        GUI.blockedQueue5.setListData(blockedQueue[4].toArray());
-        GUI.blockedQueue6.setListData(blockedQueue[5].toArray());
-        GUI.blockedQueue7.setListData(blockedQueue[6].toArray());
-        GUI.blockedQueue8.setListData(blockedQueue[7].toArray());
+//        GUI.blockedQueue5.setListData(blockedQueue[4].toArray());
+//        GUI.blockedQueue6.setListData(blockedQueue[5].toArray());
+//        GUI.blockedQueue7.setListData(blockedQueue[6].toArray());
+//        GUI.blockedQueue8.setListData(blockedQueue[7].toArray());
         GUI.jobReadyQueue.setListData(jobReadyQueue.toArray());
     }
 

@@ -15,22 +15,22 @@ import java.util.Objects;
  * 设定1个inode 64B
  */
 public class Inode {
-    public short inodeNum;         //inode序号，可以由序号计算出在inode区的位置
-    public short inodeCount;       //inode引用数,不在内存则为0
-    public short inodeSaveMode;        //文件存储权限
-    public short inodeLink;       //文件硬链接数
-    public short fileType;          //文件类型 1普通文件 2目录文件 3特殊文件
-    public short fileSize;         //文件数据大小（数据块数量）
-    public short fileOwner;             //文件属主
-    public short fileDeviceNumber;      //文件设备号
+    private short inodeNum;         //inode序号，可以由序号计算出在inode区的位置
+    private short inodeCount;       //inode引用数,不在内存则为0
+    private short inodeSaveMode;        //文件存储权限
+    private short inodeLink;       //文件硬链接数
+    private short fileType;          //文件类型 1普通文件 2目录文件 3特殊文件
+    private short fileSize;         //文件数据大小（数据块数量）
+    private short fileOwner;             //文件属主
+    private short fileDeviceNumber;      //文件设备号
 
-    public short inodeIndexInMemory;    //inode在内存的位置，不在内存则为0
+    private short inodeIndexInMemory;    //inode在内存的位置，不在内存则为0
 
-    public short fileCreateTime;        //文件创建时间
-    public short fileAlterTime;         //文件修改时间
-    public short[] fileAddressDirect; //文件直接索引块8块  共8*512B=4KB
-    public short fileAddressIndirect1; //文件一级间接索引块   可以存放256*512B=128KB
-    public short fileAddressIndirect2; //文件二级间接索引块   可以存放256*128KB=32MB
+    private short fileCreateTime;        //文件创建时间
+    private short fileAlterTime;         //文件修改时间
+    private short[] fileAddressDirect; //文件直接索引块8块  共8*512B=4KB
+    private short fileAddressIndirect1; //文件一级间接索引块   可以存放256*512B=128KB
+    private short fileAddressIndirect2; //文件二级间接索引块   可以存放256*128KB=32MB
 
     public static Inode[] activeInodeInMemoryTable = new Inode[32];  //内存活动inode表，其实质已经模拟在内存的物理块中，此处列出单纯为了展示
                                                         //其存放在内存的 9、10块

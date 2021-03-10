@@ -248,7 +248,7 @@ public class File {
         }
         for (int i=0;i<blockNum;i++){
             nextBlock = GroupLink.getAFreeBlock();
-            fInode.fileAddressDirect[i] = nextBlock;
+            fInode.getFileAddressDirect()[i] = nextBlock;
             dataBlockList.add(OS.disk.findBlockByDno(nextBlock));
         }
     }
@@ -700,7 +700,7 @@ public class File {
         ArrayList<String> list = new ArrayList<>();
         for(File file : fileStructTable){
             if(file != null && file.fd != -1){
-                list.add(file.fd+"--------------------------"+file.fInode.inodeNum);
+                list.add(file.fd+"--------------------------"+file.fInode.getInodeNum());
             }
         }
         return list.toArray();
@@ -714,33 +714,33 @@ public class File {
      * @date: 2021/3/1 11:08
      */
     public short[] readInstruction(int index){
-        short[] returnShort = new short[8];
-        Block thisBlock = dataBlockList.get(index/32);
-        for(int i=0;i<8;i++){
-            returnShort[i] = thisBlock.readAWord(index%32*8 + i);
+        short[] returnShort = new short[16];
+        Block thisBlock = dataBlockList.get(index/16);
+        for(int i=0;i<16;i++){
+            returnShort[i] = thisBlock.readAWord(index%16*16 + i);
         }
 
         return returnShort;
     }
 
-    /**
-     * @Description: 判断当前文件是否为可执行文件
-     * @param: []
-     * @return: short 对于规范文件，返回优先级，对于不规范文件，返回负数
-     * @auther: Lu Ning
-     * @date: 2021/3/1 12:23
-     */
-    public short runnableFileJudgement(){
-        short[] temp = readInstruction(0);
-        if (Block.convertUTF16ToShort("p") == temp[0] && Block.convertUTF16ToShort("r") == temp[1] &&
-            Block.convertUTF16ToShort("i") == temp[2] && Block.convertUTF16ToShort("o") == temp[3] &&
-            Block.convertUTF16ToShort("r") == temp[4] && Block.convertUTF16ToShort(":") == temp[5] &&
-            temp[6] <= '9' && temp[6] >= '0')
-        {
-            return (short) (temp[6] - '0');
-        }
-        else return -1;
-    }
+//    /**
+//     * @Description: 判断当前文件是否为可执行文件
+//     * @param: []
+//     * @return: short 对于规范文件，返回优先级，对于不规范文件，返回负数
+//     * @auther: Lu Ning
+//     * @date: 2021/3/1 12:23
+//     */
+//    public short runnableFileJudgement(){
+//        short[] temp = readInstruction(0);
+//        if (Block.convertUTF16ToShort("p") == temp[0] && Block.convertUTF16ToShort("r") == temp[1] &&
+//            Block.convertUTF16ToShort("i") == temp[2] && Block.convertUTF16ToShort("o") == temp[3] &&
+//            Block.convertUTF16ToShort("r") == temp[4] && Block.convertUTF16ToShort(":") == temp[5] &&
+//            temp[6] <= '9' && temp[6] >= '0')
+//        {
+//            return (short) (temp[6] - '0');
+//        }
+//        else return -1;
+//    }
 
     /**
      * @Description: 用inode来比较两个文件是否相同；

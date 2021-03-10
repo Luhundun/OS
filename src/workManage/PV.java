@@ -136,7 +136,7 @@ public class PV {
             VisitDIskThread.ifRequestDisk = true;
             VisitDIskThread.lastTime = (short) OS.getTime();
             System.out.println("申请通过,进程"+process.getPcb().getPid()+"获得资源");
-            GUI.outInfoArea.append("请求访问磁盘文件系统成功,进程"+process.getPcb().getPid()+"获得资源\n");
+            GUI.outInfoArea.append("请求访问磁盘成功,进程"+process.getPcb().getPid()+"获得资源\n");
         }else{
             System.out.println("申请通过,但进程"+process.getPcb().getPid()+"前有"+(-disk.value)+"个进程，已加入对应阻塞队列");
             GUI.outInfoArea.append("申请磁盘通过,但进程"+process.getPcb().getPid()+"前有"+(-keyboard.value)+"个进程已请求，已加入对应阻塞队列\n");

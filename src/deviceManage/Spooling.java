@@ -80,18 +80,20 @@ public class Spooling {
      */
     public static void initSpooling() throws Exception {
         //从跟目录进入设备管理目录，如果不存在井文件则创建，存在则读取
-//        File.createFile("设备文件目录",7,2,1);
-        Directory.getInDirectory("设备文件目录");
+        try{
+            Directory.getInDirectory("设备文件目录");
+        }catch (Exception e){
+            File.createFile("设备文件目录",7,2,1);
+            Directory.getInDirectory("设备文件目录");
+        }
         try{
             inputWell = OS.pathDirectory.findFileInDirectory("输入井");
         }catch (Exception e){
-            System.out.println(1);
             inputWell = File.createFile("输入井",6,3,8);
         }
         try{
             outputWell = OS.pathDirectory.findFileInDirectory("输出井");
         }catch (Exception e){
-            e.printStackTrace();
             outputWell = File.createFile("输出井",6,3,8);
         }
         //再额外打开一次，防止退出当前目录后inode被回收

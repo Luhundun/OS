@@ -106,11 +106,11 @@ new FormModel {
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label23"
-						"text": "text"
+						"text": "指令数目："
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label24"
-						"text": "text"
+						"text": "当前执行指令数cx:"
 					} )
 					add( new FormComponent( "javax.swing.JLabel" ) {
 						name: "label25"

@@ -23,8 +23,11 @@ public class LRU {
         if (recodeStack.size() < 3){
             if(!recodeStack.contains(comingPage)){
                 recodeStack.push(comingPage);
+                return (short) -recodeStack.size();//内存没满，直接置入新页，但引发缺页中断
             }
-            return (short) -recodeStack.size();//内存没满，直接置入新页，但引发缺页中断
+            recodeStack.remove(comingPage);
+            recodeStack.push(comingPage);
+            return  -10;  //有此页，不需要缺页中断
         }
         ArrayList<Short> arrayList = new ArrayList<>();
         short returnShort;

@@ -1,9 +1,9 @@
 package workManage;
 
+import control.GUI;
 import control.OS;
 import hardware.CPU;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -52,7 +52,7 @@ public class ProcessSchduleThread extends Thread{
      * @param: []
      * @return: void
      * @auther: Lu Ning
-     * @date: 2021/3/3 13:19
+     * @date: 2021/3/1 13:19
      */
     public void roundRobinScheduling() throws Exception {
         Collections.sort(Queues.readyQueue);  //按优先级大小对就绪队列进行重新排队
@@ -73,7 +73,7 @@ public class ProcessSchduleThread extends Thread{
         else {
             Process process = Queues.readyQueue.poll();      //如果CPU此刻不工作，就从就绪队列首位取元素,就绪队列为空会返回一个空地址
             if(process == null) {                     //如果就绪队列空，打印CPU空闲状态
-
+                GUI.outInfoArea.append("CPU空闲/n");
             }
             else {                                 //就绪队列不空，进行进程上下文切换，再从就绪队列取出优先级最高的进程执行
                 CPU.processContextSwitch(process);
@@ -102,7 +102,7 @@ public class ProcessSchduleThread extends Thread{
             Process thisProcess = null;
             short longestTime = 32766;
             for (Process process : tempList) {
-                if (process.getPcb().getInQueueTime() < longestTime) {
+                if (process.getPcb().getInQueueTime() <= longestTime) {
                     longestTime = process.getPcb().getInQueueTime();
                     thisProcess = process;
                 }
@@ -110,6 +110,7 @@ public class ProcessSchduleThread extends Thread{
             if (thisProcess != null) {
                 System.out.println("尝试激活线程");
                 Primitives.activate(thisProcess);
+                GUI.outInfoArea.append("激活进程"+thisProcess.toString()+'\n');
             }
         }else {
             //如果当前内存进程数大于规定的一半，且有进程在相应队列等待时间超过某个值（在OS.java中规定），挂起超过这个值的进程中优先级最低的
@@ -123,7 +124,7 @@ public class ProcessSchduleThread extends Thread{
             for(LinkedList<Process> list : Queues.blockedQueue){
                 for(Process process : list){
                     if(OS.getTime() - process.getPcb().getInTimes() > OS.HANGUPWAITTIME && (thisProcess == null ||
-                            thisProcess.getPcb().getProcessPriority() < process.getPcb().getProcessPriority()) ){
+                            thisProcess.getPcb().getProcessPriority() <= process.getPcb().getProcessPriority()) ){
                         thisProcess = process;
                     }
                 }
@@ -131,6 +132,7 @@ public class ProcessSchduleThread extends Thread{
             if(thisProcess != null){
                 System.out.println("尝试挂起线程");
                 Primitives.hangup(thisProcess);
+                GUI.outInfoArea.append("激活进程"+thisProcess.toString()+'\n');
             }
         }
     }

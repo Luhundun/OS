@@ -18,7 +18,7 @@ public class WriteFileDialog extends JDialog {
     public WriteFileDialog(Window owner) {
         super(owner);
         initComponents();
-//        writeFileArea.setText("");
+        writeFileArea.setText(File.readFile(OS.topFile.getFd()));
     }
 
     public void writeFileSureActionPerformed(ActionEvent e) {

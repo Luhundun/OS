@@ -15,7 +15,7 @@ import java.util.Arrays;
 public class FCB {
 
     private String fileName;         //文件名
-    private short ino;              //文件编号
+    private short ino;              //inode编号
 
     /**
      * @Description: 初始化一个FCB

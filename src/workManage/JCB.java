@@ -19,6 +19,7 @@ public class JCB implements Comparable<JCB>{
     private short jobID;
     private short jobInTime;
 
+    private short instructionNum;
     private short jobPriority;
     private File jobFile;          //申请这个作业的文件 （实际以这个file的文件号来储存）
 
@@ -31,10 +32,11 @@ public class JCB implements Comparable<JCB>{
      * @auther: Lu Ning
      * @date: 2021/3/5 12:41
      */
-    public JCB(File file, short priority) {
+    public JCB(File file, short priority, short num) {
         jobID = jobNum++;
         jobInTime = (short) OS.getTime();
         jobFile = file;
+        instructionNum = num;
         jobPriority = priority;
         System.out.println("生成作业"+toString());
     }
@@ -46,11 +48,12 @@ public class JCB implements Comparable<JCB>{
      * @auther: Lu Ning
      * @date: 2021/3/5 12:41
      */
-    public JCB(File file, short priority, short inTime) {
+    public JCB(File file, short priority, short inTime,short num) {
         jobID = jobNum++;
         jobInTime = inTime;
         jobFile = file;
         jobPriority = priority;
+        instructionNum = num;
         System.out.println("生成作业"+toString());
     }
 
@@ -89,6 +92,15 @@ public class JCB implements Comparable<JCB>{
 
     public void setJobPriority(short jobPriority) {
         this.jobPriority = jobPriority;
+    }
+
+
+    public short getInstructionNum() {
+        return instructionNum;
+    }
+
+    public void setInstructionNum(short instructionNum) {
+        this.instructionNum = instructionNum;
     }
 
     /**

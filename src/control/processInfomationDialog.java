@@ -38,6 +38,8 @@ public class processInfomationDialog extends JDialog {
         label17.setText("pc:"+p.getPcb().getPc());
 //        label18.setText("内存中第一页块号:"+p.getBlocksInMemory());
         label22.setText("最近访问页面:"+p.getUserStack());
+        label23.setText("指令总数:"+p.getPcb().getInstructionNum());
+        label24.setText("当前执行指令数cx:"+p.getPcb().getCx());
         label25.setText("当前系统时间:"+OS.getTime());
     }
 
@@ -184,11 +186,11 @@ public class processInfomationDialog extends JDialog {
                 contentPanel.add(label22);
 
                 //---- label23 ----
-                label23.setText("text");
+                label23.setText("\u6307\u4ee4\u6570\u76ee\uff1a");
                 contentPanel.add(label23);
 
                 //---- label24 ----
-                label24.setText("text");
+                label24.setText("\u5f53\u524d\u6267\u884c\u6307\u4ee4\u6570cx:");
                 contentPanel.add(label24);
 
                 //---- label25 ----

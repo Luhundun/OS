@@ -20,6 +20,10 @@ public class PCB implements Comparable<PCB>{
     private short runTimes;           //进程运行时间
     private short turnTimes;          //进程周转时间
     private short timeSliceLeft;      //当前进程在cpu运行的剩余时间片，若非运行态则为0
+
+
+
+    private short instructionNum;       //指令数目
     private short directoryIno;         //当前进程所在目录
     private short processState;        //进程状态 0为未创建 1为就绪 2为运行 3挂起就绪 4为挂起等待 11-18为不同原因的阻塞
     private short inQueueTime;          //设置进入相应队列时间
@@ -30,6 +34,22 @@ public class PCB implements Comparable<PCB>{
     private short r1;                 //通用寄存器r1
     private short r2;                 //通用寄存器r2
     private short r3;                 //通用寄存器r3
+    public short getInstructionNum() {
+        return instructionNum;
+    }
+
+    public void setInstructionNum(short instructionNum) {
+        this.instructionNum = instructionNum;
+    }
+    public short getCx() {
+        return cx;
+    }
+
+    public void setCx(short cx) {
+        this.cx = cx;
+    }
+
+    private short cx;                 //特殊寄存器cx，记录运行的第x条指令
 
     public static PCB[] pcbPool;        //PCB池
     public static short pcbNumberIndex;         //出现过的PCB数
@@ -42,7 +62,7 @@ public class PCB implements Comparable<PCB>{
      * @auther: Lu Ning
      * @date: 2021/3/1 23:56
      */
-    public PCB(short processPriority, short inTime){
+    public PCB(short processPriority, short inTime, short instructionNum){
         this.pid = pcbNumberIndex++;
         this.processPriority = processPriority;
         this.inTimes = inTime;
@@ -50,6 +70,7 @@ public class PCB implements Comparable<PCB>{
         this.turnTimes = 0;
         this.timeSliceLeft = 0;
         this.indexInMemory = -1;
+        this.instructionNum = instructionNum;
         this.processState = 1;
         this.psw = 0;
         this.pc = 0;
@@ -71,7 +92,7 @@ public class PCB implements Comparable<PCB>{
      */
     @Override
     public int compareTo(PCB o) {
-        return Integer.compare(this.processPriority, o.processPriority);
+        return -Integer.compare(this.processPriority, o.processPriority);
     }
 
     /**

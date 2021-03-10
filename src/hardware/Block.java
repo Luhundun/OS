@@ -106,8 +106,6 @@ public class Block {
         dno = bi.shortValue();
         bi = new BigInteger(context.substring(4*(i+1)),16);
         blockUsedBytes = bi.intValue();
-
-
     }
 
     /**
@@ -144,23 +142,23 @@ public class Block {
             throw new Exception("错误的inode存储位置");
         }
         int startIndex = ino * 32;
-        block[startIndex + 0] = inode.inodeNum;
-        block[startIndex + 1] = inode.inodeCount;
-        block[startIndex + 2] = inode.inodeSaveMode;
-        block[startIndex + 3] = inode.inodeLink;
-        block[startIndex + 4] = inode.fileType;
-        block[startIndex + 5] = inode.fileSize;
-        block[startIndex + 6] = inode.fileOwner;
-        block[startIndex + 7] = inode.fileDeviceNumber;
+        block[startIndex + 0] = inode.getInodeNum();
+        block[startIndex + 1] = inode.getInodeCount();
+        block[startIndex + 2] = inode.getInodeSaveMode();
+        block[startIndex + 3] = inode.getInodeLink();
+        block[startIndex + 4] = inode.getFileType();
+        block[startIndex + 5] = inode.getFileSize();
+        block[startIndex + 6] = inode.getFileOwner();
+        block[startIndex + 7] = inode.getFileDeviceNumber();
         block[startIndex + 8] = inode.getFileCreateTime();
         block[startIndex + 9] = inode.getFileAlterTime();
         block[startIndex + 10] = inode.getInodeIndexInMemory();
 
         for (int i=0;i<8;i++){
-            block[startIndex + 11 + i] = inode.fileAddressDirect[i];
+            block[startIndex + 11 + i] = inode.getFileAddressDirect()[i];
         }
-        block[startIndex + 19] = inode.fileAddressIndirect1;
-        block[startIndex + 20] = inode.fileAddressIndirect2;
+        block[startIndex + 19] = inode.getFileAddressIndirect1();
+        block[startIndex + 20] = inode.getFileAddressIndirect2();
     }
 
     /**

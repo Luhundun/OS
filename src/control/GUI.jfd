@@ -277,12 +277,12 @@ new FormModel {
 								} )
 							} )
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {
-								"$horizontalGroup": "par l {seq {space :::p, par l {seq l {par l {seq {comp label3:::p::p, space :::p, comp filePathLabel:::p::p}, comp panel8:::p:261:p}, space :::x, par l:::p {comp deleteFile::t::0:x, seq {par l {par l:t::p {comp readFileButton::l::76:x, comp addFileButton::l::0:x, comp createFile::t::0:x, comp button1::l::0:x}, par t:l {comp openFile::t::76:x, comp writeFileButton::::0:x}}, space :1:1:p}, comp runFile::::0:x, comp getInDirectory::::0:x}, space :p:42:p}, seq l {comp runRequestFile::::136:x, space :::p, comp adjustFile::::124:x, space :::p, comp randomFile::::114:x, space :p:11:p}, seq {comp textField1:::p:220:p, space :::x}}}}"
-								"$verticalGroup": "par l {seq {par l {seq l {space :p:69:p, comp createFile:::p::p, space :::p, comp openFile:::p::p, space :::p, comp writeFileButton:::p::p, space :::p, comp readFileButton:::p::p, space :::p, comp addFileButton:::p::p, space :::p, comp button1:::p::p, space :::p, comp deleteFile:::p::p, space :::p, comp getInDirectory:::p::p, space :::p, comp runFile:::p::p}, seq l {space :p:8:p, par b {comp label3::b:p::p, comp filePathLabel::b:p::p}, space :::p, comp textField1:::p:30:p, space u:::p, comp panel8:::p:330:p}}, space :::p, par b {comp runRequestFile::b:p::p, comp adjustFile::b:p::p, comp randomFile::b:p::p}, space ::9:x}}"
+								"$horizontalGroup": "par l {seq {space :::p, par l {seq l {comp runRequestFile::::136:x, space :::p, comp adjustFile::::124:x, space :::p, comp randomFile::::114:x, space :p:11:p}, seq l {par t:::p {seq {comp pathArea:::p:208:p, space :::p, comp jump::::0:x}, par l {seq {comp label3:::p::p, space :::p, comp filePathLabel:::p::p}, comp panel8:::p:261:p}}, space :::x, par l:::p {comp deleteFile::t::0:x, seq {par l {comp openFile::t::0:x, comp writeFileButton::t::0:x, seq t {space :0:0:x, par l:::p {comp readFileButton::l::76:x, comp addFileButton::l::0:x, comp createFile::t::0:x, comp linkFile::l::0:x}}}, space :1:1:p}, comp runFile::::0:x, comp getInDirectory::::0:x}, space :p:42:p}}}}"
+								"$verticalGroup": "par l {seq {space :p:8:p, par b {comp label3::b:p::p, comp filePathLabel::b:p::p}, space :::p, par b {comp pathArea::b:p:30:p, comp jump::b:p:25:p}, space u:::p, par l {comp panel8::l:p:330:p, seq l {space :p:15:p, comp createFile:::p::p, space :::p, comp openFile:::p::p, space :::p, comp writeFileButton:::p::p, space :::p, comp readFileButton:::p::p, space :::p, comp addFileButton:::p::p, space :::p, comp linkFile:::p::p, space :::p, comp deleteFile:::p::p, space :::p, comp getInDirectory:::p::p, space :::p, comp runFile:::p::p}}, space :::p, par b {comp runRequestFile::b:p::p, comp adjustFile::b:p::p, comp randomFile::b:p::p}, space :::x}}"
 							} ) {
 								name: "panel3"
 								add( new FormComponent( "javax.swing.JTextField" ) {
-									name: "textField1"
+									name: "pathArea"
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "deleteFile"
@@ -298,8 +298,9 @@ new FormModel {
 									"text": "/"
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
-									name: "button1"
+									name: "linkFile"
 									"text": "建立链接"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "linkFileActionPerformed", true ) )
 								} )
 								add( new FormComponent( "javax.swing.JButton" ) {
 									name: "writeFileButton"
@@ -369,6 +370,11 @@ new FormModel {
 									name: "randomFile"
 									"text": "建立随机作业"
 									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "randomFileActionPerformed", true ) )
+								} )
+								add( new FormComponent( "javax.swing.JButton" ) {
+									name: "jump"
+									"text": "跳转"
+									addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "jumpActionPerformed", true ) )
 								} )
 							} )
 							add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class org.jdesktop.layout.GroupLayout ) {

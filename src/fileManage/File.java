@@ -122,6 +122,21 @@ public class File {
     }
 
     /**
+     * @Description: 为硬链接预留的构造方法
+     * @param: [file]
+     * @return:
+     * @auther: Lu Ning
+     * @date: 2021/3/23 18:30
+     */
+    public File(File file) throws Exception {
+        fInode = file.fInode;
+        fd=openFileByFile();
+        dataBlockList = file.dataBlockList;
+        fCount = file.fCount;
+        fPos = file.fPos;
+    }
+
+    /**
      * @Description: 真正创建文件的方法，先在当前目录中创建目录项，再分配Inode，新建文件
      * @param: [fileName, mode, type, sizeForTest]
      * @return: short
@@ -212,6 +227,10 @@ public class File {
         return fd;
     }
 
+
+    public short createHardLinkFile(){
+        return 0;
+    }
 
 
     /**
@@ -754,7 +773,6 @@ public class File {
         if (o == null) return false;
         return Objects.equals(getfInode().getInodeNum(), o.getfInode().getInodeNum());
     }
-
 
     public short getFd() {
         return fd;

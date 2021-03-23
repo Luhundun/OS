@@ -73,6 +73,7 @@ public class FlashGUIThread extends Thread {
 
         //更新文件系统
         StringBuffer path = new StringBuffer("/");
+        //计算路径
         for(String subPath : OS.path){
             path.append(subPath);
             path.append("/");

@@ -195,9 +195,9 @@ public class GUI extends JFrame {
             Directory.getInDirectory(OS.selectedString);
 
             if(OS.selectedString.equals("..")){
-                OS.path.remove(OS.path.size()-1);
+                OS.path.pop();
             }else if(!OS.selectedString.equals(".")){
-                OS.path.add(OS.selectedString);
+                OS.path.push(OS.selectedString);
             }
             OS.selectedString = null;
 
@@ -346,6 +346,56 @@ public class GUI extends JFrame {
         }
     }
 
+    public void jumpActionPerformed(ActionEvent e) {
+        String[] path = new String[0];
+        try {
+            String temp = pathArea.getText();
+            path = temp.split("/");
+            System.out.println("root");
+            for(String ee:path){
+                System.out.print(ee+"/");
+            }
+        }catch (Exception e1){
+            e1.printStackTrace();
+        }
+
+        try {
+            Directory.jumpToAnotherDirectory(path);
+        }catch (Exception e1){
+            e1.printStackTrace();
+        }
+
+    }
+
+    public void linkFileActionPerformed(ActionEvent e) {
+        try {
+            Random random = new Random();
+            JTextField fileName = new JTextField(OS.pathDirectory.getNameByIno(OS.topFile.getfInode().getInodeNum()));
+            JTextField path = new JTextField("/");
+            JComboBox linkType = new JComboBox();
+            linkType.addItem("硬链接");
+            linkType.addItem("软链接");
+            Object[] message = {
+                    "文件名:", fileName,
+                    "存放链接的文件夹", path,
+                    "链接类型", linkType,
+            };
+
+            int option = JOptionPane.showConfirmDialog(null, message, "建立链接", JOptionPane.OK_CANCEL_OPTION);
+            if (option == JOptionPane.OK_OPTION) {
+                if(((String)linkType.getSelectedItem()).equals("硬链接")){
+                    if(OS.topFile.getfInode().getFileType() == 2){
+                        JOptionPane.showMessageDialog(null,"无法对文件夹建立硬链接");
+                    }
+                }
+
+            } else {
+                System.out.println("取消生成作业文件");
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }    }
+
 
 
     private void initComponents() {
@@ -415,11 +465,11 @@ public class GUI extends JFrame {
         indirectAddress2 = new JLabel();
         label27 = new JLabel();
         panel3 = new JPanel();
-        textField1 = new JTextField();
+        pathArea = new JTextField();
         deleteFile = new JButton();
         label3 = new JLabel();
         filePathLabel = new JLabel();
-        button1 = new JButton();
+        linkFile = new JButton();
         writeFileButton = new JButton();
         readFileButton = new JButton();
         addFileButton = new JButton();
@@ -435,6 +485,7 @@ public class GUI extends JFrame {
         runRequestFile = new JButton();
         adjustFile = new JButton();
         randomFile = new JButton();
+        jump = new JButton();
         panel4 = new JPanel();
         label6 = new JLabel();
         scrollPane3 = new JScrollPane();
@@ -1023,8 +1074,9 @@ public class GUI extends JFrame {
                             //---- filePathLabel ----
                             filePathLabel.setText("/");
 
-                            //---- button1 ----
-                            button1.setText("\u5efa\u7acb\u94fe\u63a5");
+                            //---- linkFile ----
+                            linkFile.setText("\u5efa\u7acb\u94fe\u63a5");
+                            linkFile.addActionListener(e -> linkFileActionPerformed(e));
 
                             //---- writeFileButton ----
                             writeFileButton.setText("\u91cd\u5199\u6587\u4ef6");
@@ -1087,6 +1139,10 @@ public class GUI extends JFrame {
                             randomFile.setText("\u5efa\u7acb\u968f\u673a\u4f5c\u4e1a");
                             randomFile.addActionListener(e -> randomFileActionPerformed(e));
 
+                            //---- jump ----
+                            jump.setText("\u8df3\u8f6c");
+                            jump.addActionListener(e -> jumpActionPerformed(e));
+
                             GroupLayout panel3Layout = new GroupLayout(panel3);
                             panel3.setLayout(panel3Layout);
                             panel3Layout.setHorizontalGroup(
@@ -1095,30 +1151,6 @@ public class GUI extends JFrame {
                                         .addContainerGap()
                                         .addGroup(panel3Layout.createParallelGroup()
                                             .addGroup(panel3Layout.createSequentialGroup()
-                                                .addGroup(panel3Layout.createParallelGroup()
-                                                    .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addComponent(label3)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(filePathLabel))
-                                                    .addComponent(panel8, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(deleteFile, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                                    .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addGroup(panel3Layout.createParallelGroup()
-                                                            .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                                .addComponent(readFileButton, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                                                                .addComponent(addFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                                                .addComponent(createFile, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                                                .addComponent(button1, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
-                                                            .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                                .addComponent(openFile, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-                                                                .addComponent(writeFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)))
-                                                        .addGap(1, 1, 1))
-                                                    .addComponent(runFile, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                                                    .addComponent(getInDirectory, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
-                                                .addGap(42, 42, 42))
-                                            .addGroup(panel3Layout.createSequentialGroup()
                                                 .addComponent(runRequestFile, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(adjustFile, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
@@ -1126,15 +1158,52 @@ public class GUI extends JFrame {
                                                 .addComponent(randomFile, GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
                                                 .addGap(11, 11, 11))
                                             .addGroup(panel3Layout.createSequentialGroup()
-                                                .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-                                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                                    .addGroup(panel3Layout.createSequentialGroup()
+                                                        .addComponent(pathArea, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE)
+                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                        .addComponent(jump, GroupLayout.DEFAULT_SIZE, 1, Short.MAX_VALUE))
+                                                    .addGroup(panel3Layout.createParallelGroup()
+                                                        .addGroup(panel3Layout.createSequentialGroup()
+                                                            .addComponent(label3)
+                                                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                            .addComponent(filePathLabel))
+                                                        .addComponent(panel8, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE)))
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(deleteFile, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                    .addGroup(panel3Layout.createSequentialGroup()
+                                                        .addGroup(panel3Layout.createParallelGroup()
+                                                            .addComponent(openFile, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                            .addComponent(writeFileButton, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                            .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
+                                                                .addGap(0, 0, Short.MAX_VALUE)
+                                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+                                                                    .addComponent(readFileButton, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+                                                                    .addComponent(addFileButton, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                                    .addComponent(createFile, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                                    .addComponent(linkFile, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))))
+                                                        .addGap(1, 1, 1))
+                                                    .addComponent(runFile, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                                                    .addComponent(getInDirectory, GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                                                .addGap(42, 42, 42))))
                             );
                             panel3Layout.setVerticalGroup(
                                 panel3Layout.createParallelGroup()
                                     .addGroup(panel3Layout.createSequentialGroup()
+                                        .addGap(8, 8, 8)
+                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                            .addComponent(label3)
+                                            .addComponent(filePathLabel))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                            .addComponent(pathArea, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jump, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(panel3Layout.createParallelGroup()
+                                            .addComponent(panel8, GroupLayout.PREFERRED_SIZE, 330, GroupLayout.PREFERRED_SIZE)
                                             .addGroup(panel3Layout.createSequentialGroup()
-                                                .addGap(69, 69, 69)
+                                                .addGap(15, 15, 15)
                                                 .addComponent(createFile)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(openFile)
@@ -1145,28 +1214,19 @@ public class GUI extends JFrame {
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(addFileButton)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(button1)
+                                                .addComponent(linkFile)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(deleteFile)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(getInDirectory)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(runFile))
-                                            .addGroup(panel3Layout.createSequentialGroup()
-                                                .addGap(8, 8, 8)
-                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                                    .addComponent(label3)
-                                                    .addComponent(filePathLabel))
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(panel8, GroupLayout.PREFERRED_SIZE, 330, GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(runFile)))
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                             .addComponent(runRequestFile)
                                             .addComponent(adjustFile)
                                             .addComponent(randomFile))
-                                        .addContainerGap(9, Short.MAX_VALUE))
+                                        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             );
                         }
 
@@ -2179,11 +2239,11 @@ public class GUI extends JFrame {
     public static JLabel indirectAddress2;
     public static JLabel label27;
     public static JPanel panel3;
-    public static JTextField textField1;
+    public static JTextField pathArea;
     public static JButton deleteFile;
     public static JLabel label3;
     public static JLabel filePathLabel;
-    public static JButton button1;
+    public static JButton linkFile;
     public static JButton writeFileButton;
     public static JButton readFileButton;
     public static JButton addFileButton;
@@ -2199,6 +2259,7 @@ public class GUI extends JFrame {
     public static JButton runRequestFile;
     public static JButton adjustFile;
     public static JButton randomFile;
+    public static JButton jump;
     public static JPanel panel4;
     public static JLabel label6;
     public static JScrollPane scrollPane3;

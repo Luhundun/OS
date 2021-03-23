@@ -8,6 +8,7 @@ import workManage.RequestFile;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 /**
  * @ClassName: Directory
@@ -127,6 +128,8 @@ public class Directory extends File{
         if(oldDirectory.getfInode().getInodeNum() != 0 ){
             closeFileInMemory(oldDirectory.getFd());
         }
+
+        System.out.println();
     }
 
 //    /**
@@ -186,7 +189,7 @@ public class Directory extends File{
     public File findFileInDirectory(String name) throws Exception {
         short ino = -1;
         for(FCB fcb : directoryItems){
-            System.out.println(name + " " + fcb.getFileName()+ " " +Arrays.toString(name.getBytes(StandardCharsets.UTF_8)) +" "+ Arrays.toString(fcb.getFileName().getBytes(StandardCharsets.UTF_8)));
+//            System.out.println(name + " " + fcb.getFileName()+ " " +Arrays.toString(name.getBytes(StandardCharsets.UTF_8)) +" "+ Arrays.toString(fcb.getFileName().getBytes(StandardCharsets.UTF_8)));
             if(fcb.getFileName().equals(name)){
                 ino = fcb.getIno();
                 break;
@@ -298,10 +301,54 @@ public class Directory extends File{
         return "";
     }
 
+    /**
+     * @Description: 路径跳转
+     * @param: [newPath]
+     * @return: void
+     * @auther: Lu Ning
+     * @date: 2021/3/23 17:02
+     */
+    public static void jumpToAnotherDirectory(String[] newPath) throws Exception {
+        if(newPath.length==0 || newPath[0].equals("")){
+            while (!OS.path.isEmpty()){
+                Directory.getInDirectory("..");
+                OS.path.pop();
+            }
+        }
+        if(newPath.length > 0){
+            for(String subPath: newPath){
+                if(!subPath.equals("")){
+                    Directory.getInDirectory(subPath);
+                    OS.path.push(subPath);
+                }
+            }
+        }
+    }
+
+//    /**
+//     * @Description: 查看新路径是否有效
+//     * @param: [newPath]
+//     * @return: boolean
+//     * @auther: Lu Ning
+//     * @date: 2021/3/23 17:05
+//     */
+//    public boolean checkPathValid(String[] newPath){
+//        if(newPath[0]==null){
+//
+//        }
+//    }
 
     public ArrayList<FCB> getDirectoryItems() {
         return directoryItems;
     }
 
+    public static void main(String[] args) {
+        String s = "e";
+        String[] list = s.split("/");
+        for(String e : list){
+            System.out.println(e);
+        }
 
+            System.out.println(list.length);
+    }
 }

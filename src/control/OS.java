@@ -11,6 +11,7 @@ import workManage.*;
 import workManage.Process;
 
 import java.util.ArrayList;
+import java.util.Stack;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -59,7 +60,7 @@ public class OS {
     public static File topFile;
     public static Process chooseProcess;
     public static Directory pathDirectory;
-    public static ArrayList<String> path = new ArrayList<>();
+    public static Stack<String> path = new Stack<>();
     public static String selectedString;
 
     /**
